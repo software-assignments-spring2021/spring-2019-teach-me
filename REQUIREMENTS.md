@@ -14,10 +14,13 @@
 - Development process will adhere to Agile methodology, which will be implemented using the Scrum framework
 - System uptime will be at least 90% after launch
 
-### Stakeholder Interviews
+## Stakeholder Interviews
 ---
-Wei-kai asked if our site can add more categories. Which requires us to accept instructors that techers different fields. He also asked which language and database that we should be using. Our team is yet certain regarding database, but we have decided to use React for the front-end, and Python for the back-end.
-### End User Observations
+-Wei-kai asked if our site can add more categories. Which requires us to accept instructors that techers different fields. He also asked which language and database that we should be using. Our team is yet certain regarding database, but we have decided to use React for the front-end, and Python for the back-end.
+
+-The interview with the professor: we explained what our project is about, and how Teach-Me will work.The professor suggested that we take a look at WYZANT. He also suggested that we use React.js and node.js as front-end and back-end, along with express and mongoDB.
+  
+## End User Observations
 ---
 #### Persona1:
 - Brian Booth is a college student with fair amount of free time, and he would like to learn how to code in Python without taking classes in this university. He has tried various methods to achieve his goal, but there are flaws for method. Searching up videos on YouTube easy and free, but there when Brian needs further explaination on a problem or when he fails to solve a bug, there is no one to help him. As a college student, Brian thinks that the paid online courses are costing too much. He wish there is a place where he can learn the basics without guidance but not paying too much.
