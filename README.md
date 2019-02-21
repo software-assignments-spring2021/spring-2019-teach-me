@@ -15,3 +15,4 @@ Thank you for your interest in contributing! Please check out our [CONTRIBUTING.
 This section will be added after first build.
 
 ## Additional links
+[Our Project Requirements](https://github.com/nyu-software-engineering/teach-me/blob/master/REQUIREMENTS.md)
