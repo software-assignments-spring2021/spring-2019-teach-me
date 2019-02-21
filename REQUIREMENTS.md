@@ -35,7 +35,7 @@
 - Actor: Learner
 - Scenario: First, the learner browses the profiles of various instructors. The learner selects a instructor who they are interested in learning from. The learner looks at the instructor’s schedule. The learner chooses an available date and time that is convenient for them. The user reserves that lesson and pays for it using their credit card.
 
-(https://github.com/nyu-software-engineering/teach-me/blob/master/requirements_diagrams/Use%20Case%201.jpg)
+![Use Case Diagram 1](https://github.com/nyu-software-engineering/teach-me/blob/master/requirements_diagrams/Use%20Case%201.jpg)
 
 ### Use Case 2
 
