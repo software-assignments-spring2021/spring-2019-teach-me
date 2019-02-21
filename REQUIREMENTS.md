@@ -14,7 +14,7 @@
 - Development process will adhere to Agile methodology, which will be implemented using the Scrum framework
 - System uptime will be at least 90% after launch
 
-## Stakeholder Interviews
+### Stakeholder Interviews
 ---
 Wei-kai asked if our site can add more categories. Which requires us to accept instructors that techers different fields. He also asked which language and database that we should be using. Our team is yet certain regarding database, but we have decided to use JavaScript for the front-end, and Python for the back-end.
 ### End User Observations
