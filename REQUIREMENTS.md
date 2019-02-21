@@ -28,4 +28,15 @@
 #### Persona2:
 - Mattie Lopez is a college student who is also a very skilled guitar player. She would like to teach others how to play this instrument. She has thought of recording videos and publish it online. However, she would prefer to have some income from teaching these classes. In addition, she would also want to browse other classes avaliable. 
 
+## Use Cases
+
+### Use Case 1
+- Title: Register for a class
+- Actor: Learner
+- Scenario: First, the learner browses the profiles of various instructors. The learner selects a instructor who they are interested in learning from. The learner looks at the instructor’s schedule. The learner chooses an available date and time that is convenient for them. The user reserves that lesson and pays for it using their credit card.
+
+(https://github.com/nyu-software-engineering/teach-me/blob/master/requirements_diagrams/Use%20Case%201.jpg)
+
+### Use Case 2
+
  
