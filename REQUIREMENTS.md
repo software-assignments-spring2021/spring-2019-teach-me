@@ -9,21 +9,21 @@
 - Service for learners to leave a review of their instructor after completing a lesson
 
 ## Non-functional Requirements
-- Technologies that will be used:
+- Technologies that will be used: MongoDB, Express, Reactjs, Nodejs 
 - Variable names must follow language convention
 - Development process will adhere to Agile methodology, which will be implemented using the Scrum framework
 - System uptime will be at least 90% after launch
 
 ## Stakeholder Interviews
 ---
--Wei-kai asked if our site can add more categories. Which requires us to accept instructors that techers different fields. He also asked which language and database that we should be using. Our team is yet certain regarding database, but we have decided to use React for the front-end, and Python for the back-end.
+-Wei-kai asked if our site can add more teaching categories. He also encouraged us to look at Thumbtack.com as a similar platform, so that we can determine how to differentiate ourselves from them.
 
--The interview with the professor: we explained what our project is about, and how Teach-Me will work.The professor suggested that we take a look at WYZANT. He also suggested that we use React.js and node.js as front-end and back-end, along with express and mongoDB.
+-Professor Bloomberg asked us to explain the details of Teach Me. The professor suggested that we take a look at WYZANT as a similar platform. He also suggested that we use React.js and node.js as front-end and back-end, along with Express and MongoDB.
   
 ## End User Observations
 ---
 #### Persona1:
-- Brian Booth is a college student with fair amount of free time, and he would like to learn how to code in Python without taking classes in this university. He has tried various methods to achieve his goal, but there are flaws for method. Searching up videos on YouTube easy and free, but there when Brian needs further explaination on a problem or when he fails to solve a bug, there is no one to help him. As a college student, Brian thinks that the paid online courses are costing too much. He wish there is a place where he can learn the basics without guidance but not paying too much.
+- Brian Booth is a college student with fair amount of free time, and he would like to learn how to code in Python without taking classes in this university. He has tried various methods to achieve his goal, but there are flaws for method. Searching up videos on YouTube easy and free, but there when Brian needs further explaination on a problem or when he fails to solve a bug, there is no one to help him. As a college student, Brian thinks that the paid online courses are costing too much. He wish there is a place where he can learn the basics with guidance without spending too much.
 
 #### Persona2:
 - Mattie Lopez is a college student who is also a very skilled guitar player. She would like to teach others how to play this instrument. She has thought of recording videos and publish it online. However, she would prefer to have some income from teaching these classes. In addition, she would also want to browse other classes avaliable. 
