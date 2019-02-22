@@ -12,7 +12,7 @@ All contributions made to this repository are welcomed and appreciated. Nonethel
 All codes for User Stories must (1) satisfy all the requirements, (2) be reviewed by other members of the team and (3) pass automated tests before merging into master.
 
 ## Standup schedule
-In-person standups will occur on Tuesdays and Thursdays after class; remote standups will occur on Fridays and Sundays at 6pm.
+In-person standups will occur on Tuesdays and Thursdays after class, as well as on Fridays at 6pm; remote standups will occur on Sundays at 6pm.
 
 Team members are expected to appear on time for standups. All absences should be communicated through Slack prior to the standup.
 
