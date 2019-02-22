@@ -71,3 +71,6 @@
 - Scenario:  When a course is completed, the learner and instructor can find their completed course in the course history. When they click the rate button near the record, a window will pop out for them to select a score between one and five. There will also be a textbox for them to leave comment on each other. They can also select or add a tag to the comment, indicating the corresponding course.
 
  ![Use Case Diagram 6](https://github.com/nyu-software-engineering/teach-me/blob/master/requirements_diagrams/Use%20Case%206.jpg)
+
+ ## Domain modeling
+ ![Domain Modeling](https://github.com/nyu-software-engineering/teach-me/blob/master/requirements_diagrams/Domain%20Modeling.jpg)
