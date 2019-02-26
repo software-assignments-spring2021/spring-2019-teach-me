@@ -9,10 +9,9 @@ The idea behind **Teach Me** came from observing a simple problem evident in our
 Those who continue to pursue their passions, whether they are dramatic, musical or craft-based in nature, often find themselves experiencing financial hardship. On the other hand, those who choose to focus on maximizing their financial gain are yearning to discover (or rediscover) their creative potential. By connecting these diverse groups of people, **Teach Me** seeks to bridge the gap and help our teachers improve their financial security, and our learners to rekindle their passions for all things creative and fun.
 
 ## How to contribute
-Thank you for your interest in contributing! Please check out our [Contributing Guidelines](https://github.com/nyu-software-engineering/teach-me/blob/master/CONTRIBUTING.md) for detailed instructions regarding project contributions.
+Thank you for your interest in contributing! Please check out our [contributing guidelines](https://github.com/nyu-software-engineering/teach-me/blob/master/CONTRIBUTING.md) for detailed instructions regarding project contributions. To get a better grasp of what we are trying to accomplish, please also take a look at our [project requirements](https://github.com/nyu-software-engineering/teach-me/blob/master/REQUIREMENTS.md).
 
 ## How to build and test
 This section will be added after first build.
 
 ## Additional links
-[Our Project Requirements](https://github.com/nyu-software-engineering/teach-me/blob/master/REQUIREMENTS.md)
