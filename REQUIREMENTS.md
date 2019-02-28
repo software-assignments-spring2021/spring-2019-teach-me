@@ -10,7 +10,7 @@
 
 ## Non-functional Requirements
 - Technologies that will be used: MongoDB, Express, Reactjs, Nodejs 
-- Variable names must follow language convention
+- Variable names must follow language convention, which is lowerCamelCase for JavaScript.
 - Development process will adhere to Agile methodology, which will be implemented using the Scrum framework
 - System uptime will be at least 90% after launch
 
