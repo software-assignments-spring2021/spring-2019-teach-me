@@ -1,0 +1,16 @@
+.nav-link {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.navbar-brand {
+	font-weight: bold;
+}
+
+.navbar-nav .btn {
+	margin-left: 10px;
+}
+
+.bg-primary {
+	background-color: #17a2b8 !important;
+}
