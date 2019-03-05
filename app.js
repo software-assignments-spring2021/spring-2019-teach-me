@@ -23,6 +23,10 @@ app.get('/teach-others', function(req, res) {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
+app.get('/about', function(req, res) {
+	res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 app.listen(9000);
 
 module.exports = app;

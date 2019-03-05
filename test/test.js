@@ -25,4 +25,16 @@ describe('the server', function() {
 		.expect('Content-Type', /html/)
 		.expect(200, done);
 	});
+
+	it('shoud respond to /about with a html document', function(done) {
+		request(app)
+			.get('/about')
+			.set('Accept', 'text/html')
+			.expect('Content-Type', /html/)
+			.expect(200, done);
+	});
+
+
+
+
 });
