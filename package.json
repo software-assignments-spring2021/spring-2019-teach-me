@@ -16,7 +16,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test-react-default": "react-scripts test",
+    "test": "mocha --exit",
+    "test-with-coverage": "nyc --reporter=text mocha --exit",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
