@@ -19,3 +19,5 @@ app.get('/*', function(req, res) {
 });
 
 app.listen(9000);
+
+module.exports = app;
