@@ -29,5 +29,11 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.0.2",
+    "nyc": "^13.3.0",
+    "supertest": "^3.4.2"
+  }
 }
