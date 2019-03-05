@@ -17,4 +17,12 @@ describe('the server', function() {
 			.expect('Content-Type', /json/)
 			.expect(200, done);
 	});
+
+	it('should respond to a request for /teach-others with a html document', function (done) {
+	request(app)
+		.get('/teach-others')
+		.set('Accept', 'text/html')
+		.expect('Content-Type', /html/)
+		.expect(200, done);
+	});
 });
