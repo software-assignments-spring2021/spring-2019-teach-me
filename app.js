@@ -27,6 +27,10 @@ app.get('/about', function(req, res) {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
+//Temp
+app.get('/payment', function(req, res) {
+	res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 app.listen(9000);
 
 module.exports = app;
