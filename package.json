@@ -5,10 +5,10 @@
   "dependencies": {
     "bootstrap": "^4.3.1",
     "express": "^4.16.4",
-    "mongoose": "^5.4.16",
-    "react": "^16.8.3",
+    "mongoose": "^5.4.17",
+    "react": "^16.8.4",
     "react-bootstrap": "^1.0.0-beta.5",
-    "react-dom": "^16.8.3",
+    "react-dom": "^16.8.4",
     "react-router-bootstrap": "^0.24.4",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.5"
@@ -32,6 +32,7 @@
   ],
   "devDependencies": {
     "chai": "^4.2.0",
+    "eslint": "^5.15.1",
     "mocha": "^6.0.2",
     "nyc": "^13.3.0",
     "supertest": "^3.4.2"
