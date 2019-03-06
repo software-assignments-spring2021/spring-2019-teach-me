@@ -10,6 +10,6 @@ const Testclass =  mongoose.model('Testclass', testclassSchema);
 
 
 const dbconf = process.env.DB_URI;
-mongoose.connect(dbconf);
+mongoose.connect(dbconf, { useNewUrlParser: true });
 
 
