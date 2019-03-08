@@ -25,10 +25,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "server": "nodemon app.js",
     "test-react-default": "react-scripts test",
-    "test": "mocha --exit",
-    "test-with-coverage": "nyc --reporter=text mocha --exit",
+    "test": "export DB_URI='mongodb+srv://throwaway-user-1:gLDkfoFApIyyz3Fg@teach-me-zlqgf.mongodb.net/test?retryWrites=true'; mocha --exit",
+    "test-with-coverage": "export DB_URI='mongodb+srv://throwaway-user-1:gLDkfoFApIyyz3Fg@teach-me-zlqgf.mongodb.net/test?retryWrites=true'; nyc --reporter=text mocha --exit",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -42,6 +41,7 @@
   ],
   "devDependencies": {
     "chai": "^4.2.0",
+    "eslint": "^5.15.1",
     "mocha": "^6.0.2",
     "nodemon": "^1.18.10",
     "nyc": "^13.3.0",
