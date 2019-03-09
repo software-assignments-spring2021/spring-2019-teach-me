@@ -41,7 +41,6 @@
   ],
   "devDependencies": {
     "chai": "^4.2.0",
-    "eslint": "^5.15.1",
     "mocha": "^6.0.2",
     "nodemon": "^1.18.10",
     "nyc": "^13.3.0",
