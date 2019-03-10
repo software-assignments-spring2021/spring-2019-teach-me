@@ -19,7 +19,7 @@ export const Routes = () => {
 					<Redirect to="/home" />
 				</Route>
 				<Route exact path="/classes" component={Classes} />
-				<Route exact path="/create-class" component={CreateClass} />
+				<Route exact path="/create-class/:instructorId" component={CreateClass} />
 				<Route exact path="/myaccount" component={MyAccount} />
 				<Route component={NoMatch} />
 			</Switch>
