@@ -9,7 +9,7 @@ const CreateClass = props => {
 	return (
 	<div id='create-form'>
      <h3>Create a Class</h3>
-     <form method="post" action="/create-class">
+     <form method="post" action="">
 	 <label>Name</label><br />
 	 <input type="text" name="name" required /><br />
 	 <label>Description</label><br />
