@@ -1,4 +1,44 @@
-.class-listing {
+.jumbotron, .class-listing-display {
     width: 60%;
     margin: 2.5% auto;
+}
+
+.class-filter {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.italics-text {
+    font-style: italic;
+}
+
+.instructor-img {
+    width: 110px;
+    height: 110px;
+    float: right;
+}
+
+.card {
+    margin-top: 3%;
+}
+
+.pagination {
+    margin: 20px auto;
+}
+
+.pagination li{
+    padding: 20px;
+}
+
+.pagination a {
+    color: #17a2b8;
+    font-size: 20px;
+}
+
+.active{
+    background-color: #17a2b8;
+}
+
+.active a {
+    color: white;
 }
