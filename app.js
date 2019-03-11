@@ -51,6 +51,23 @@ require("./config/passport")(passport);
 // Routes
 app.use("/api/users", users);
 
+// Create Class
+app.post('/create-class/:instructorId', function(req, res) {
+	const newClass = new Class({
+		name: req.body.name,
+        description: req.body.description,
+        price: req.body.price,
+        proposedSchedule: req.body.proposedSchedule,
+        instructor: new mongoose.Types.ObjectId(req.params.instructorId),
+    });
+	newClass.save((err, newclass) => {
+		if (err) {
+			res.send(err);
+		}
+		res.send("New class created.");
+	});
+});
+
 app.listen(9000);
 
 module.exports = app;
