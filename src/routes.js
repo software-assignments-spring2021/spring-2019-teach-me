@@ -5,6 +5,7 @@ import { Home } from './views/Home';
 import { NoMatch } from './views/NoMatch';
 import { Classes } from './views/Classes'
 import { CreateClass } from './views/CreateClass'
+import { EditClass } from './views/EditClass'
 import { MyAccount } from './views/MyAccount'
 import { ClassHistory } from './views/ClassHistory'
 import { NavBar } from './components/NavBar';
@@ -21,6 +22,7 @@ export const Routes = () => {
 				</Route>
 				<Route exact path="/classes" component={Classes} />
 				<Route exact path="/create-class/:instructorId" component={CreateClass} />
+				<Route exact path="/edit-class/:classId" component={EditClass} />
 				<Route exact path="/myaccount" component={MyAccount} />
 				<Route exact path="/classhistory" component={ClassHistory}/>
 				<Route component={NoMatch} />
