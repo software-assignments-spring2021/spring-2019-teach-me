@@ -1,0 +1,30 @@
+#edit-form {
+    width: 60%;
+    margin: auto;
+}
+
+form {
+	width: 80%;
+	margin: auto;
+}
+
+input[type=text], input[type=number] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=submit], input[type=button] {
+  width: 40%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 5%;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
