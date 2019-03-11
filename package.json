@@ -44,6 +44,7 @@
     "mocha": "^6.0.2",
     "nodemon": "^1.18.10",
     "nyc": "^13.3.0",
+    "react-js-pagination": "^3.0.2",
     "supertest": "^3.4.2"
   }
 }
