@@ -1,6 +1,7 @@
 //https://www.robinwieruch.de/react-fetching-data/
 import React, { Component } from 'react';
 import Jumbotron from 'react-bootstrap/Jumbotron';
+import Alert from 'react-bootstrap/Alert';
 import Pagination from "react-js-pagination";
 import { ClassDisplay } from '../../components/ClassDisplay';
 import { ClassFilter } from '../../components/ClassFilter';
@@ -14,17 +15,15 @@ class Classes extends Component {
 		this.state = {
 			classListing: [],
 			allClasses: [],
-			activePage: 1
+			activePage: 1,
+			showWarning: false
 		};
 	}
 
 	componentDidMount() {
-		
 		fetch('/api/classes')
 			.then(response => response.json())
 			.then(data => this.setState({classListing: data, allClasses: data}))
-			
-		
 		//const data = [{"_id":"5c8547511c9d44000024fb63","name":"Piano","description":"Piano","price":75,"proposedSchedule":"Monday","instructor":"5c854805e0c8200000afd73a","rating":"9.6","cateogry":"Art"},{"_id":"5c855c0f7471ed05294dff40","name":"1","description":"1","price":1,"proposedSchedule":"1","rating":6,"instructor":"5c854805e0c8200000afd73a","__v":0},{"_id":"5c858b101c9d4400002224ce","name":"authentic chinese cooking","description":"the best of chinese cooking. all in one class!","price":888,"proposedSchedule":"Monday 2-4pm","instructor":"5c854805e0c8200000afd73a","rating":2.5,"category":"Music"},{"_id":"5c858b9b1c9d4400002224cf","name":"intro to javascript","description":"learning programming with the best programming language ever! (haha not really)","price":123,"proposedSchedule":"Saturdays 3-5pm","instructor":"5c854805e0c8200000afd73a","rating":9.9,"category":"Technology"}];
 		//this.setState({classListing: data, allClasses: data});
 	}
@@ -64,12 +63,17 @@ class Classes extends Component {
 			}
 		}
 		
-		this.setState({classListing: filteredClasses, activePage: 1});		
+		console.log(filteredClasses.length);
+		if (filteredClasses.length === 0) {
+			this.setState({showWarning: true, classListing: filteredClasses, activePage: 1});
+		}
+		else {
+			this.setState({showWarning: false, classListing: filteredClasses, activePage: 1});
+		}
+				
 	}
 	
 	render() {
-		
-		console.log(this.state.classListing);
 		const classListData = this.state.classListing.map(function(data, index) {
 			return <ClassDisplay key={index} title={data.name} description={data.description} price={data.price} instructor={data.instructor} rating={data.rating} category={data.category}/>
 		});
@@ -92,6 +96,7 @@ class Classes extends Component {
 				</div>
 				<div className='class-listing-display'>
 					{toDisplay}
+					{ this.state.showWarning ? <Alert variant='danger'>It seems that we don't have any classes that satisfy your filter. Try resetting the filter to see more results!</Alert> : null }
 					<div className='pagination-container'>
 						<Pagination
 							activePage={this.state.activePage}
