@@ -1,47 +1,63 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Button, Form, Row, Col} from 'react-bootstrap'
+//import { Link } from 'react-router-dom';
+import { Form } from 'react-bootstrap'
 
 
 class ClassFilter extends Component {
+    constructor(props) {
+		super(props);
+
+		this.state = {
+            maxPrice: 'Max Price...',
+            minRating: 'Min Rating...',
+            classCategory: 'Class Category...'
+		};
+    }
+    
+    filterResults(e) {
+        const filterType = e.target.id;
+        if (filterType === 'maxPrice') {
+            this.setState({maxPrice: e.target.value}, () => {
+                this.props.filterResults(this.state);
+            });
+        }
+        else if (filterType === 'minRating') {
+            this.setState({minRating: e.target.value}, () => {
+                this.props.filterResults(this.state);
+            });
+        }
+        else {
+            this.setState({classCategory: e.target.value}, () => {
+                this.props.filterResults(this.state);
+            });
+        }
+    }
+
     render() {
         return(
-            <Form className="class-filter">
-                <Row>
-                    <Col>
-                        <Form.Group controlId="maxPrice">
-                            <Form.Control as="select">
-                                <option>Max Price...</option>
-                                <option>$50</option>
-                                <option>$100</option>
-                            </Form.Control>
-                        </Form.Group>
-                    </Col>
-                    <Col>
-                        <Form.Group controlId="minRating">
-                            <Form.Control as="select">
-                                <option>Min Rating...</option>
-                                <option>70%</option>
-                                <option>85%</option>
-                            </Form.Control>
-                        </Form.Group>
-                    </Col>
-                    <Col>
-                        <Form.Group controlId="classCategory">
-                            <Form.Control as="select">
-                                <option>Class Category...</option>
-                                <option>Music</option>
-                                <option>Art</option>
-                                <option>Language</option>
-                            </Form.Control>
-                        </Form.Group>
-                    </Col>
-                    <Col sm={1}>
-                        <Button variant="info" type="submit">
-                            Filter
-                        </Button>
-                    </Col>
-                </Row>
+            <Form className="class-filter" >
+                <Form.Group controlId="maxPrice" onChange={this.filterResults.bind(this)}>
+                    <Form.Control as="select" >
+                        <option value={undefined}>Max Price...</option>
+                        <option value={50}>$50</option>
+                        <option value={100}>$100</option>
+                    </Form.Control>
+                </Form.Group>
+                <Form.Group controlId="minRating" onChange={this.filterResults.bind(this)}>
+                    <Form.Control as="select" >
+                        <option value={undefined}>Min Rating...</option>
+                        <option>8</option>
+                        <option>9</option>
+                    </Form.Control>
+                </Form.Group>
+                <Form.Group controlId="classCategory" onChange={this.filterResults.bind(this)}>
+                    <Form.Control as="select" >
+                        <option value={undefined}>Class Category...</option>
+                        <option>Music</option>
+                        <option>Art</option>
+                        <option>Language</option>
+                    </Form.Control>
+                </Form.Group>
             </Form>
         );
     }

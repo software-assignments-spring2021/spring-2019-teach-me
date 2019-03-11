@@ -13,26 +13,66 @@ class Classes extends Component {
 
 		this.state = {
 			classListing: [],
+			allClasses: [],
 			activePage: 1
 		};
 	}
 
 	componentDidMount() {
+		
 		fetch('/api/classes')
 			.then(response => response.json())
-			.then(data => this.setState({classListing: data}))	
+			.then(data => this.setState({classListing: data, allClasses: data}))
+			
+		
+		//const data = [{"_id":"5c8547511c9d44000024fb63","name":"Piano","description":"Piano","price":75,"proposedSchedule":"Monday","instructor":"5c854805e0c8200000afd73a","rating":"9.6","cateogry":"Art"},{"_id":"5c855c0f7471ed05294dff40","name":"1","description":"1","price":1,"proposedSchedule":"1","rating":6,"instructor":"5c854805e0c8200000afd73a","__v":0},{"_id":"5c858b101c9d4400002224ce","name":"authentic chinese cooking","description":"the best of chinese cooking. all in one class!","price":888,"proposedSchedule":"Monday 2-4pm","instructor":"5c854805e0c8200000afd73a","rating":2.5,"category":"Music"},{"_id":"5c858b9b1c9d4400002224cf","name":"intro to javascript","description":"learning programming with the best programming language ever! (haha not really)","price":123,"proposedSchedule":"Saturdays 3-5pm","instructor":"5c854805e0c8200000afd73a","rating":9.9,"category":"Technology"}];
+		//this.setState({classListing: data, allClasses: data});
 	}
 
 	handlePageChange(pg) {
 		this.setState({activePage: pg});
 	}
+
+	filterResults(query) {
+		console.log(query);
+		const allClasses = this.state.allClasses;
+		let filteredClasses = [];
+
+		for (let i = 0; i < allClasses.length; i++) {
+			let includeInResult = true;
+			const c = allClasses[i];
+			if (query['maxPrice'] !== 'Max Price...') {
+				if (c.price > parseFloat(query['maxPrice'])) {
+					includeInResult = false;
+				}
+			}
+
+			if (query['minRating'] !== 'Min Rating...') {
+				if (c.rating < parseFloat(query['minRating'])) {
+					includeInResult = false;
+				}
+			}
+
+			if (query['classCategory'] !== 'Class Category...') {
+				if (c.category !== query['classCategory']) {
+					includeInResult = false;
+				}
+			}
+
+			if (includeInResult) {
+				filteredClasses.push(c);
+			}
+		}
+		
+		this.setState({classListing: filteredClasses, activePage: 1});		
+	}
 	
 	render() {
 		
+		console.log(this.state.classListing);
 		const classListData = this.state.classListing.map(function(data, index) {
 			return <ClassDisplay key={index} title={data.name} description={data.description} price={data.price} instructor={data.instructor} rating={data.rating} category={data.category}/>
 		});
-		
 		
 		const CLASSES_PER_PAGE = 2;
 
@@ -47,7 +87,9 @@ class Classes extends Component {
 					<h1>Available Classes</h1>
 					<p>Below is the list of classes that are available on TeachMe.</p>
 				</Jumbotron>
-				<ClassFilter />
+				<div className='filter-container'>
+					<ClassFilter filterResults={this.filterResults.bind(this)}/>
+				</div>
 				<div className='class-listing-display'>
 					{toDisplay}
 					<div className='pagination-container'>

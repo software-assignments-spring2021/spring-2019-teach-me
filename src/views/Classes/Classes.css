@@ -3,10 +3,27 @@
     margin: 2.5% auto;
 }
 
+.filter-container {
+    text-align: center;
+}
+
 .class-filter {
-    width: 60%;
+    width: 75%;
     margin: 0 auto;
 }
+
+.class-filter div{
+    display: inline-block;
+    width: 22.5%;
+    margin-left: 12.5px;
+    margin-right: 12.5px; 
+}
+
+/*
+input {
+    width: 100% !important;
+}
+*/
 
 .italics-text {
     font-style: italic;
@@ -23,10 +40,13 @@
 }
 
 .pagination {
-    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
 }
 
 .pagination li{
+    display: block;
     padding: 20px;
 }
 
@@ -35,7 +55,7 @@
     font-size: 20px;
 }
 
-.active{
+.active {
     background-color: #17a2b8;
 }
 
