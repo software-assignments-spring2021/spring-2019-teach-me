@@ -1,0 +1,12 @@
+.nav-tabs {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.class-history-nav a {
+    color: #17a2b8;
+}
+
+.filter-container-ch {
+    margin-top: 3%;
+}
