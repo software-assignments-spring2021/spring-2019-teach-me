@@ -24,9 +24,38 @@ app.get('/api/classes', function(req, res) {
 	});
 });
 
+app.get('/api/class-history-teach/:userId', function(req, res) {
+	console.log(req.params.userId);
+	const instructorId = new mongoose.Types.ObjectId(req.params.userId);
+	Class.find({instructor: instructorId},function(err, classes, count) {
+		res.json(classes);
+	});
+})
+
+app.post('/api/create-class', function(req, res) {
+	//console.log(req.body);
+	const newClass = new Class({
+		name: req.body.name,
+        description: req.body.description,
+        price: req.body.price,
+		proposedSchedule: req.body.proposedSchedule,
+		instructor: req.body.instructorId
+    });
+	newClass.save((err, newclass) => {
+		if (err) {
+			res.json({result: err});
+		}
+		else {
+			res.json({result: 'success'});
+		}
+	});
+});
+
 app.get('/*', function(req, res) {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
+
+
 
 /*
 // Temporary
@@ -51,6 +80,7 @@ require("./config/passport")(passport);
 // Routes
 app.use("/api/users", users);
 
+/*
 // Create Class
 app.post('/create-class/:instructorId', function(req, res) {
 	const newClass = new Class({
@@ -67,6 +97,7 @@ app.post('/create-class/:instructorId', function(req, res) {
 		res.send("New class created.");
 	});
 });
+*/
 
 app.listen(9000);
 

@@ -9,7 +9,7 @@ class ClassDisplay extends Component {
         return(
             <Card>
                 <Card.Body>
-                    <Card.Img className="instructor-img" src="./images/default-user.png"></Card.Img>
+                    <Card.Img className="instructor-img" src="/images/default-user.png"></Card.Img>
                     <Card.Title>{this.props.title}</Card.Title>
                     <Card.Text>{this.props.description}</Card.Text>
                     <Card.Text className="italics-text">Price: ${this.props.price} | Rating: {this.props.rating} | Category: {this.props.category}</Card.Text>
