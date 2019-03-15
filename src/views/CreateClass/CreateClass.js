@@ -27,7 +27,7 @@ class CreateClass extends Component {
 		const { instructorId } = this.props.match.params;
 		newClassObj.instructorId = instructorId;
 		console.log(newClassObj);
-		/*
+		
 		fetch('/api/create-class/', {
 			method: 'POST',
 			body: JSON.stringify(newClassObj),
@@ -36,7 +36,7 @@ class CreateClass extends Component {
             }
 		}).then(response => response.json())
 			.then(data => this.setState({successRedirect: data}));
-			*/
+			
 
 	}
 
@@ -59,6 +59,8 @@ class CreateClass extends Component {
 							<input type="number" name="price" required /><br />
 							<label>Proposed Schedule</label><br />
 							<input type="text" name="proposedSchedule" required /><br />
+							<label>Category</label><br />
+							<input type="text" name="category" required /><br />
 							<input type="submit" value="Publish" />
 							<input type="button" value="Cancel" />
 					</form>

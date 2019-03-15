@@ -14,7 +14,11 @@ const classSchema = new mongoose.Schema ({
     description : String,
     price: Number,
     proposedSchedule: String,
-    instructor: {type: mongoose.Schema.Types.ObjectId, ref: 'Instructor'}
+    instructor: {type: mongoose.Schema.Types.ObjectId, ref: 'Instructor'},
+    category: String,
+    rating: Number,
+    sumOfRating: Number,
+    numOfRating: Number
 });
 
 const Class =  mongoose.model('Class', classSchema);
