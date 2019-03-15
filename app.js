@@ -30,7 +30,7 @@ app.get('/api/class-history-teach/:userId', function(req, res) {
 	Class.find({instructor: instructorId},function(err, classes, count) {
 		res.json(classes);
 	});
-})
+});
 
 app.post('/api/create-class', function(req, res) {
 	//console.log(req.body);
@@ -39,7 +39,11 @@ app.post('/api/create-class', function(req, res) {
         description: req.body.description,
         price: req.body.price,
 		proposedSchedule: req.body.proposedSchedule,
-		instructor: req.body.instructorId
+		instructor: req.body.instructorId,
+        category: req.body.category,
+        rating: 0,
+    	sumOfRating: 0,
+    	numOfRating: 0
     });
 	newClass.save((err, newclass) => {
 		if (err) {
@@ -98,6 +102,18 @@ app.post('/create-class/:instructorId', function(req, res) {
 	});
 });
 */
+
+
+// Does not work yet
+app.get('/api/edit-class/:classId', function(req, res) {
+	console.log("1");
+	console.log(req.params.classId);
+	console.log("2");
+	const classId = new mongoose.Types.ObjectId(req.params.classId);
+	Class.find({_id: classId},function(err, classes, count) {
+		res.json(classes);
+	});
+})
 
 app.listen(9000);
 
