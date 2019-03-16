@@ -28,7 +28,8 @@
     "test-react-default": "react-scripts test",
     "test": "export DB_URI='mongodb+srv://throwaway-user-1:gLDkfoFApIyyz3Fg@teach-me-zlqgf.mongodb.net/test?retryWrites=true'; mocha --exit",
     "test-with-coverage": "export DB_URI='mongodb+srv://throwaway-user-1:gLDkfoFApIyyz3Fg@teach-me-zlqgf.mongodb.net/test?retryWrites=true'; nyc --reporter=text mocha --exit",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "npm run build; nodemon app.js"
   },
   "eslintConfig": {
     "extends": "react-app"
