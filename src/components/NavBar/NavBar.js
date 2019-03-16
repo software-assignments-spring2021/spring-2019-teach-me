@@ -18,7 +18,7 @@ const NavBar = () => {
 			<LinkContainer to="/about"><NavItem className="nav-link">About</NavItem></LinkContainer>
 		</Nav>
 		<Nav>
-			<LinkContainer to="/log-in"><Button variant="outline-light">Log In</Button></LinkContainer>
+			<LinkContainer to="/login"><Button variant="outline-light">Log In</Button></LinkContainer>
 			<LinkContainer to="/register"><Button variant="outline-light">Sign Up</Button></LinkContainer>
 		</Nav>
     </Navbar>

@@ -9,6 +9,7 @@ import { EditClass } from './views/EditClass'
 import { MyAccount } from './views/MyAccount'
 import { ClassHistory } from './views/ClassHistory'
 import { NavBar } from './components/NavBar';
+import { Login } from './views/Login';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 export const Routes = () => {
@@ -25,6 +26,7 @@ export const Routes = () => {
 				<Route exact path="/edit-class/:classId" component={EditClass} />
 				<Route exact path="/my-account" component={MyAccount} />
 				<Route exact path="/class-history/:userId" component={ClassHistory}/>
+				<Route exact path="/login" component={Login} />
 				<Route component={NoMatch} />
 			</Switch>
 		</div>
