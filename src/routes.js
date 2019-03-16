@@ -10,6 +10,7 @@ import { MyAccount } from './views/MyAccount'
 import { ClassHistory } from './views/ClassHistory'
 import { NavBar } from './components/NavBar';
 import { Login } from './views/Login';
+import { Register } from './views/Register';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 export const Routes = () => {
@@ -27,6 +28,7 @@ export const Routes = () => {
 				<Route exact path="/my-account" component={MyAccount} />
 				<Route exact path="/class-history/:userId" component={ClassHistory}/>
 				<Route exact path="/login" component={Login} />
+				<Route exact path="/register" component={Register} />
 				<Route component={NoMatch} />
 			</Switch>
 		</div>
