@@ -8,7 +8,8 @@ export default class Login extends Component {
 
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      errors: {}
     };
   }
 
@@ -24,6 +25,12 @@ export default class Login extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
+    const userData = {
+      email: this.state.email,
+      password: this.state.password
+    };
+
+    console.log(userData);
   }
 
   render() {
