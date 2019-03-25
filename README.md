@@ -13,6 +13,10 @@ Thank you for your interest in contributing! Please check out our [contributing 
 
 ## How to build and test
 
+## Latest builds status Travis.ci
+[![Build Status](https://travis-ci.com/nyu-software-engineering/teach-me.svg?branch=master)](https://travis-ci.com/nyu-software-engineering/teach-me)
+
+
 ### Build instructions
 1. Clone the repository to your local machine using the command line `$ git clone https://github.com/nyu-software-engineering/teach-me.git`
 2. Install [nodejs and npm](https://www.npmjs.com/get-npm)
