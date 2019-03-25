@@ -2,4 +2,9 @@ language: node_js
 node_js:
   - "node"
   - "7"
-  
+
+notifications:
+  slack:
+    rooms:
+      - nyu-agile-software:O3V1RiMjAyzTmGRpKiJlWmx1#travis-result
+      - nyu-agile-software:O3V1RiMjAyzTmGRpKiJlWmx1#group_teach
