@@ -6,5 +6,5 @@ node_js:
 notifications:
   slack:
     rooms:
-      - nyu-agile-software:O3V1RiMjAyzTmGRpKiJlWmx1#travis-result
+      - nyu-agile-software:O3V1RiMjAyzTmGRpKiJlWmx1#travis-results
       - nyu-agile-software:O3V1RiMjAyzTmGRpKiJlWmx1#group_teach
