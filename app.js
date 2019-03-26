@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const users = require("./routes/api/users");
 
+
 const Class = mongoose.model('Class');
 const app = express();
 
