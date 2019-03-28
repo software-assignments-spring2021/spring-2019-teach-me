@@ -1,1 +1,24 @@
-//temp test
+
+.instructor-profile-page {
+    width: 60%;
+    margin: 2.5% auto;
+}
+
+.title {
+    padding-bottom: 20px;
+}
+
+.comment {
+    margin: 10px;
+    height: 90px;
+    border-bottom: 1px solid #e4e6e8;
+}
+
+.comment-date {
+    float: right;
+}
+
+.no-comments {
+    text-align: center;
+    color: gray;
+}
