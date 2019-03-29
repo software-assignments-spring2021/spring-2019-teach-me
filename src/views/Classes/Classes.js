@@ -62,7 +62,7 @@ class Classes extends Component {
 				filteredClasses.push(c);
 			}
 		}
-		
+
 		console.log(filteredClasses.length);
 		if (filteredClasses.length === 0) {
 			this.setState({showWarning: true, classListing: filteredClasses, activePage: 1});
@@ -70,14 +70,14 @@ class Classes extends Component {
 		else {
 			this.setState({showWarning: false, classListing: filteredClasses, activePage: 1});
 		}
-				
+
 	}
-	
+
 	render() {
 		const classListData = this.state.classListing.map(function(data, index) {
 			return <ClassDisplay key={index} title={data.name} description={data.description} price={data.price} instructor={data.instructor} rating={data.rating} category={data.category}/>
 		});
-		
+
 		const CLASSES_PER_PAGE = 2;
 
 		const startIdx = (this.state.activePage - 1) * CLASSES_PER_PAGE;

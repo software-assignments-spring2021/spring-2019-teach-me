@@ -23,7 +23,7 @@ export const Routes = () => {
 				<Route exact path="/classes" component={Classes} />
 				<Route exact path="/create-class/:instructorId" component={CreateClass} />
 				<Route exact path="/edit-class/:classId" component={EditClass} />
-				<Route exact path="/my-account" component={MyAccount} />
+				<Route exact path="/my-account/:userId" component={MyAccount} />
 				<Route exact path="/class-history/:userId" component={ClassHistory}/>
 				<Route component={NoMatch} />
 			</Switch>
