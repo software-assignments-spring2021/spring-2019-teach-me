@@ -7,6 +7,7 @@ const passport = require("passport");
 const users = require("./routes/api/users");
 
 const Class = mongoose.model('Class');
+const Users = mongoose.model('users');
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'build')));
@@ -29,6 +30,13 @@ app.get('/api/class-history-teach/:userId', function(req, res) {
 	const instructorId = new mongoose.Types.ObjectId(req.params.userId);
 	Class.find({instructor: instructorId},function(err, classes, count) {
 		res.json(classes);
+	});
+});
+
+app.get('/api/my-account/:userId', function(req, res) {
+	const userId = new mongoose.Types.ObjectId(req.params.userId);
+	Users.find({}, function(err, userinfo) {
+		res.json(userinfo);
 	});
 });
 

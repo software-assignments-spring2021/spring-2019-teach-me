@@ -11,14 +11,34 @@ class MyAccount extends Component {
     this.state = {
       IsReadOnly: true,
       imageIsReadOnly: true,
-      value: 'roger'
+      userName: '',
+      userEmail: ''
     };
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handleEditClick = this.handleEditClick.bind(this);
   }
-  handleChange(event) {
-    this.setState({value:event.target.value});
+
+  componentDidMount() {
+    const { userId } = this.props.match.params;
+    const url = '/api/my-account/' + userId;
+    console.log(url);
+    fetch(url)
+      .then(response => response.json())
+      .then(data => this.setState({userName: data.name}, {userEmail: data.email}))
+      console.log(this.state.userName);
+  }
+
+
+
+
+  handleNameChange(event) {
+    this.setState({userName:event.target.value});
+  }
+
+  handleEmailChange(event) {
+    this.setState({userEmail:event.target.value});
   }
 
   handleSubmit(event) {
@@ -30,19 +50,19 @@ class MyAccount extends Component {
     this.setState({IsReadOnly:false});
   }
 
-  render() {
+  render() { console.log(this.state.userEmail);
     return (
       <div className='myaccount-page'>
         <h3>My Account Page</h3><br />
 
         <form onSubmit={this.handleSubmit}>
         <label>Name</label>
-        <input type = "text" name = "name" value = {this.state.value} readOnly={this.state.IsReadOnly}
-        onChange = {this.handleChange} required/>
+        <input type = "text" name = "name" value = {this.state.userName} readOnly={this.state.IsReadOnly}
+        onChange = {this.handleNameChange} required/>
         <input type = "button" name = "editname" value = "Edit" onClick={this.handleEditClick} /><br />
         <label>Email</label>
-        <input type = "text" name = "email" value = "roger@gmail.com" readOnly={this.state.IsReadOnly}
-        onChange = {this.handleChange} required/>
+        <input type = "text" name = "email" value = {this.state.userEmail} readOnly={this.state.IsReadOnly}
+        onChange = {this.handleEmailChange} required/>
         <input type = "button" name = "editemail" value = "Edit" onClick={this.handleEditClick}/><br />
         <input type = "submit" value = "Submit"/>
         </form>
