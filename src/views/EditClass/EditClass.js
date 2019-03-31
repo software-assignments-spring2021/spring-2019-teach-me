@@ -79,7 +79,7 @@ class EditClass extends Component {
 						<input type="text" name="category" value={this.state.class.category} required /><br />
 						<input type="submit" value="Publish" />
 						<input type="button" value="Cancel" onClick={this.handleCancel} />
-						</a>
+						
 					</form>
 				</div>
 			);
