@@ -63,6 +63,14 @@ app.post('/api/create-class', function(req, res) {
 	});
 });
 
+app.get('/api/edit-class/:classId', function(req, res) {
+	console.log(req.params.classId);
+	const classId = new mongoose.Types.ObjectId(req.params.classId);
+	Class.find({_id: classId},function(err, classes, count) {
+		res.json(classes);
+	});
+})
+
 app.get('/*', function(req, res) {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
@@ -110,18 +118,6 @@ app.post('/create-class/:instructorId', function(req, res) {
 	});
 });
 */
-
-
-// Does not work yet
-app.get('/api/edit-class/:classId', function(req, res) {
-	console.log("1");
-	console.log(req.params.classId);
-	console.log("2");
-	const classId = new mongoose.Types.ObjectId(req.params.classId);
-	Class.find({_id: classId},function(err, classes, count) {
-		res.json(classes);
-	});
-})
 
 app.listen(9000);
 
