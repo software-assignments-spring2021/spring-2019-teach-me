@@ -42,14 +42,16 @@ class EditClass extends Component {
 
 		console.log(newClassObj);
 
-		// fetch('/api/edit-class/', {
-		// 	method: 'POST',
-		// 	body: JSON.stringify(newClassObj),
-		// 	headers: {
-		// 	'Content-Type': 'application/json'
-		// }
-		// }).then(response => response.json())
-		// 	.then(data => this.setState({successRedirect: data}));
+		const { classId } = this.props.match.params;
+		const url = '/api/edit-class/' + classId;
+		fetch(url, {
+			method: 'POST',
+			body: JSON.stringify(newClassObj),
+			headers: {
+			'Content-Type': 'application/json'
+		}
+		}).then(response => response.json())
+			.then(data => this.setState({successRedirect: data}));
 	}
 
 	handleCancel(e) {
@@ -68,18 +70,17 @@ class EditClass extends Component {
 					<h3>Edit the Class</h3>
 					<form onSubmit={this.handleSubmit}>
 						<label>Name</label><br />
-						<input type="text" name="name" value={this.state.class.name} required /><br />
+						<input type="text" name="name" defaultValue={this.state.class.name} required /><br />
 						<label>Description</label><br />
-						<input type="text" name="description" value={this.state.class.description} required /><br />
+						<input type="text" name="description" defaultValue={this.state.class.description} required /><br />
 						<label>Price</label><br />
-						<input type="number" name="price" value={this.state.class.price} required /><br />
+						<input type="number" name="price" defaultValue={this.state.class.price} required /><br />
 						<label>Proposed Schedule</label><br />
-						<input type="text" name="proposedSchedule" value={this.state.class.proposedSchedule} required /><br />
+						<input type="text" name="proposedSchedule" defaultValue={this.state.class.proposedSchedule} required /><br />
 						<label>Category</label><br />
-						<input type="text" name="category" value={this.state.class.category} required /><br />
+						<input type="text" name="category" defaultValue={this.state.class.category} required /><br />
 						<input type="submit" value="Publish" />
 						<input type="button" value="Cancel" onClick={this.handleCancel} />
-						
 					</form>
 				</div>
 			);

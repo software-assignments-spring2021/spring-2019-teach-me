@@ -69,7 +69,20 @@ app.get('/api/edit-class/:classId', function(req, res) {
 	Class.find({_id: classId},function(err, classes, count) {
 		res.json(classes);
 	});
-})
+});
+
+app.post('/api/edit-class/:classId', function(req, res) {
+	console.log(req.params.classId);
+	const classId = new mongoose.Types.ObjectId(req.params.classId);
+	Class.findOneAndUpdate({_id: classId}, req.body, {new:true}, function(err, classes) {
+		if (err) {
+			res.json({result: err});
+		}
+		else {
+			res.json({result: 'success'});
+		}
+	});
+});
 
 app.get('/*', function(req, res) {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'));
