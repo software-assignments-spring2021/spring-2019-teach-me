@@ -40,7 +40,6 @@ class ClassHistory extends Component {
 	displayTeach() {
 		const { userId } = this.props.match.params;
 		const url = '/api/class-history-teach/' + userId;
-		console.log(url);
 		fetch(url)
 			.then(response => response.json())
 			.then((data) => {

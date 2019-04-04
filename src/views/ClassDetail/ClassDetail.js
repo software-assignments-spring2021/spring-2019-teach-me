@@ -8,14 +8,33 @@ import { LinkContainer } from 'react-router-bootstrap'
 import './ClassDetail.css'
 
 class ClassDetail extends Component {
-    render() {
-        const testtxt = 'A check or money order for $410 made payable to the US Department of Homeland Security. If paying by check, be sure that your name and address are pre-printed on it. If you have to hand write in either your name or address on the check then we recommend getting a money order instead. Write SEVIS ID on check/money order. Do NOT send your money order separate from the application the money order is for. Your money order should be included with your other application materials.';
+
+    constructor(props) {
+		super(props);
+
+		this.state = {
+			currentClass: {}
+		};
+	}
+
+    componentDidMount() {
         const { classId } = this.props.match.params;
+        const url = '/api/classes/' + classId;
+        fetch(url)
+			.then(response => response.json())
+            .then(data => this.setState({currentClass: data}))
+        
+        /*const data = {"_id":"5c8547511c9d44000024fb63","name":"Piano","description":"Piano","price":75,"proposedSchedule":"Monday","instructor":"5c854805e0c8200000afd73a","rating":"9.6","cateogry":"Art"};
+		this.setState({currentClass: data});*/
+    }
+    
+    render() {
+        const classData = this.state.currentClass;
         return (
             <div className='detail-page-container'>
                 <Jumbotron>
-					<h1>Class Detail: xyz</h1>
-					<p>[short description goes here]</p>
+					<h1>Class Detail: {classData.name}</h1>
+					<p>{classData.description}</p>
 				</Jumbotron>
                 <div className='detail-container'>
                     <Row>
@@ -23,19 +42,19 @@ class ClassDetail extends Component {
                             <div className='detail-image-container'>
                                 <img alt='instructor profile' src='/images/default-user.png' className='instructor-image'></img>
                                 <p>Class taught by:</p>
-                                <LinkContainer to='/instructor/_id' className='instructor-link'><h5>Generic instructor name here</h5></LinkContainer>
+                                <LinkContainer to='/instructor/_id' className='instructor-link'><h5>instructor name here</h5></LinkContainer>
                             </div>
                         </Col>
                         <Col sm={7}>
                             <div className="detail-text-container">
                                 <h3>About</h3>
-                                <p>{testtxt}</p>
+                                <p>{classData.about}</p>
                                 <h3>Pricing</h3>
-                                <p>$9999</p>
+                                <p>${classData.price}</p>
                                 <h3>Proposed Class Schedule</h3>
-                                <p>blah</p>
+                                <p>{classData.proposedSchedule}</p>
                                 <h3>Class Category</h3>
-                                <p>blah</p>
+                                <p>{classData.category}</p>
                             </div>
                         </Col>
                     </Row>

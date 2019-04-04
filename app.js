@@ -20,13 +20,18 @@ app.use(
 app.use(bodyParser.json());
 
 app.get('/api/classes', function(req, res) {
-	Class.find({},function(err, classes, count) {
+	Class.find({}, function(err, classes, count) {
 		res.json(classes);
 	});
 });
 
+app.get('/api/classes/:classId', function(req, res) {
+	Class.findById(req.params.classId, function(err, result) {
+		res.json(result);
+	});
+});
+
 app.get('/api/class-history-teach/:userId', function(req, res) {
-	console.log(req.params.userId);
 	const instructorId = new mongoose.Types.ObjectId(req.params.userId);
 	Class.find({instructor: instructorId},function(err, classes, count) {
 		res.json(classes);
