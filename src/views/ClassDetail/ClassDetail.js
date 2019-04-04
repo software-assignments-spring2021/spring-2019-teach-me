@@ -30,6 +30,7 @@ class ClassDetail extends Component {
     
     render() {
         const classData = this.state.currentClass;
+        //console.log(classData);
         return (
             <div className='detail-page-container'>
                 <Jumbotron>
@@ -42,7 +43,7 @@ class ClassDetail extends Component {
                             <div className='detail-image-container'>
                                 <img alt='instructor profile' src='/images/default-user.png' className='instructor-image'></img>
                                 <p>Class taught by:</p>
-                                <LinkContainer to='/instructor/_id' className='instructor-link'><h5>instructor name here</h5></LinkContainer>
+                                <LinkContainer to={'/instructor/' + classData.instructorID} className='instructor-link'><h5>{classData.instructorName}</h5></LinkContainer>
                             </div>
                         </Col>
                         <Col sm={7}>

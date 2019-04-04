@@ -26,9 +26,25 @@ app.get('/api/classes', function(req, res) {
 });
 
 app.get('/api/classes/:classId', function(req, res) {
-	Class.findById(req.params.classId, function(err, result) {
-		res.json(result);
-	});
+	Class
+		.findOne({_id: req.params.classId})
+		.populate({
+			path: 'instructor',
+			populate: {
+				path: 'userID',
+				model: 'users'
+			}
+		})
+		.exec(function(err, classData) {
+			if (err) {
+				console.log(err)
+			}
+			classData = classData.toObject();
+			classData.instructorName = classData.instructor.userID.name;
+			classData.instructorID = classData.instructor._id;
+			//console.log(classData);
+			res.json(classData);
+		})
 });
 
 app.get('/api/class-history-teach/:userId', function(req, res) {
