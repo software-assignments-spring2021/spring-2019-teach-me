@@ -12,6 +12,7 @@ import { NavBar } from './components/NavBar';
 import { Login } from './views/Login';
 import { Register } from './views/Register';
 import { Route, Switch, Redirect } from 'react-router-dom';
+import ClassDetail from './views/ClassDetail/ClassDetail';
 
 export const Routes = () => {
 	return (
@@ -23,6 +24,7 @@ export const Routes = () => {
 					<Redirect to="/home" />
 				</Route>
 				<Route exact path="/classes" component={Classes} />
+				<Route exact path="/classes/:classId" component={ClassDetail} />
 				<Route exact path="/create-class/:instructorId" component={CreateClass} />
 				<Route exact path="/edit-class/:classId" component={EditClass} />
 				<Route exact path="/my-account/:userId" component={MyAccount} />

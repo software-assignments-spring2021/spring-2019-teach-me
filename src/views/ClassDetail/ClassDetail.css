@@ -1,0 +1,46 @@
+.detail-container {
+    width: 60%;
+    margin: 3em auto;
+}
+
+/*.detail-text-container, .detail-image-container {
+    display: inline-block;
+}*/
+
+.detail-image-container {
+    padding-left: 2em;
+    padding-right: 2em;
+}
+
+.detail-image-container p {
+    margin: 0;
+}
+
+.detail-text-container {
+    padding-left: 2em;
+    padding-right: 2em;
+    border-left: 1px solid rgba(23, 162, 184, 0.5);
+}
+
+.instructor-image {
+    width: 110px;
+    height: 110px;
+    margin-bottom: 1em;
+}
+
+.instructor-link {
+    color: rgb(23, 162, 184);
+}
+
+.instructor-link:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.detail-buttons-container {
+    margin: 0 auto;
+}
+
+.detail-buttons-container button{
+    margin-right: 1em;
+}

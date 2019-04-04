@@ -55,10 +55,10 @@ input {
     font-size: 20px;
 }
 
-.active {
+.pagination-container .active {
     background-color: #17a2b8;
 }
 
-.active a {
+.pagination-container .active a {
     color: white;
 }
