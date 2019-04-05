@@ -20,13 +20,34 @@ app.use(
 app.use(bodyParser.json());
 
 app.get('/api/classes', function(req, res) {
-	Class.find({},function(err, classes, count) {
+	Class.find({}, function(err, classes, count) {
 		res.json(classes);
 	});
 });
 
+app.get('/api/classes/:classId', function(req, res) {
+	Class
+		.findOne({_id: req.params.classId})
+		.populate({
+			path: 'instructor',
+			populate: {
+				path: 'userID',
+				model: 'users'
+			}
+		})
+		.exec(function(err, classData) {
+			if (err) {
+				console.log(err)
+			}
+			classData = classData.toObject();
+			classData.instructorName = classData.instructor.userID.name;
+			classData.instructorID = classData.instructor._id;
+			//console.log(classData);
+			res.json(classData);
+		})
+});
+
 app.get('/api/class-history-teach/:userId', function(req, res) {
-	console.log(req.params.userId);
 	const instructorId = new mongoose.Types.ObjectId(req.params.userId);
 	Class.find({instructor: instructorId},function(err, classes, count) {
 		res.json(classes);

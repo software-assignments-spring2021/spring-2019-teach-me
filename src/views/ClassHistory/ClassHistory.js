@@ -40,7 +40,6 @@ class ClassHistory extends Component {
 	displayTeach() {
 		const { userId } = this.props.match.params;
 		const url = '/api/class-history-teach/' + userId;
-		console.log(url);
 		fetch(url)
 			.then(response => response.json())
 			.then((data) => {
@@ -134,7 +133,7 @@ class ClassHistory extends Component {
 			return <ClassDisplay key={index} title={data.name} description={data.description} price={data.price} instructor={data.instructor} rating={data.rating} category={data.category}/>
 		});
 		
-		const CLASSES_PER_PAGE = 2;
+		const CLASSES_PER_PAGE = 4;
 
 		const startIdx = (this.state.activePage - 1) * CLASSES_PER_PAGE;
 		const endIdx = startIdx + CLASSES_PER_PAGE;
