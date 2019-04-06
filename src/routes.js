@@ -1,5 +1,6 @@
 //https://github.com/evedes/ReactRouter_Boilerplate_01
 
+import { BrowserRouter as Router } from "react-router-dom";
 import React from 'react';
 import { Home } from './views/Home';
 import { NoMatch } from './views/NoMatch';
@@ -13,9 +14,13 @@ import { Login } from './views/Login';
 import { Register } from './views/Register';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import ClassDetail from './views/ClassDetail/ClassDetail';
+import { Provider } from "react-redux";
+import { store } from "./store";
 
 export const Routes = () => {
 	return (
+		<Provider store={store}>
+		<Router>
 		<div>
 			<NavBar />
 			<Switch>
@@ -34,5 +39,7 @@ export const Routes = () => {
 				<Route component={NoMatch} />
 			</Switch>
 		</div>
+		</Router>
+		</Provider>
 	);
 };
