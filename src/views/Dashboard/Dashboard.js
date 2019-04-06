@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 
+import './Dashboard.css';
+
 class Dashboard extends Component {
   onLogoutClick = e => {
     e.preventDefault();
@@ -28,7 +30,7 @@ return (
                 marginTop: "1rem"
               }}
               onClick={this.onLogoutClick}
-              className="btn btn-large waves-effect waves-light hoverable blue accent-3"
+              className="btn btn-large waves-effect waves-light hoverable"
             >
               Logout
             </button>
