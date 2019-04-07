@@ -12,7 +12,8 @@ class MyAccount extends Component {
       IsReadOnly: true,
       imageIsReadOnly: true,
       userName: '',
-      userEmail: ''
+      userEmail: '',
+      successOrNot: undefined
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -43,7 +44,27 @@ class MyAccount extends Component {
 
   handleSubmit(event) {
     alert('A new profile is submitted! ');
+    this.setState({successOrNot: {"result": "success"}});
     event.preventDefault();
+
+    const newUserData = new FormData.entries(event.target);
+    const newUserObj = {};
+
+    for(let userInput of newUserData.entries()) {
+      newUserObj[userInput[0]] = userInput[1];
+    }
+    console.log(newUserObj);
+
+    const { userId } = this.props.match.params;
+    const url = '/api/my-account/' + userId;
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(newUserObj),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json())
+      .then(data => this.setState({successOrNot: data}));
   }
 
   handleEditClick(event) {

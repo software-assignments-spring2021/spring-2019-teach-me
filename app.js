@@ -56,7 +56,7 @@ app.get('/api/class-history-teach/:userId', function(req, res) {
 
 app.get('/api/my-account/:userId', function(req, res) {
 	const userId = new mongoose.Types.ObjectId(req.params.userId);
-	Users.find({}, function(err, userinfo) {
+	Users.find({_id: userId}, function(err, userinfo, count) {
 		res.json(userinfo);
 	});
 });
@@ -102,6 +102,19 @@ app.post('/api/edit-class/:classId', function(req, res) {
 		else {
 			res.json({result: 'success'});
 		}
+	});
+});
+
+app.post('/api/my-account/:userId', function(req,res) {
+	console.log(req.params.userId);
+	const userId = new mongoose.Types.ObjectId(req.params.userId);
+	Users.findOneAndUpdate({_id:userId}, req.body, {new:true}, function(err, users) {
+			if(err) {
+				res.json({result: err});
+			}
+			else {
+				res.json({result: 'success'});
+			}
 	});
 });
 
