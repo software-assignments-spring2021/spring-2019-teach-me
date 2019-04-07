@@ -55,7 +55,7 @@ class MyAccount extends Component {
     console.log(newUserObj);
 
     const { userId } = this.props.match.params;
-    const url = '/api/my-account' + userId;
+    const url = '/api/my-account/' + userId;
     fetch(url, {
       method: 'POST',
       body: JSON.stringify(newUserObj),
