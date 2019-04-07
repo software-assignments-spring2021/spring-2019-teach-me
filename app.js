@@ -105,6 +105,19 @@ app.post('/api/edit-class/:classId', function(req, res) {
 	});
 });
 
+app.post('/api/my-account/:userId', function(req, res) {
+	console.log(req.params.userId);
+	const userId = new mongoose.Types.ObjectId(req.params.userId);
+	Users.findOneAndUpdate({_id: userId}, req.body, {new:true}, function(err, users) {
+		if(err) {
+			res.json({result: err});
+		}
+		else {
+			res.json({result: 'success'});
+		}
+	});
+});
+
 app.get('/*', function(req, res) {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
