@@ -8,9 +8,7 @@ import { Routes } from './routes';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-    <Router>
-        <Routes />
-    </Router>, 
+        <Routes />, 
     document.getElementById('root')
 );
 
