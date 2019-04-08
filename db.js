@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const testclassSchema = new mongoose.Schema ({
     name: String,
     price: Number,
+    Rating: Number,
     instructor: String
 });
 
