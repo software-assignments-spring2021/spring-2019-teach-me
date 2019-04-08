@@ -1,0 +1,64 @@
+.jumbotron, .instructor-listing-display {
+    width: 60%;
+    margin: 2.5% auto;
+}
+
+.filter-container {
+    text-align: center;
+}
+
+.instructor-filter {
+    width: 75%;
+    margin: 0 auto;
+}
+
+.instructor-filter div{
+    display: inline-block;
+    width: 22.5%;
+    margin-left: 12.5px;
+    margin-right: 12.5px; 
+}
+
+/*
+input {
+    width: 100% !important;
+}
+*/
+
+.italics-text {
+    font-style: italic;
+}
+
+.instructor-img {
+    width: 110px;
+    height: 110px;
+    float: right;
+}
+
+.card {
+    margin-top: 3%;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.pagination li{
+    display: block;
+    padding: 20px;
+}
+
+.pagination a {
+    color: #17a2b8;
+    font-size: 20px;
+}
+
+.pagination-container .active {
+    background-color: #17a2b8;
+}
+
+.pagination-container .active a {
+    color: white;
+}

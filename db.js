@@ -12,7 +12,9 @@ const Testclass =  mongoose.model('Testclass', testclassSchema);
 
 const InstructorSchema = new mongoose.Schema ({
     userID: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    introduction: String,
     credentials: String,
+    rating: Number,
     sumOfRating: Number,
     numOfRating: Number
 })
