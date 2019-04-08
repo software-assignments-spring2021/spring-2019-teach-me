@@ -121,10 +121,7 @@ app.get('/about', function(req, res) {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-// Temp
-app.get('/payment', function(req, res) {
-	res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+
 */
 
 // Passport middleware
@@ -149,6 +146,14 @@ app.post('/create-class/:instructorId', function(req, res) {
 			res.send(err);
 		}
 		res.send("New class created.");
+	});
+});
+
+app.get('/api/Insturctor/:InstructorId', function(req, res) {
+	console.log(req.params.InstructorId);
+	const classId = new mongoose.Types.ObjectId(req.params.InstructorId);
+	Class.find({_id: InstructorId},function(err, classes, count) {
+		res.json(Instructor);
 	});
 });
 */
