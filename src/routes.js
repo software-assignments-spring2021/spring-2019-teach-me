@@ -64,6 +64,7 @@ export const Routes = () => {
 				<Route exact path="/instructors" component={Instructors} />
 				<Route exact path="/login" component={Login} />
 				<Route exact path="/register" component={Register} />
+				<Route exact path="/instructorProfile/:instructorId" component={Instructors} />
 				<Route component={NoMatch} />
 			</Switch>
 		</div>
