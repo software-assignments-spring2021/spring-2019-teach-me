@@ -33,8 +33,18 @@ const classSchema = new mongoose.Schema ({
     numOfRating: Number
 });
 
+const userClassSchema = new mongoose.Schema ({
+    userID: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    classID: {type: mongoose.Schema.Types.ObjectId, ref: 'Class'},
+    date: {
+        type: Date,
+        default: Date.now
+    }
+})
+
 const Class =  mongoose.model('Class', classSchema);
 const Instructor = mongoose.model('Instructor', InstructorSchema);
+const UserClass = mongoose.model('UserClass', userClassSchema);
 
 const dbconf = process.env.DB_URI;
 mongoose.connect(dbconf, { useNewUrlParser: true });
