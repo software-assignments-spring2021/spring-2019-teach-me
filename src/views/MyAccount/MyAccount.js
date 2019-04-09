@@ -27,8 +27,8 @@ class MyAccount extends Component {
     console.log(url);
     fetch(url)
       .then(response => response.json())
-      .then(data => this.setState({userName: data.name}, {userEmail: data.email}))
-      console.log(this.state.userName);
+      .then(data => this.setState({userName: data[0].name, userEmail: data[0].email}))
+      //console.log(successCheck);
   }
 
 

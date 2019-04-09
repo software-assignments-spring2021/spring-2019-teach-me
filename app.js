@@ -56,7 +56,7 @@ app.get('/api/class-history-teach/:userId', function(req, res) {
 
 app.get('/api/my-account/:userId', function(req, res) {
 	const userId = new mongoose.Types.ObjectId(req.params.userId);
-	Users.find({}, function(err, userinfo) {
+	Users.find({_id: userId}, function(err, userinfo) {
 		res.json(userinfo);
 	});
 });
