@@ -19,10 +19,13 @@ class ClassDetail extends Component {
 
 		this.state = {
             currentClass: {},
-            successRedirect: {}
+            successRedirect: {},
+            loginRequired: false,
+            classNotRegistered: false
         };
         
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleWithdraw = this.handleWithdraw.bind(this);
     }
     
     handleSubmit() {
@@ -44,7 +47,36 @@ class ClassDetail extends Component {
                 .then(data => this.setState({successRedirect: data}));
         }
         else {
-            this.props.history.push("/login");
+            this.setState({loginRequired: true});
+            setTimeout(() => {
+                this.props.history.push("/login"); 
+            }, 2000);
+        }
+    }
+
+    handleWithdraw() {
+        const { classId } = this.props.match.params;
+
+        if (this.props.auth.isAuthenticated) {
+            const newUserClassPair = {};
+            newUserClassPair.userID = this.props.auth.user.id;
+            newUserClassPair.classID = classId;
+
+            const url = '/api/drop-class';
+            fetch(url, {
+                method: 'POST',
+                body: JSON.stringify(newUserClassPair),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json())
+                .then(data => this.setState({successRedirect: data}));
+        }
+        else {
+            this.setState({loginRequired: true});
+            setTimeout(() => {
+                this.props.history.push("/login"); 
+            }, 2000);
         }
     }
 
@@ -95,13 +127,15 @@ class ClassDetail extends Component {
                     </Row>
                     <Row>
                         <div className='alerts-container'>
-                            { this.state.successRedirect.status === 'success' ? <Alert variant='success' className='success-alert'>You have successfully registered for this course!</Alert> : null }  
-                            { this.state.successRedirect.status === 'error' ? <Alert variant='danger' className='success-alert'>Oops, it seems that we have encountered a problem: {this.state.successRedirect.result}</Alert> : null }
+                            { this.state.successRedirect.status === 'success' ? <Alert variant='success' className='success-alert'>You have successfully {this.state.successRedirect.result} this class!</Alert> : null }  
+                            { this.state.successRedirect.status === 'error' ? <Alert variant='danger' className='error-alert'>Oops, it seems that we have encountered a problem: {this.state.successRedirect.result}</Alert> : null }
+                            { this.state.loginRequired ? <Alert variant='danger' className='login-alert'>It seems that you have not logged in. We are now taking you to the log in page.</Alert> : null }
                         </div>
                     </Row>
                     <Row>
                         <div className='detail-buttons-container'>
                             <Button onClick={this.handleSubmit} variant="info">Register now!</Button>
+                            <Button onClick={this.handleWithdraw} variant="warning">Withdraw from Class</Button>
                             <Button variant="info" disabled>Contact Instructor (Coming Soon)</Button>
                         </div>
                     </Row>

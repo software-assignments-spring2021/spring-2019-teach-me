@@ -125,9 +125,23 @@ app.post('/api/register-class', function(req, res) {
 				}
 				else {
 					console.log(newUserClass);
-					res.json({status: 'success'});
+					res.json({status: 'success', result: 'registered for'});
 				}
 			});
+		}
+	});
+});
+
+app.post('/api/drop-class', function(req, res) {
+	const userID = req.body.userID;
+	const classID = req.body.classID;
+
+	UserClass.findOneAndDelete({classID: classID, userID: userID}, function(err, classData) {
+		if (!classData) {
+			res.json({status: 'error', result: 'you have not registered for this class yet.'});
+		}
+		else {
+			res.json({status: 'success', result: 'dropped from'})
 		}
 	});
 });
