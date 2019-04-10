@@ -48,8 +48,8 @@ class EditClass extends Component {
 			method: 'POST',
 			body: JSON.stringify(newClassObj),
 			headers: {
-			'Content-Type': 'application/json'
-		}
+				'Content-Type': 'application/json'
+			}
 		}).then(response => response.json())
 			.then(data => this.setState({successRedirect: data}));
 	}

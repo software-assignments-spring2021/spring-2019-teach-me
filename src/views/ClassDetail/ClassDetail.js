@@ -3,7 +3,12 @@ import Jumbotron from 'react-bootstrap/Jumbotron';
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import Alert from 'react-bootstrap/Alert';
 import { LinkContainer } from 'react-router-bootstrap'
+
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import classnames from "classnames";
 
 import './ClassDetail.css'
 
@@ -13,9 +18,35 @@ class ClassDetail extends Component {
 		super(props);
 
 		this.state = {
-			currentClass: {}
-		};
-	}
+            currentClass: {},
+            successRedirect: {}
+        };
+        
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    
+    handleSubmit() {
+        const { classId } = this.props.match.params;
+
+        if (this.props.auth.isAuthenticated) {
+            const newUserClassPair = {};
+            newUserClassPair.userID = this.props.auth.user.id;
+            newUserClassPair.classID = classId;
+
+            const url = '/api/register-class';
+            fetch(url, {
+                method: 'POST',
+                body: JSON.stringify(newUserClassPair),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json())
+                .then(data => this.setState({successRedirect: data}));
+        }
+        else {
+            this.props.history.push("/login");
+        }
+    }
 
     componentDidMount() {
         const { classId } = this.props.match.params;
@@ -30,7 +61,9 @@ class ClassDetail extends Component {
     
     render() {
         const classData = this.state.currentClass;
-        //console.log(classData);
+        if (this.state.successRedirect.result === 'success') {
+
+        }
         return (
             <div className='detail-page-container'>
                 <Jumbotron>
@@ -38,6 +71,7 @@ class ClassDetail extends Component {
 					<p>{classData.description}</p>
 				</Jumbotron>
                 <div className='detail-container'>
+                    
                     <Row>
                         <Col sm={5}>
                             <div className='detail-image-container'>
@@ -60,9 +94,15 @@ class ClassDetail extends Component {
                         </Col>
                     </Row>
                     <Row>
+                        <div className='alerts-container'>
+                            { this.state.successRedirect.status === 'success' ? <Alert variant='success' className='success-alert'>You have successfully registered for this course!</Alert> : null }  
+                            { this.state.successRedirect.status === 'error' ? <Alert variant='danger' className='success-alert'>Oops, it seems that we have encountered a problem: {this.state.successRedirect.result}</Alert> : null }
+                        </div>
+                    </Row>
+                    <Row>
                         <div className='detail-buttons-container'>
-                            <Button variant="info">Register now!</Button>
-                            <Button variant="info" disabled>Contact Instructor</Button>
+                            <Button onClick={this.handleSubmit} variant="info">Register now!</Button>
+                            <Button variant="info" disabled>Contact Instructor (Coming Soon)</Button>
                         </div>
                     </Row>
                     <Row>
@@ -75,4 +115,12 @@ class ClassDetail extends Component {
     }
 }
 
-export default ClassDetail;
+ClassDetail.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(ClassDetail);

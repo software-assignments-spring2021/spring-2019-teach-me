@@ -8,6 +8,7 @@ const users = require("./routes/api/users");
 
 const Class = mongoose.model('Class');
 const Users = mongoose.model('users');
+const UserClass = mongoose.model('UserClass');
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'build')));
@@ -42,7 +43,6 @@ app.get('/api/classes/:classId', function(req, res) {
 			classData = classData.toObject();
 			classData.instructorName = classData.instructor.userID.name;
 			classData.instructorID = classData.instructor._id;
-			//console.log(classData);
 			res.json(classData);
 		})
 });
@@ -85,7 +85,7 @@ app.post('/api/create-class', function(req, res) {
 });
 
 app.get('/api/edit-class/:classId', function(req, res) {
-	console.log(req.params.classId);
+	//console.log(req.params.classId);
 	const classId = new mongoose.Types.ObjectId(req.params.classId);
 	Class.find({_id: classId},function(err, classes, count) {
 		res.json(classes);
@@ -93,7 +93,7 @@ app.get('/api/edit-class/:classId', function(req, res) {
 });
 
 app.post('/api/edit-class/:classId', function(req, res) {
-	console.log(req.params.classId);
+	//console.log(req.params.classId);
 	const classId = new mongoose.Types.ObjectId(req.params.classId);
 	Class.findOneAndUpdate({_id: classId}, req.body, {new:true}, function(err, classes) {
 		if (err) {
@@ -101,6 +101,33 @@ app.post('/api/edit-class/:classId', function(req, res) {
 		}
 		else {
 			res.json({result: 'success'});
+		}
+	});
+});
+
+app.post('/api/register-class', function(req, res) {
+	const userID = req.body.userID;
+	const classID = req.body.classID;
+
+	UserClass.find({classID: classID, userID: userID}, function(err, duplicateFound) {
+		if (duplicateFound.length > 0) {
+			res.json({status: 'error', result: 'you have already registered for this class.'});
+		}
+		else {
+			const newUserClass = new UserClass({
+				userID: userID,
+				classID: classID
+			});
+			
+			newUserClass.save(function(err, userClass) {
+				if (err) {
+					res.json({status: 'error', result: err});
+				}
+				else {
+					console.log(newUserClass);
+					res.json({status: 'success'});
+				}
+			});
 		}
 	});
 });

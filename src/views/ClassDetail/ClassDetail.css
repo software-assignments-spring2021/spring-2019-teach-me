@@ -33,10 +33,11 @@
     text-decoration: underline;
 }
 
-.detail-buttons-container {
+.detail-buttons-container, .alerts-container {
     margin: 0 auto;
 }
 
 .detail-buttons-container button{
     margin-right: 1em;
 }
+
