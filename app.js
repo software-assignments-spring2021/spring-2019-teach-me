@@ -9,6 +9,7 @@ const users = require("./routes/api/users");
 const Class = mongoose.model('Class');
 const Users = mongoose.model('users');
 const UserClass = mongoose.model('UserClass');
+const Instructor = mongoose.model('Instructor');
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'build')));
@@ -44,15 +45,37 @@ app.get('/api/classes/:classId', function(req, res) {
 			classData.instructorName = classData.instructor.userID.name;
 			classData.instructorID = classData.instructor._id;
 			res.json(classData);
-		})
+		});
 });
 
 app.get('/api/class-history-teach/:userId', function(req, res) {
-	const instructorId = new mongoose.Types.ObjectId(req.params.userId);
-	Class.find({instructor: instructorId},function(err, classes, count) {
-		res.json(classes);
-	});
+	const userId = new mongoose.Types.ObjectId(req.params.userId);
+	Instructor.findOne({userID: userId}, function(err, instructor) {
+		if (!instructor) {
+			res.json([]);
+		}
+		else {
+			const instructorId = instructor._id;
+			Class.find({instructor: instructorId}, function(err, classes, count) {
+				res.json(classes);
+			});
+		}
+	})
+	
 });
+
+app.get('/api/class-history-take/:userId', function(req, res) {
+	const studentId = new mongoose.Types.ObjectId(req.params.userId);
+	UserClass
+		.find({userID: studentId})
+		.populate('classID')
+		.exec(function (err, classData) {
+			const classes = [];
+			classData.forEach(c => classes.push(c.classID));
+			res.json(classes);
+		});
+	
+})
 
 app.get('/api/my-account/:userId', function(req, res) {
 	const userId = new mongoose.Types.ObjectId(req.params.userId);
@@ -124,7 +147,6 @@ app.post('/api/register-class', function(req, res) {
 					res.json({status: 'error', result: err});
 				}
 				else {
-					console.log(newUserClass);
 					res.json({status: 'success', result: 'registered for'});
 				}
 			});
@@ -147,7 +169,7 @@ app.post('/api/drop-class', function(req, res) {
 });
 
 app.post('/api/my-account/:userId', function(req, res) {
-	console.log(req.params.userId);
+	//console.log(req.params.userId);
 	const userId = new mongoose.Types.ObjectId(req.params.userId);
 	Users.findOneAndUpdate({_id: userId}, req.body, {new:true}, function(err, users) {
 		if (err) {

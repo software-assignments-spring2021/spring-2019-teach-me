@@ -60,7 +60,7 @@ export const Routes = () => {
 				<Route exact path="/create-class/:instructorId" component={CreateClass} />
 				<Route exact path="/edit-class/:classId" component={EditClass} />
 				<Route exact path="/my-account/:userId" component={MyAccount} />
-				<Route exact path="/class-history/:userId" component={ClassHistory}/>
+				<Route exact path="/class-history" component={ClassHistory}/>
 				<Route exact path="/instructors" component={Instructors} />
 				<Route exact path="/login" component={Login} />
 				<Route exact path="/register" component={Register} />
