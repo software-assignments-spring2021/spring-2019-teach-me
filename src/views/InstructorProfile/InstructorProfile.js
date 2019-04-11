@@ -45,7 +45,7 @@ class InstructorProfile extends Component {
     const {instructorId} = this.props.match.params;
     fetch('/api/instructor/' + instructorId + '/info')
         .then(response => response.json())
-        .then(data => this.setState({instructor: data}))
+        .then(data => this.setState({instructor: data[0]}))
   }
 
   render() {
