@@ -1,7 +1,11 @@
 //https://www.robinwieruch.de/react-fetching-data/
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import Jumbotron from 'react-bootstrap/Jumbotron'
+import Jumbotron from 'react-bootstrap/Jumbotron';
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { registerUser } from "../../actions/authActions";
+import classnames from "classnames";
 
 import './CreateClass.css'
 
@@ -17,6 +21,13 @@ class CreateClass extends Component {
 			successRedirect: undefined
 		};
 	}
+
+	componentDidMount() {
+    // If not logged in and user navigates to Create Class page, should redirect them to login
+	    if (!this.props.auth.isAuthenticated) {
+	      this.props.history.push("/login");
+	    }
+  	}
 
 	handleSubmit(e) {
 		e.preventDefault();
