@@ -22,7 +22,8 @@ app.use(bodyParser.json());
 
 
 app.get('/api/instructor/:userId/info', function(req, res) {
-	const userId = new mongoose.Types.ObjectId(req.params.userId);
+	const userId = req.params.userId;
+	console.log(userId);
 	Users.find({_id: userId}, function(err, info) {
 		res.json(info);
 	});

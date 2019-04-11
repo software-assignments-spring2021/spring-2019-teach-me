@@ -24,8 +24,8 @@ class InstructorProfile extends Component {
 
   rateInstructor(rating) {
     
-    const {instructorId} = this.props.match.params;
-    fetch('/api/instructor/' + instructorId + '/rating', {
+    const {userId} = this.props.match.params;
+    fetch('/api/instructor/' + userId + '/rating', {
         method: 'POST',
         body: rating,
     }).then(response => {})
@@ -33,8 +33,8 @@ class InstructorProfile extends Component {
 
   addComment(comment) {
     
-    const {instructorId} = this.props.match.params;
-    fetch('/api/instructor/' + instructorId + '/add_comment', {
+    const {userId} = this.props.match.params;
+    fetch('/api/instructor/' + userId + '/add_comment', {
         method: 'POST',
         body: comment,
     }).then(response => {})
@@ -42,8 +42,8 @@ class InstructorProfile extends Component {
 
   componentDidMount() {
     
-    const {instructorId} = this.props.match.params;
-    fetch('/api/instructor/' + instructorId + '/info')
+    const {userId} = this.props.match.params;
+    fetch('/api/instructor/' + userId + '/info')
         .then(response => response.json())
         .then(data => this.setState({instructor: data[0]}))
   }
