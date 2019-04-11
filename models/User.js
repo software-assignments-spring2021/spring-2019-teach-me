@@ -17,6 +17,25 @@ const UserSchema = new Schema({
   date: {
     type: Date,
     default: Date.now
+  },
+  introduction: {
+    type: String
+  },
+  sumOfRatingAsInstructor: {
+    type: Number,
+    default: -1
+  },
+  numOfRatingAsInstructor: {
+    type: Number,
+    default: -1
+  },
+  sumOfRatingAsLearner: {
+    type: Number,
+    default: 0
+  },
+  numOfRatingAsLearner: {
+    type: Number,
+    default: 0
   }
 });
 module.exports = User = mongoose.model("users", UserSchema);
