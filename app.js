@@ -234,6 +234,15 @@ app.get('/api/Insturctor/:InstructorId', function(req, res) {
 });
 */
 
+
+app.get('/api/instructor/:userId/info', function(req, res) {
+	const userId = new mongoose.Types.ObjectId(req.params.userId);
+	Users.find({_id: userId}, function(err, info) {
+		res.json(info);
+	});
+});
+
+
 app.listen(9000);
 
 module.exports = app;
