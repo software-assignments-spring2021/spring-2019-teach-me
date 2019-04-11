@@ -9,7 +9,6 @@ const users = require("./routes/api/users");
 const Class = mongoose.model('Class');
 const Users = mongoose.model('users');
 const UserClass = mongoose.model('UserClass');
-const Instructor = mongoose.model('Instructor');
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'build')));
@@ -43,19 +42,13 @@ app.get('/api/classes', function(req, res) {
 app.get('/api/classes/:classId', function(req, res) {
 	Class
 		.findOne({_id: req.params.classId})
-		.populate({
-			path: 'instructor',
-			populate: {
-				path: 'userID',
-				model: 'users'
-			}
-		})
+		.populate('instructor')
 		.exec(function(err, classData) {
 			if (err) {
 				console.log(err)
 			}
 			classData = classData.toObject();
-			classData.instructorName = classData.instructor.userID.name;
+			classData.instructorName = classData.instructor.name;
 			classData.instructorID = classData.instructor._id;
 			res.json(classData);
 		});
@@ -63,7 +56,7 @@ app.get('/api/classes/:classId', function(req, res) {
 
 app.get('/api/class-history-teach/:userId', function(req, res) {
 	const userId = new mongoose.Types.ObjectId(req.params.userId);
-	Instructor.findOne({userID: userId}, function(err, instructor) {
+	Users.findOne({userID: userId}, function(err, instructor) {
 		if (!instructor) {
 			res.json([]);
 		}

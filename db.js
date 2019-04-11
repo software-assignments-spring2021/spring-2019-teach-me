@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const users = require("./routes/api/users");
+const Users = mongoose.model('users');
 
 /*
 const testclassSchema = new mongoose.Schema ({
@@ -11,6 +13,8 @@ const testclassSchema = new mongoose.Schema ({
 const Testclass =  mongoose.model('Testclass', testclassSchema);
 */
 
+/*
+WARNING: deprecated in favor of unification between users and instructors.
 const InstructorSchema = new mongoose.Schema ({
     userID: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     introduction: String,
@@ -18,7 +22,7 @@ const InstructorSchema = new mongoose.Schema ({
     rating: Number,
     sumOfRating: Number,
     numOfRating: Number
-})
+})*/
 
 const classSchema = new mongoose.Schema ({
     name: String,
@@ -26,7 +30,7 @@ const classSchema = new mongoose.Schema ({
     description: String, //short description of the class
     price: Number,
     proposedSchedule: String,
-    instructor: {type: mongoose.Schema.Types.ObjectId, ref: 'Instructor'},
+    instructor: {type: mongoose.Schema.Types.ObjectId, ref: 'users'},
     category: String,
     rating: Number,
     sumOfRating: Number,
@@ -34,7 +38,7 @@ const classSchema = new mongoose.Schema ({
 });
 
 const userClassSchema = new mongoose.Schema ({
-    userID: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    userID: {type: mongoose.Schema.Types.ObjectId, ref: 'users'},
     classID: {type: mongoose.Schema.Types.ObjectId, ref: 'Class'},
     date: {
         type: Date,
@@ -43,7 +47,7 @@ const userClassSchema = new mongoose.Schema ({
 })
 
 const Class =  mongoose.model('Class', classSchema);
-const Instructor = mongoose.model('Instructor', InstructorSchema);
+//const Instructor = mongoose.model('Instructor', InstructorSchema);
 const UserClass = mongoose.model('UserClass', userClassSchema);
 
 const dbconf = process.env.DB_URI;
