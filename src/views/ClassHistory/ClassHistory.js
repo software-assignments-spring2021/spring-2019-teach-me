@@ -6,6 +6,10 @@ import Pagination from "react-js-pagination";
 import { ClassDisplay } from '../../components/ClassDisplay';
 import { ClassFilter } from '../../components/ClassFilter';
 
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import classnames from "classnames";
+
 import './ClassHistory.css'
 
 class ClassHistory extends Component {
@@ -13,6 +17,7 @@ class ClassHistory extends Component {
 		super(props);
 
 		this.state = {
+			userID: undefined,
 			classListing: [],
 			allClasses: [],
 			activePage: 1,
@@ -20,35 +25,18 @@ class ClassHistory extends Component {
 			noTeachClassWarning: false,
 			noTakeClassWarning: false
 		};
-		/*
-		this.handleDelete = this.handleDelete.bind(this);
-		this.handleEdit = this.handleEdit.bind(this);
-		*/
 	}
-
-	//maybe do this in the class detail page
-	/*
-    handleEdit(event) {
-
-    }
-
-    handleDelete(event) {
-
-	}
-	*/
 
 	displayTeach() {
-		const { userId } = this.props.match.params;
-		const url = '/api/class-history-teach/' + userId;
+		const url = '/api/class-history-teach/' + this.state.userID;
 		fetch(url)
 			.then(response => response.json())
 			.then((data) => {
-				console.log(data);
 				if (data.length === 0) {
-					this.setState({noTeachClassWarning: true, classListing: data, allClasses: data});
+					this.setState({noTeachClassWarning: true, noTakeClassWarning: false, classListing: data, allClasses: data});
 				}
 				else {
-					this.setState({noTeachClassWarning: false, classListing: data, allClasses: data});
+					this.setState({noTeachClassWarning: false, noTakeClassWarning: false, classListing: data, allClasses: data});
 				}
 			});
 				
@@ -64,11 +52,17 @@ class ClassHistory extends Component {
 	}
 
 	displayTake() {
-		//TODO: create user-class schema in database & use new api to select documents from db
-		fetch('/api/classes')
+		const url = '/api/class-history-take/' + this.state.userID;
+		fetch(url)
 			.then(response => response.json())
-			.then(data => this.setState({noTeachClassWarning: false, classListing: data, allClasses: data}));
-		
+			.then((data) => {
+				if (data.length === 0) {
+					this.setState({noTakeClassWarning: true, noTeachClassWarning: false, classListing: data, allClasses: data});
+				}
+				else {
+					this.setState({noTakeClassWarning: false, noTeachClassWarning: false, classListing: data, allClasses: data});
+				}
+			});
 		/*
 		const data = [{"_id":"5c8547511c9d44000024fb63","name":"Something else","description":"not Piano","price":175,"proposedSchedule":"Monday","instructor":"5c854805e0c8200000afd73a","rating":"9.6","cateogry":"Art"},{"_id":"5c855c0f7471ed05294dff40","name":"1","description":"1","price":1,"proposedSchedule":"1","rating":6,"instructor":"5c854805e0c8200000afd73a","__v":0},{"_id":"5c858b101c9d4400002224ce","name":"authentic chinese cooking","description":"the best of chinese cooking. all in one class!","price":888,"proposedSchedule":"Monday 2-4pm","instructor":"5c854805e0c8200000afd73a","rating":2.5,"category":"Music"},{"_id":"5c858b9b1c9d4400002224cf","name":"intro to javascript","description":"learning programming with the best programming language ever! (haha not really)","price":123,"proposedSchedule":"Saturdays 3-5pm","instructor":"5c854805e0c8200000afd73a","rating":9.9,"category":"Technology"}];
 		if (data.length === 0) {
@@ -81,7 +75,15 @@ class ClassHistory extends Component {
 	}
 
 	componentDidMount() {
-		this.displayTeach();
+		// If logged in and user navigates to Login page, should redirect them to dashboard
+		if (this.props.auth.isAuthenticated) {
+			this.setState({userID: this.props.auth.user.id}, function() {
+				this.displayTeach();
+			});
+		}
+		else {
+			this.props.history.push("/login");
+		}
 	}
 
 	handlePageChange(pg) {
@@ -89,7 +91,6 @@ class ClassHistory extends Component {
 	}
 
 	filterResults(query) {
-		console.log(query);
 		const allClasses = this.state.allClasses;
 		let filteredClasses = [];
 
@@ -130,7 +131,7 @@ class ClassHistory extends Component {
 
   	render() {
 		const classListData = this.state.classListing.map(function(data, index) {
-			return <ClassDisplay key={index} title={data.name} description={data.description} price={data.price} instructor={data.instructor} rating={data.rating} category={data.category}/>
+			return <ClassDisplay key={index} title={data.name} description={data.description} price={data.price} instructor={data.instructor} rating={data.rating} category={data.category} slug={data._id}/>
 		});
 		
 		const CLASSES_PER_PAGE = 4;
@@ -177,4 +178,12 @@ class ClassHistory extends Component {
 	}
 }
 
-export default ClassHistory;
+ClassHistory.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(ClassHistory);
