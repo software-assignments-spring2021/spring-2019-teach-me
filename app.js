@@ -9,7 +9,6 @@ const users = require("./routes/api/users");
 const Class = mongoose.model('Class');
 const Users = mongoose.model('users');
 const UserClass = mongoose.model('UserClass');
-//const Instructor = mongoose.model('Instructor');
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'build')));

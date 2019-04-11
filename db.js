@@ -14,7 +14,7 @@ const Testclass =  mongoose.model('Testclass', testclassSchema);
 */
 
 /*
-WARNING: deprecated
+WARNING: deprecated in favor of unification between users and instructors.
 const InstructorSchema = new mongoose.Schema ({
     userID: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     introduction: String,
