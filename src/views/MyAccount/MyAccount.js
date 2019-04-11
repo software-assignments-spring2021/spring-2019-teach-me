@@ -1,6 +1,9 @@
 //https://www.robinwieruch.de/react-fetching-data/
 import React, { Component } from 'react';
+import { Link } from "react-router-dom";
 import Jumbotron from 'react-bootstrap/Jumbotron'
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
 import './MyAccount.css'
 
@@ -9,6 +12,7 @@ class MyAccount extends Component {
     super(props);
 
     this.state = {
+      userId: undefined,
       IsReadOnly: true,
       imageIsReadOnly: true,
       userName: '',
@@ -19,15 +23,25 @@ class MyAccount extends Component {
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handleEditClick = this.handleEditClick.bind(this);
+    this.handleClassHistory = this.handleClassHistory.bind(this);
   }
 
   componentDidMount() {
-    const { userId } = this.props.match.params;
-    const url = '/api/my-account/' + userId;
-    console.log(url);
-    fetch(url)
-      .then(response => response.json())
-      .then(data => this.setState({userName: data[0].name, userEmail: data[0].email}))
+
+    if(this.props.auth.isAuthenticated) {
+      console.log("correct!");
+      this.setState({userId: this.props.auth.user.id}, function() {
+        const url = '/api/my-account/' + this.state.userId;
+        console.log(url);
+        fetch(url)
+          .then(response => response.json())
+          .then(data => this.setState({userName: data[0].name, userEmail: data[0].email}))
+      });
+    }
+    else {
+      this.props.history.push("/login");
+    }
+
       //console.log(this.state.userName);
   }
 
@@ -72,6 +86,13 @@ class MyAccount extends Component {
     this.setState({IsReadOnly:false});
   }
 
+  handleClassHistory(event) {
+
+      this.props.history.push("/class-history");
+
+
+  }
+
   render() { console.log(this.state.userEmail);
     return (
       <div className='myaccount-page'>
@@ -80,8 +101,7 @@ class MyAccount extends Component {
         <form onSubmit={this.handleSubmit}>
         <label>Name</label>
         <input type = "text" name = "name" value = {this.state.userName} readOnly={this.state.IsReadOnly}
-        onChange = {this.handleNameChange} required/>
-        <input type = "button" name = "editname" value = "Edit" onClick={this.handleEditClick} /><br />
+        onChange = {this.handleNameChange} required/><br />
         <label>Email</label>
         <input type = "text" name = "email" value = {this.state.userEmail} readOnly={this.state.IsReadOnly}
         onChange = {this.handleEmailChange} required/>
@@ -89,7 +109,8 @@ class MyAccount extends Component {
         <input type = "submit" value = "Submit"/>
         </form>
 
-        <input type = "button" name = "viewclasshistory" value = "View Class History"/>
+        <input type = "button" name = "viewclasshistory" value = "View Class History" onClick={this.handleClassHistory}
+        history = {this.props.history}/>
 
 
       </div>
@@ -98,6 +119,13 @@ class MyAccount extends Component {
 
 
 }
+MyAccount.propTypes = {
+    auth: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired
+};
 
+const mapStateToProps = state => ({
+    auth: state.auth
+});
 
-export default MyAccount;
+export default connect(mapStateToProps)(MyAccount);
