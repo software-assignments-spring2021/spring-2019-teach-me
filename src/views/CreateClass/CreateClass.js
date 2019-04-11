@@ -2,9 +2,10 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import Jumbotron from 'react-bootstrap/Jumbotron';
+
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { registerUser } from "../../actions/authActions";
+//import { registerUser } from "../../actions/authActions";
 import classnames from "classnames";
 
 import './CreateClass.css'
@@ -24,9 +25,12 @@ class CreateClass extends Component {
 
 	componentDidMount() {
     // If not logged in and user navigates to Create Class page, should redirect them to login
-	    if (!this.props.auth.isAuthenticated) {
-	      this.props.history.push("/login");
-	    }
+	    if (this.props.auth.isAuthenticated) {
+			//console.log(this.props.auth);
+		}
+		else {
+			this.props.history.push("/login");
+		}
   	}
 
 	handleSubmit(e) {
@@ -38,7 +42,7 @@ class CreateClass extends Component {
 			newClassObj[userInput[0]] = userInput[1];
 		}
 		
-		const { instructorId } = this.props.match.params;
+		const instructorId = this.props.auth.user.id;
 		newClassObj.instructorId = instructorId;
 		console.log(newClassObj);
 		
@@ -60,7 +64,7 @@ class CreateClass extends Component {
 	render() {
 		if (this.state.successRedirect && (this.state.successRedirect.result === 'success' || this.state.successRedirect.result === 'cancelled')) {
 			return (
-				<Redirect to='/home' />
+				<Redirect to='/class-history' />
 			)
 		}
 		else {
@@ -87,4 +91,12 @@ class CreateClass extends Component {
 	}
 }
 
-export default CreateClass;
+CreateClass.propTypes = {
+	auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+	auth: state.auth
+});
+
+export default connect(mapStateToProps)(CreateClass);
