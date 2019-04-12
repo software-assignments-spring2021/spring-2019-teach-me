@@ -5,6 +5,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Alert from 'react-bootstrap/Alert';
 import { LinkContainer } from 'react-router-bootstrap'
+import { StudentDisplay } from '../../components/StudentDisplay';
 
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -21,11 +22,44 @@ class ClassDetail extends Component {
             currentClass: {},
             successRedirect: {},
             loginRequired: false,
-            classNotRegistered: false
+            classNotRegistered: false,
+            noStudentAlert: false,
+            notInstructorAlert: false,
+            studentsList: []
         };
         
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleWithdraw = this.handleWithdraw.bind(this);
+        this.getStudents = this.getStudents.bind(this);
+    }
+
+    getStudents() {
+        if (this.props.auth.isAuthenticated) {
+            if (this.state.currentClass.instructorID === this.props.auth.user.id) {
+                const { classId } = this.props.match.params;
+                const url = '/api/get-students/' + classId;
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => this.setState({studentsList: data}, function() {
+                        if (this.state.studentsList.length === 0) {
+                            this.setState({noStudentAlert: true});
+                        }
+                    }));
+            }
+            else {
+                this.setState({notInstructorAlert: true});
+            }
+        }
+        else {
+            this.setState({loginRequired: true});
+            setTimeout(() => {
+                this.props.history.push("/login"); 
+            }, 2000);
+        }
+        /*
+        const data = [{date: '2019-1-1', userID: {name: 'test'}}, {date: '2019-1-2', userID: {name: 'test2'}}, {date: '2019-1-3', userID: {name: 'haha'}}, {date: '2019-1-1', userID: {name: 'test'}}, {date: '2019-1-1', userID: {name: 'test'}}];
+        this.setState({studentsList: data});
+        */
     }
     
     handleSubmit() {
@@ -87,15 +121,23 @@ class ClassDetail extends Component {
 			.then(response => response.json())
             .then(data => this.setState({currentClass: data}))
         
-        /*const data = {"_id":"5c8547511c9d44000024fb63","name":"Piano","description":"Piano","price":75,"proposedSchedule":"Monday","instructor":"5c854805e0c8200000afd73a","rating":"9.6","cateogry":"Art"};
-		this.setState({currentClass: data});*/
+        /*
+        const data = {"_id":"5c8547511c9d44000024fb63","name":"Piano","description":"Piano","price":75,"proposedSchedule":"Monday","instructor":"5c854805e0c8200000afd73a","rating":"9.6","cateogry":"Art"};
+        this.setState({currentClass: data});
+        */
     }
     
     render() {
         const classData = this.state.currentClass;
+        const studentData = this.state.studentsList.map(function(data, index) {
+            return <StudentDisplay key={index} name={data.userID.name} signupDate={data.date} />
+        });
+
+        /*
         if (this.state.successRedirect.result === 'success') {
 
         }
+        */
         return (
             <div className='detail-page-container'>
                 <Jumbotron>
@@ -103,7 +145,6 @@ class ClassDetail extends Component {
 					<p>{classData.description}</p>
 				</Jumbotron>
                 <div className='detail-container'>
-                    
                     <Row>
                         <Col sm={5}>
                             <div className='detail-image-container'>
@@ -130,17 +171,25 @@ class ClassDetail extends Component {
                             { this.state.successRedirect.status === 'success' ? <Alert variant='success' className='success-alert'>You have successfully {this.state.successRedirect.result} this class!</Alert> : null }  
                             { this.state.successRedirect.status === 'error' ? <Alert variant='danger' className='error-alert'>Oops, it seems that we have encountered a problem: {this.state.successRedirect.result}</Alert> : null }
                             { this.state.loginRequired ? <Alert variant='danger' className='login-alert'>It seems that you have not logged in. We are now taking you to the log in page.</Alert> : null }
+                            { this.state.notInstructorAlert ? <Alert variant='danger' className='not-instructor-alert'>Registered student information is only visible to the instructor of this class.</Alert> : null }
+                            { this.state.noStudentAlert ? <Alert variant='warning' className='no-student-alert'>There are no registered students for this class.</Alert> : null }
                         </div>
                     </Row>
                     <Row>
                         <div className='detail-buttons-container'>
                             <Button onClick={this.handleSubmit} variant="info">Register now!</Button>
                             <Button onClick={this.handleWithdraw} variant="warning">Withdraw from Class</Button>
+                            <Button onClick={this.getStudents} variant="info">See Registered Students</Button>
                             <Button variant="info" disabled>Contact Instructor (Coming Soon)</Button>
                         </div>
                     </Row>
                     <Row>
                         <div className='detail-comments-container'>
+                        </div>
+                    </Row>
+                    <Row>
+                        <div className='student-list-container'>
+                            {studentData}
                         </div>
                     </Row>
                 </div>
