@@ -1,7 +1,11 @@
 //https://www.robinwieruch.de/react-fetching-data/
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import Jumbotron from 'react-bootstrap/Jumbotron'
+import Alert from 'react-bootstrap/Alert';
+
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import classnames from "classnames";
 
 import './EditClass.css'
 
@@ -20,17 +24,22 @@ class EditClass extends Component {
 	}
 
 	componentDidMount() {
-		const { classId } = this.props.match.params;
-		const url = '/api/edit-class/' + classId;
-		console.log(url);
-		fetch(url)
-			.then(response => response.json())
-			.then(data => this.setState({class: data[0]}))
+    // If not logged in and user navigates to Edit Class page, should redirect them to login
+	    if (this.props.auth.isAuthenticated) {
+			// console.log(this.props.auth);
+			const { classId } = this.props.match.params;
+			const url = '/api/edit-class/' + classId;
+			console.log(url);
+			fetch(url)
+				.then(response => response.json())
+				.then(data => this.setState({class: data[0]}))
+		}
+		else {
+			this.props.history.push("/login");
+		}
 	}
 
 	handleSubmit(e) {
-		this.setState({successRedirect: {"result": "success"}});
-		console.log(e.target);
 
 		e.preventDefault();
 		const newClassData = new FormData(e.target);
@@ -64,6 +73,14 @@ class EditClass extends Component {
 				<Redirect to='/home' />
 			)
 		}
+		else if (this.state.class.instructor !== this.props.auth.user.id) {
+			return (
+				<div id='alert'>
+					<Alert variant='danger'>"You are not the instructor of this class so you don not have the permission to edit it."</Alert>
+				</div>
+			)
+
+		}
 		else {
 			return (
 				<div id='edit-form'>
@@ -91,4 +108,12 @@ class EditClass extends Component {
 }
 
 
-export default EditClass;
+EditClass.propTypes = {
+	auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+	auth: state.auth
+});
+
+export default connect(mapStateToProps)(EditClass);
