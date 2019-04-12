@@ -45,6 +45,7 @@ app.get('/api/classes/:classId', function(req, res) {
 			classData = classData.toObject();
 			classData.instructorName = classData.instructor.name;
 			classData.instructorID = classData.instructor._id;
+			classData.instructor.password = null;
 			res.json(classData);
 		});
 });
@@ -57,6 +58,7 @@ app.get('/api/get-students/:classId', function(req, res) {
 			if (err) {
 				console.log(err);
 			}
+
 			const returnValue = [];
 			for (let i = 0; i < students.length; i++) {
 				const newStudent = students[i].toObject();
@@ -67,7 +69,6 @@ app.get('/api/get-students/:classId', function(req, res) {
 				newStudent.date = newDate;
 				returnValue.push(newStudent);
 			}
-			
 			//console.log(returnValue);
 			res.json(returnValue);
 		})
@@ -75,17 +76,10 @@ app.get('/api/get-students/:classId', function(req, res) {
 
 app.get('/api/class-history-teach/:userId', function(req, res) {
 	const userId = new mongoose.Types.ObjectId(req.params.userId);
-	Users.findOne({userID: userId}, function(err, instructor) {
-		if (!instructor) {
-			res.json([]);
-		}
-		else {
-			const instructorId = instructor._id;
-			Class.find({instructor: instructorId}, function(err, classes, count) {
-				res.json(classes);
-			});
-		}
-	})
+	const instructorId = userId;
+	Class.find({instructor: instructorId}, function(err, classes, count) {
+		res.json(classes);
+	});
 });
 
 app.get('/api/class-history-take/:userId', function(req, res) {

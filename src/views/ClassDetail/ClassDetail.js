@@ -24,6 +24,7 @@ class ClassDetail extends Component {
             loginRequired: false,
             classNotRegistered: false,
             noStudentAlert: false,
+            notInstructorAlert: false,
             studentsList: []
         };
         
@@ -33,17 +34,28 @@ class ClassDetail extends Component {
     }
 
     getStudents() {
-        const { classId } = this.props.match.params;
-        const url = '/api/get-students/' + classId;
-        fetch(url)
-            .then(response => response.json())
-            .then(data => this.setState({studentsList: data}, function() {
-                if (this.state.studentsList.length === 0) {
-                    this.setState({noStudentAlert: true});
-                }
-            }));
-        
-        
+        if (this.props.auth.isAuthenticated) {
+            if (this.state.currentClass.instructorID === this.props.auth.user.id) {
+                const { classId } = this.props.match.params;
+                const url = '/api/get-students/' + classId;
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => this.setState({studentsList: data}, function() {
+                        if (this.state.studentsList.length === 0) {
+                            this.setState({noStudentAlert: true});
+                        }
+                    }));
+            }
+            else {
+                this.setState({notInstructorAlert: true});
+            }
+        }
+        else {
+            this.setState({loginRequired: true});
+            setTimeout(() => {
+                this.props.history.push("/login"); 
+            }, 2000);
+        }
         /*
         const data = [{date: '2019-1-1', userID: {name: 'test'}}, {date: '2019-1-2', userID: {name: 'test2'}}, {date: '2019-1-3', userID: {name: 'haha'}}, {date: '2019-1-1', userID: {name: 'test'}}, {date: '2019-1-1', userID: {name: 'test'}}];
         this.setState({studentsList: data});
@@ -103,7 +115,6 @@ class ClassDetail extends Component {
     }
 
     componentDidMount() {
-        
         const { classId } = this.props.match.params;
         const url = '/api/classes/' + classId;
         fetch(url)
@@ -122,9 +133,11 @@ class ClassDetail extends Component {
             return <StudentDisplay key={index} name={data.userID.name} signupDate={data.date} />
         });
 
+        /*
         if (this.state.successRedirect.result === 'success') {
 
         }
+        */
         return (
             <div className='detail-page-container'>
                 <Jumbotron>
@@ -158,6 +171,7 @@ class ClassDetail extends Component {
                             { this.state.successRedirect.status === 'success' ? <Alert variant='success' className='success-alert'>You have successfully {this.state.successRedirect.result} this class!</Alert> : null }  
                             { this.state.successRedirect.status === 'error' ? <Alert variant='danger' className='error-alert'>Oops, it seems that we have encountered a problem: {this.state.successRedirect.result}</Alert> : null }
                             { this.state.loginRequired ? <Alert variant='danger' className='login-alert'>It seems that you have not logged in. We are now taking you to the log in page.</Alert> : null }
+                            { this.state.notInstructorAlert ? <Alert variant='danger' className='not-instructor-alert'>Registered student information is only visible to the instructor of this class.</Alert> : null }
                             { this.state.noStudentAlert ? <Alert variant='warning' className='no-student-alert'>There are no registered students for this class.</Alert> : null }
                         </div>
                     </Row>
