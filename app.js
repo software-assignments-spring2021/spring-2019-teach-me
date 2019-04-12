@@ -20,7 +20,6 @@ app.use(
 );
 app.use(bodyParser.json());
 
-
 app.get('/api/instructor/:userId/info', function(req, res) {
 	const userId = req.params.userId;
 	console.log(userId);
@@ -28,10 +27,6 @@ app.get('/api/instructor/:userId/info', function(req, res) {
 		res.json(info);
 	});
 });
-
-
-
-
 
 app.get('/api/classes', function(req, res) {
 	Class.find({}, function(err, classes, count) {
@@ -54,6 +49,30 @@ app.get('/api/classes/:classId', function(req, res) {
 		});
 });
 
+app.get('/api/get-students/:classId', function(req, res) {
+	UserClass
+		.find({classID: req.params.classId})
+		.populate('userID')
+		.exec(function(err, students) {
+			if (err) {
+				console.log(err);
+			}
+			const returnValue = [];
+			for (let i = 0; i < students.length; i++) {
+				const newStudent = students[i].toObject();
+				const yr = newStudent.date.getFullYear();
+				const mo = newStudent.date.getMonth() + 1;
+				const day = newStudent.date.getDate();
+				const newDate = yr + '-' + mo + '-' + day;
+				newStudent.date = newDate;
+				returnValue.push(newStudent);
+			}
+			
+			//console.log(returnValue);
+			res.json(returnValue);
+		})
+})
+
 app.get('/api/class-history-teach/:userId', function(req, res) {
 	const userId = new mongoose.Types.ObjectId(req.params.userId);
 	Users.findOne({userID: userId}, function(err, instructor) {
@@ -67,7 +86,6 @@ app.get('/api/class-history-teach/:userId', function(req, res) {
 			});
 		}
 	})
-	
 });
 
 app.get('/api/class-history-take/:userId', function(req, res) {
@@ -80,7 +98,6 @@ app.get('/api/class-history-take/:userId', function(req, res) {
 			classData.forEach(c => classes.push(c.classID));
 			res.json(classes);
 		});
-	
 })
 
 app.get('/api/my-account/:userId', function(req, res) {
