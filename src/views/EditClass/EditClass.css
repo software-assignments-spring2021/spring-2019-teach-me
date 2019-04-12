@@ -1,6 +1,12 @@
 #edit-form {
-    width: 60%;
-    margin: auto;
+  width: 60%;
+  margin: auto;
+}
+
+#alert {
+  width: 60%;
+  margin: auto;
+  margin-top: 20px;
 }
 
 form {
