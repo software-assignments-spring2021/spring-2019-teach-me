@@ -198,6 +198,24 @@ app.post('/api/my-account/:userId', function(req, res) {
 	});
 });
 
+app.get('/api/instructors', function(req, res) {
+	Users.find({}, function(err, users, count) {
+		const returnValue = [];
+		for (let i = 0; i < users.length; i++) {
+			const newUser = users[i].toObject();
+			if (newUser.numOfRatingAsInstructor >= 0){
+				var rating = newUser.sumOfRatingAsInstructor / newUser.numOfRatingAsInstructor;
+				if (Number.isNaN(rating)){
+					rating = 0;
+				}
+				newUser.rating = rating;
+				returnValue.push(newUser);
+			}
+		}
+		res.json(returnValue);
+	});
+});
+
 app.get('/*', function(req, res) {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
