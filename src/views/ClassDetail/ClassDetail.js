@@ -24,13 +24,18 @@ class ClassDetail extends Component {
             loginRequired: false,
             classNotRegistered: false,
             noStudentAlert: false,
-            notInstructorAlert: false,
+            isInstructor: false,
             studentsList: []
         };
         
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleWithdraw = this.handleWithdraw.bind(this);
         this.getStudents = this.getStudents.bind(this);
+        this.deleteClass = this.deleteClass.bind(this);
+    }
+
+    deleteClass() {
+        
     }
 
     getStudents() {
@@ -47,7 +52,7 @@ class ClassDetail extends Component {
                     }));
             }
             else {
-                this.setState({notInstructorAlert: true});
+                this.setState({isInstructor: false});
             }
         }
         else {
@@ -119,19 +124,41 @@ class ClassDetail extends Component {
         const url = '/api/classes/' + classId;
         fetch(url)
 			.then(response => response.json())
-            .then(data => this.setState({currentClass: data}))
-        
+            .then(data => this.setState(
+                {currentClass: data}, 
+                () => {
+                    if (this.props.auth.isAuthenticated) {
+                        if (this.state.currentClass.instructorID === this.props.auth.user.id) {
+                            this.setState({isInstructor: true});
+                        }
+                    }
+                }));
         /*
         const data = {"_id":"5c8547511c9d44000024fb63","name":"Piano","description":"Piano","price":75,"proposedSchedule":"Monday","instructor":"5c854805e0c8200000afd73a","rating":"9.6","cateogry":"Art"};
         this.setState({currentClass: data});
         */
     }
-    
+
     render() {
+        const { classId } = this.props.match.params;
         const classData = this.state.currentClass;
         const studentData = this.state.studentsList.map(function(data, index) {
             return <StudentDisplay key={index} name={data.userID.name} signupDate={data.date} />
         });
+
+        const instructorButtons  = 
+            <div className='detail-buttons-container'>
+                <Button onClick={this.getStudents} variant="info">See Registered Students</Button>
+                <LinkContainer to={"/edit-class/" + classId}><Button variant="info">Edit Class</Button></LinkContainer>
+                <Button onClick={this.deleteClass} variant="warning" disabled>Delete Class</Button>
+            </div>
+
+        const studentButtons =   
+            <div className='detail-buttons-container'>
+                <Button onClick={this.handleSubmit} variant="info">Register now!</Button>
+                <Button onClick={this.handleWithdraw} variant="warning">Withdraw from Class</Button>
+                <Button variant="info" disabled>Contact Instructor (Coming Soon)</Button>
+            </div>
 
         /*
         if (this.state.successRedirect.result === 'success') {
@@ -176,12 +203,7 @@ class ClassDetail extends Component {
                         </div>
                     </Row>
                     <Row>
-                        <div className='detail-buttons-container'>
-                            <Button onClick={this.handleSubmit} variant="info">Register now!</Button>
-                            <Button onClick={this.handleWithdraw} variant="warning">Withdraw from Class</Button>
-                            <Button onClick={this.getStudents} variant="info">See Registered Students</Button>
-                            <Button variant="info" disabled>Contact Instructor (Coming Soon)</Button>
-                        </div>
+                        { this.state.isInstructor? instructorButtons : studentButtons }
                     </Row>
                     <Row>
                         <div className='detail-comments-container'>
