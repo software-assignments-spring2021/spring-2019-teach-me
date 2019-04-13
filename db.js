@@ -32,7 +32,6 @@ const classSchema = new mongoose.Schema ({
     proposedSchedule: String,
     instructor: {type: mongoose.Schema.Types.ObjectId, ref: 'users'},
     category: String,
-    rating: Number,
     sumOfRating: Number,
     numOfRating: Number
 });
