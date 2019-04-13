@@ -145,6 +145,10 @@ app.post('/api/edit-class/:classId', function(req, res) {
 	});
 });
 
+app.post('/api/delete-class/:classId', function(req, res) {
+	
+});
+
 app.post('/api/register-class', function(req, res) {
 	const userID = req.body.userID;
 	const classID = req.body.classID;

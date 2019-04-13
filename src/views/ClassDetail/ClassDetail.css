@@ -39,7 +39,7 @@
     margin: 0 auto;
 }
 
-.detail-buttons-container button{
+.detail-buttons-container button, .detail-buttons-container a{
     margin-right: 1em;
 }
 
