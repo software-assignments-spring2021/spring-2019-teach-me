@@ -16,7 +16,8 @@ class Instructors extends Component {
 			instructorListing: [],
 			allInstructors: [],
 			activePage: 1,
-			showWarning: false
+			showWarning: false,
+			categories: []
 		};
 	}
 
@@ -25,7 +26,34 @@ class Instructors extends Component {
 		// 	.then(response => response.json())
 		// 	.then(data => this.setState({instructorListing: data, allInstructors: data}))
 		const data = [{"_id":"5c8420601c9d440000dc7530","userID":"5ca7c1b41c9d44000002a798","rating":7,"sumOfRating":35,"numOfRating":5,"credentials":"Professional Tennis Player","introduction":"hi","name":"A"},{"_id":"5ca68e2b1c9d440000d6ec74","userID":"5c8060e6ea8bdc07cd5e06a2","credentials":"wut","introduction":"hi","rating":4.2,"sumOfRating":100,"numOfRating":24,"name":"Sameer Tulshyan"}];
-		this.setState({instructorListing: data, allInstructors: data});
+		
+		this.setState({instructorListing: data, allInstructors: data}, () => {
+
+			const allInstructors = this.state.allInstructors;
+			var total = [];
+
+				for (let i = 0; i < allInstructors.length; i++) {
+					var temp = [];
+					// console.log(temp);
+					const url = '/api/class-history-teach/' + allInstructors[i]._id;
+					console.log(url);
+					fetch(url)
+						.then(response => response.json())
+						.then(data => {
+							console.log(data);
+							for (let j = 0; j < data.length; j++) {
+								// console.log(data[j]);
+								temp.push(data[j].category);
+							}
+							// console.log(temp);
+							total.push(temp);
+							temp = [];
+						})
+				}
+
+			console.log(total);
+			this.setState({categories: total});
+		});
 	}
 
 	handlePageChange(pg) {
@@ -44,6 +72,18 @@ class Instructors extends Component {
 
 			if (query['minRating'] !== 'Min Rating...') {
 				if (c.rating < parseFloat(query['minRating'])) {
+					includeInResult = false;
+				}
+			}
+
+			if (query['instructorCategory'] !== 'Instructor Category...') {
+				var noMatch = true;
+				for (let j = 0; j < this.state.categories[i].length; j++) {
+					if (query['instructorCategory'] == this.state.categories[i][j]) {
+						noMatch = false;
+					}
+				}
+				if (noMatch) {
 					includeInResult = false;
 				}
 			}
