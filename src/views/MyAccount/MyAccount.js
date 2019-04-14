@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Jumbotron from 'react-bootstrap/Jumbotron'
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import Rater from 'react-rater'
 
 import './MyAccount.css'
 
@@ -15,15 +16,17 @@ class MyAccount extends Component {
       userId: undefined,
       IsReadOnly: true,
       imageIsReadOnly: true,
-      userName: '',
-      userEmail: '',
-      successCheck: undefined
+      user: {},
+      successCheck: undefined,
+      instructorRating: 0.0,
+      learnerRating: 0.0
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handleEditClick = this.handleEditClick.bind(this);
     this.handleClassHistory = this.handleClassHistory.bind(this);
+    this.handleLogOut = this.handleLogOut.bind(this);
   }
 
   componentDidMount() {
@@ -35,25 +38,37 @@ class MyAccount extends Component {
         console.log(url);
         fetch(url)
           .then(response => response.json())
-          .then(data => this.setState({userName: data[0].name, userEmail: data[0].email}))
+          .then(data => this.setState({user:data[0]}))
       });
     }
     else {
       this.props.history.push("/login");
     }
 
+
       //console.log(this.state.userName);
   }
 
-
+  calculateRating() {
+    if(this.state.user.numOfRatingAsInstructor > 0) {
+      this.setState({instructorRating : this.state.user.sumOfRatingAsInstructor * 1.0 /
+      this.state.user.numOfRatingAsInstructor});}
+    if(this.state.user.numOfRatingAsLearner > 0) {
+      this.setState({learnerRating : this.state.user.sumOfRatingAsInstructor * 1.0 /
+      this.state.user.numOfRatingAsInstructor});}
+  }
 
 
   handleNameChange(event) {
-    this.setState({userName:event.target.value});
+    let newUser = this.state.user;
+    newUser.name = event.target.value;
+    this.setState({user:newUser});
   }
 
   handleEmailChange(event) {
-    this.setState({userEmail:event.target.value});
+    let newUser = this.state.user;
+    newUser.email = event.target.value;
+    this.setState({user:newUser});
   }
 
   handleSubmit(event) {
@@ -70,16 +85,19 @@ class MyAccount extends Component {
 
 		console.log(newUserObj);
 
-		const { userId } = this.props.match.params;
-		const url = '/api/my-account/' + userId;
+
+		const url = '/api/my-account/' + this.state.userId;
 		fetch(url, {
 			method: 'POST',
 			body: JSON.stringify(newUserObj),
 			headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+      'Accept': 'application/json'
 		}
 		}).then(response => response.json())
 			.then(data => this.setState({successCheck: data}));
+
+    this.setState({IsReadOnly:true});
   }
 
   handleEditClick(event) {
@@ -87,30 +105,34 @@ class MyAccount extends Component {
   }
 
   handleClassHistory(event) {
-
       this.props.history.push("/class-history");
-
-
   }
 
-  render() { console.log(this.state.userEmail);
+  handleLogOut(event) {
+      this.props.history.push("/dashboard");
+  }
+
+  render() {
+    console.log(this.state.instructorRating);
     return (
-      <div className='myaccount-page'>
+      <div id='myaccount-page'>
         <h3>My Account Page</h3><br />
 
         <form onSubmit={this.handleSubmit}>
         <label>Name</label>
-        <input type = "text" name = "name" value = {this.state.userName} readOnly={this.state.IsReadOnly}
+        <input type = "text" name = "name" value = {this.state.user.name} readOnly={this.state.IsReadOnly}
         onChange = {this.handleNameChange} required/><br />
         <label>Email</label>
-        <input type = "text" name = "email" value = {this.state.userEmail} readOnly={this.state.IsReadOnly}
+        <input type = "text" name = "email" value = {this.state.user.email} readOnly={this.state.IsReadOnly}
         onChange = {this.handleEmailChange} required/>
-        <input type = "button" name = "editemail" value = "Edit" onClick={this.handleEditClick}/><br />
+        <lable>Rating as Insturctor</lable><Rater total = {5} rating = {this.state.user.instructorRating} interactive = {false}/><br />
+        <lable>Rating as Learner</lable><Rater total = {5} rating = {this.state.user.learnerRating} interactive = {false}/><br />
+        <input type = "button" name = "edit" value = "Edit" onClick={this.handleEditClick}/><br />
         <input type = "submit" value = "Submit"/>
         </form>
 
-        <input type = "button" name = "viewclasshistory" value = "View Class History" onClick={this.handleClassHistory}
-        history = {this.props.history}/>
+        <input type = "button" name = "viewclasshistory" value = "View Class History" onClick={this.handleClassHistory}/>
+        <input type = "button" name = "logout" value = "Log out" onClick={this.handleLogOut}/>
 
 
       </div>

@@ -97,7 +97,26 @@ app.get('/api/class-history-take/:userId', function(req, res) {
 app.get('/api/my-account/:userId', function(req, res) {
 	const userId = new mongoose.Types.ObjectId(req.params.userId);
 	Users.find({_id: userId}, function(err, userinfo) {
-		res.json(userinfo);
+		const returnuser = [];
+		const returnValue = userinfo[0].toObject();
+		if(returnValue.numOfRatingAsInstructor>=0) {
+			var instructorRating = returnValue.sumOfRatingAsInstructor * 1.0 /
+			returnValue.numOfRatingAsInstructor;
+			if(Number.isNaN(instructorRating)) {
+				instructorRating = 0;
+			}
+			returnValue.instructorRating = instructorRating;
+		}
+		if(returnValue.numOfRatingAsLearner>=0) {
+			var learnerRating = returnValue.sumOfRatingAsLearner * 1.0 /
+			returnValue.numOfRatingAsLearner;
+			if(Number.isNaN(learnerRating)) {
+				learnerRating = 0;
+			}
+			returnValue.learnerRating = learnerRating;
+		}
+		returnuser.push(returnValue);
+		res.json(returnuser);
 	});
 });
 
@@ -146,7 +165,7 @@ app.post('/api/edit-class/:classId', function(req, res) {
 });
 
 app.post('/api/delete-class/:classId', function(req, res) {
-	
+
 });
 
 app.post('/api/register-class', function(req, res) {
@@ -162,7 +181,7 @@ app.post('/api/register-class', function(req, res) {
 				userID: userID,
 				classID: classID
 			});
-			
+
 			newUserClass.save(function(err, userClass) {
 				if (err) {
 					res.json({status: 'error', result: err});
