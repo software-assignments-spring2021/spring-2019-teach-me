@@ -1,6 +1,6 @@
 #myaccount-page{
   width: 60%;
-  margin: auto;
+  margin: 2.5% auto;
 }
 
 form {
@@ -28,3 +28,6 @@ input[type=submit], input[type=button] {
   border-radius: 4px;
   cursor: pointer;
 }
+
+$react-rater-link: #ccc !default;
+$react-rater-active: #000 !default;

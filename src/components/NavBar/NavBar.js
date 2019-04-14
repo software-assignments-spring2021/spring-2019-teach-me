@@ -33,7 +33,7 @@ class NavBar extends Component {
 						<LinkContainer to="/about"><NavItem className="nav-link">About</NavItem></LinkContainer>
 					</Nav>
 					<Nav>
-						<LinkContainer to="/dashboard"><NavItem className="nav-link">Hello {this.props.auth.user.name}</NavItem></LinkContainer>
+						<LinkContainer to="/my-account"><NavItem className="nav-link">Hello {this.props.auth.user.name}</NavItem></LinkContainer>
 						<NavDropdown title="Quick Access" id="collasible-nav-dropdown">
 							<LinkContainer to="/class-history"><NavDropdown.Item href="#action/3.1">My Class History</NavDropdown.Item></LinkContainer>
 							<LinkContainer to="/create-class"><NavDropdown.Item href="#action/3.1">Publish New Class</NavDropdown.Item></LinkContainer>
@@ -51,6 +51,7 @@ class NavBar extends Component {
 					<Nav className="mr-auto">
 						<LinkContainer to="/home"><NavItem className="nav-link">Home</NavItem></LinkContainer>
 						<LinkContainer to="/classes"><NavItem className="nav-link">Class Listing</NavItem></LinkContainer>
+						<LinkContainer to="/instructors"><NavItem className="nav-link">Instructor Listing</NavItem></LinkContainer>
 						<LinkContainer to="/teach-others"><NavItem className="nav-link">Teach Others</NavItem></LinkContainer>
 						<LinkContainer to="/about"><NavItem className="nav-link">About</NavItem></LinkContainer>
 					</Nav>
@@ -74,4 +75,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, { logoutUser })(NavBar);
-
