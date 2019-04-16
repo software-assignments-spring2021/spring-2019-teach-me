@@ -17,7 +17,7 @@ class Instructors extends Component {
 			allInstructors: [],
 			activePage: 1,
 			showWarning: false,
-			categories: []
+			categories: {}
 		};
 	}
 
@@ -28,7 +28,7 @@ class Instructors extends Component {
 				this.setState({instructorListing: data, allInstructors: data}, () => {
 
 					const allInstructors = this.state.allInstructors;
-					var total = [];
+					var total = {};
 
 						for (let i = 0; i < allInstructors.length; i++) {
 							var temp = [];
@@ -44,7 +44,7 @@ class Instructors extends Component {
 										temp.push(data[j].category);
 									}
 									// console.log(temp);
-									total.push(temp);
+									total[i] = temp;
 									temp = [];
 								})
 						}
