@@ -141,6 +141,21 @@ app.post('/api/create-class', function(req, res) {
 			res.json({result: 'success'});
 		}
 	});
+
+	Users.find({_id: req.body.instructorId}, function(err, users, count) {
+		const newUser = users[0].toObject();
+		// if numOfRatingAsInstructor is null or negative
+		if (!(newUser.numOfRatingAsInstructor >= 0)){
+			Users.findOneAndUpdate({_id: req.body.instructorId}, {sumOfRatingAsInstructor:0,numOfRatingAsInstructor:0}, {new:true}, function(err, classes) {
+				if (err) {
+					console.log("fail");
+				}
+				else {
+					console.log("success");
+				}
+			});
+		}
+	});
 });
 
 app.get('/api/edit-class/:classId', function(req, res) {
