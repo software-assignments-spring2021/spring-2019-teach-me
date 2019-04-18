@@ -30,7 +30,14 @@ app.get('/api/instructor/:userId/info', function(req, res) {
 
 app.get('/api/classes', function(req, res) {
 	Class.find({}, function(err, classes, count) {
-		res.json(classes);
+		const returnValue = [];
+		for (let i = 0; i < classes.length; i++) {
+			if(classes[i].archive == false) {
+				const classAvailable = classes[i].toObject();
+				returnValue.push(classAvailable);
+			}
+		}
+		res.json(returnValue);
 	});
 });
 
@@ -78,7 +85,14 @@ app.get('/api/class-history-teach/:userId', function(req, res) {
 	const userId = new mongoose.Types.ObjectId(req.params.userId);
 	const instructorId = userId;
 	Class.find({instructor: instructorId}, function(err, classes, count) {
-		res.json(classes);
+		const returnValue = [];
+		for (let i = 0; i < classes.length; i++) {
+			if(classes[i].archive == false) {
+				const classAvailable = classes[i].toObject();
+				returnValue.push(classAvailable);
+			}
+		}
+		res.json(returnValue);
 	});
 });
 
@@ -89,8 +103,15 @@ app.get('/api/class-history-take/:userId', function(req, res) {
 		.populate('classID')
 		.exec(function (err, classData) {
 			const classes = [];
+			const returnValue = [];
 			classData.forEach(c => classes.push(c.classID));
-			res.json(classes);
+			for (let i = 0; i < classes.length; i++) {
+				if(classes[i].archive == false && classData[i].complete == false) {
+					const classAvailable = classes[i].toObject();
+					returnValue.push(classAvailable);
+				}
+			}
+			res.json(returnValue);
 		});
 })
 
@@ -131,7 +152,8 @@ app.post('/api/create-class', function(req, res) {
         category: req.body.category,
         rating: 0,
     	sumOfRating: 0,
-    	numOfRating: 0
+    	numOfRating: 0,
+			archive: false
     });
 	newClass.save((err, newclass) => {
 		if (err) {
@@ -189,12 +211,16 @@ app.post('/api/register-class', function(req, res) {
 
 	UserClass.find({classID: classID, userID: userID}, function(err, duplicateFound) {
 		if (duplicateFound.length > 0) {
-			res.json({status: 'error', result: 'you have already registered for this class.'});
+			if(duplicateFound[0].complete == true) {
+				res.json({status: 'error', result: 'you have already completed this class'});
+			}
+			else{res.json({status: 'error', result: 'you have already registered for this class.'});}
 		}
 		else {
 			const newUserClass = new UserClass({
 				userID: userID,
-				classID: classID
+				classID: classID,
+				complete: false
 			});
 
 			newUserClass.save(function(err, userClass) {
@@ -221,6 +247,33 @@ app.post('/api/drop-class', function(req, res) {
 			res.json({status: 'success', result: 'dropped from'})
 		}
 	});
+});
+
+app.post('/api/archive-class', function(req, res) {
+	const classID = req.body.classID;
+	Class.findOneAndUpdate({_id:classID}, req.body, {new:true}, function(err, classes){
+		if(err) {
+			res.json({result: err});
+		}
+		else {
+			res.json({result: 'success'});
+		}
+	});
+
+});
+
+app.post('/api/complete-class', function(req, res) {
+	const classID = req.body.classID;
+	const userID = req.body.userID;
+	UserClass.findOneAndUpdate({classID:classID, userID: userID}, req.body, {new:true}, function(err, classData){
+		if (!classData) {
+			res.json({status: 'error', result: 'you have not registered for this class yet.'});
+		}
+		else {
+			res.json({status: 'success', result: 'complete'})
+		}
+	});
+
 });
 
 app.post('/api/my-account/:userId', function(req, res) {

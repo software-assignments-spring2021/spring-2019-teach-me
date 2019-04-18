@@ -33,7 +33,8 @@ const classSchema = new mongoose.Schema ({
     instructor: {type: mongoose.Schema.Types.ObjectId, ref: 'users'},
     category: String,
     sumOfRating: Number,
-    numOfRating: Number
+    numOfRating: Number,
+    archive: Boolean
 });
 
 const userClassSchema = new mongoose.Schema ({
@@ -42,7 +43,8 @@ const userClassSchema = new mongoose.Schema ({
     date: {
         type: Date,
         default: Date.now
-    }
+    },
+    complete: Boolean
 })
 
 const Class =  mongoose.model('Class', classSchema);
@@ -51,5 +53,3 @@ const UserClass = mongoose.model('UserClass', userClassSchema);
 
 const dbconf = process.env.DB_URI;
 mongoose.connect(dbconf, { useNewUrlParser: true });
-
-
