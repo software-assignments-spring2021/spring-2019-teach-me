@@ -27,15 +27,76 @@ class ClassDetail extends Component {
             isInstructor: false,
             studentsList: []
         };
-        
+
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleWithdraw = this.handleWithdraw.bind(this);
         this.getStudents = this.getStudents.bind(this);
         this.deleteClass = this.deleteClass.bind(this);
+        this.archiveClass = this.archiveClass.bind(this);
+        this.completeClass = this.completeClass.bind(this);
     }
 
     deleteClass() {
-        
+
+    }
+
+    completeClass() {
+      const { classId } = this.props.match.params;
+
+      if(this.props.auth.isAuthenticated) {
+        const newUserClassPair = {};
+        newUserClassPair.userID = this.props.auth.user.id;
+        newUserClassPair.classID = classId;
+        newUserClassPair.complete = true;
+
+        console.log(newUserClassPair);
+
+        const url = '/api/complete-class';
+        fetch(url, {
+          method: 'POST',
+          body: JSON.stringify(newUserClassPair),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(response => response.json())
+          .then(data => this.setState({successRedirect: data}));
+
+      }
+      else {
+        this.setState({loginRequired: true});
+        setTimeout(() => {
+          this.props.history.push("/login");
+        },2000);
+      }
+    }
+
+    archiveClass() {
+      if (this.props.auth.isAuthenticated) {
+          if (this.state.currentClass.instructorID === this.props.auth.user.id) {
+              const newClassObj = {};
+              const { classId } = this.props.match.params;
+              newClassObj.classID = classId;
+              newClassObj.archive = true;
+
+              console.log(newClassObj);
+              const url = '/api/archive-class';
+              fetch(url, {
+                method: 'POST',
+                body: JSON.stringify(newClassObj),
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json'
+                }
+              }).then(response => response.json())
+                .then(data => this.setState({successRedirect: data}));
+          }
+      }
+      else {
+        this.setState({loginRequired: true});
+        setTimeout(() => {
+            this.props.history.push("/login");
+        }, 2000);
+      }
     }
 
     getStudents() {
@@ -58,7 +119,7 @@ class ClassDetail extends Component {
         else {
             this.setState({loginRequired: true});
             setTimeout(() => {
-                this.props.history.push("/login"); 
+                this.props.history.push("/login");
             }, 2000);
         }
         /*
@@ -66,7 +127,7 @@ class ClassDetail extends Component {
         this.setState({studentsList: data});
         */
     }
-    
+
     handleSubmit() {
         const { classId } = this.props.match.params;
 
@@ -88,7 +149,7 @@ class ClassDetail extends Component {
         else {
             this.setState({loginRequired: true});
             setTimeout(() => {
-                this.props.history.push("/login"); 
+                this.props.history.push("/login");
             }, 2000);
         }
     }
@@ -114,7 +175,7 @@ class ClassDetail extends Component {
         else {
             this.setState({loginRequired: true});
             setTimeout(() => {
-                this.props.history.push("/login"); 
+                this.props.history.push("/login");
             }, 2000);
         }
     }
@@ -125,7 +186,7 @@ class ClassDetail extends Component {
         fetch(url)
 			.then(response => response.json())
             .then(data => this.setState(
-                {currentClass: data}, 
+                {currentClass: data},
                 () => {
                     if (this.props.auth.isAuthenticated) {
                         if (this.state.currentClass.instructorID === this.props.auth.user.id) {
@@ -146,18 +207,20 @@ class ClassDetail extends Component {
             return <StudentDisplay key={index} name={data.userID.name} signupDate={data.date} />
         });
 
-        const instructorButtons  = 
+        const instructorButtons  =
             <div className='detail-buttons-container'>
                 <Button onClick={this.getStudents} variant="info">See Registered Students</Button>
                 <LinkContainer to={"/edit-class/" + classId}><Button variant="info">Edit Class</Button></LinkContainer>
                 <Button onClick={this.deleteClass} variant="warning" disabled>Delete Class</Button>
+                <Button onClick={this.archiveClass} variant="warning">Archive Class</Button>
             </div>
 
-        const studentButtons =   
+        const studentButtons =
             <div className='detail-buttons-container'>
                 <Button onClick={this.handleSubmit} variant="info">Register now!</Button>
                 <Button onClick={this.handleWithdraw} variant="warning">Withdraw from Class</Button>
                 <Button variant="info" disabled>Contact Instructor (Coming Soon)</Button>
+                <Button onClick={this.completeClass} variant="warning">Complete Class</Button>
             </div>
 
         /*
@@ -195,7 +258,7 @@ class ClassDetail extends Component {
                     </Row>
                     <Row>
                         <div className='alerts-container'>
-                            { this.state.successRedirect.status === 'success' ? <Alert variant='success' className='success-alert'>You have successfully {this.state.successRedirect.result} this class!</Alert> : null }  
+                            { this.state.successRedirect.status === 'success' ? <Alert variant='success' className='success-alert'>You have successfully {this.state.successRedirect.result} this class!</Alert> : null }
                             { this.state.successRedirect.status === 'error' ? <Alert variant='danger' className='error-alert'>Oops, it seems that we have encountered a problem: {this.state.successRedirect.result}</Alert> : null }
                             { this.state.loginRequired ? <Alert variant='danger' className='login-alert'>It seems that you have not logged in. We are now taking you to the log in page.</Alert> : null }
                             { this.state.notInstructorAlert ? <Alert variant='danger' className='not-instructor-alert'>Registered student information is only visible to the instructor of this class.</Alert> : null }
