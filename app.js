@@ -125,6 +125,7 @@ app.get('/api/comments/:classId', function(req, res) {
 			for (let item of data) {
 				if (item.comment !== null) {
 					const comment = {};
+					comment.userID = item.userID._id;
 					comment.name = item.userID.name;
 					comment.commentText = item.comment;
 

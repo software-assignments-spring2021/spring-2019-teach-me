@@ -268,10 +268,10 @@ class ClassDetail extends Component {
         const { classId } = this.props.match.params;
         const classData = this.state.currentClass;
         const studentData = this.state.studentsList.map(function(data, index) {
-            return <StudentDisplay key={index} name={data.userID.name} signupDate={data.date} />
+            return <StudentDisplay key={index} name={data.userID.name} signupDate={data.date} userID={data.userID._id} />
         });
         const commentData = this.state.comments.map(function (data, index) {
-            return <Comment key={index} name={data.name} commentText={data.commentText} commentDate={data.commentDate} />
+            return <Comment key={index} name={data.name} commentText={data.commentText} commentDate={data.commentDate} userID={data.userID} />
         })
 
         const instructorButtons  =
