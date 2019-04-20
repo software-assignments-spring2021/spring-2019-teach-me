@@ -44,7 +44,15 @@ const userClassSchema = new mongoose.Schema ({
         type: Date,
         default: Date.now
     },
-    complete: Boolean
+    complete: Boolean,
+    comment: {
+        type: String,
+        default: null
+    },
+    commentDate: {
+        type: Date,
+        default: null
+    }
 })
 
 const Class =  mongoose.model('Class', classSchema);
