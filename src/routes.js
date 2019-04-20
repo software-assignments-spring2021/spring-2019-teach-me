@@ -10,6 +10,7 @@ import { EditClass } from './views/EditClass'
 import { MyAccount } from './views/MyAccount'
 import { ClassHistory } from './views/ClassHistory'
 import { Instructors } from './views/Instructors'
+import { UserProfile } from './views/UserProfile'
 import { NavBar } from './components/NavBar';
 import { Login } from './views/Login';
 import { Register } from './views/Register';
@@ -63,6 +64,7 @@ export const Routes = () => {
 				<Route exact path="/my-account" component={MyAccount} />
 				<Route exact path="/class-history" component={ClassHistory}/>
 				<Route exact path="/instructors" component={Instructors} />
+				<Route exact path="/user/:userId" component={UserProfile} />
 				<Route exact path="/login" component={Login} />
 				<Route exact path="/register" component={Register} />
 				<Route exact path="/instructor/:userId/info" component={InstructorProfile} />
