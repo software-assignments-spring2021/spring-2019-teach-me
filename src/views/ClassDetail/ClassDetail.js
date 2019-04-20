@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import Jumbotron from 'react-bootstrap/Jumbotron';
-import Button from 'react-bootstrap/Button'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
-import { LinkContainer } from 'react-router-bootstrap'
+import Form from 'react-bootstrap/Form'
+import { LinkContainer } from 'react-router-bootstrap';
 import { StudentDisplay } from '../../components/StudentDisplay';
+import { Comment } from '../../components/Comment';
 
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -21,11 +23,15 @@ class ClassDetail extends Component {
 		this.state = {
             currentClass: {},
             successRedirect: {},
+            commentSubmitStatus: {},
             loginRequired: false,
             classNotRegistered: false,
             noStudentAlert: false,
             isInstructor: false,
-            studentsList: []
+            noCommentAlert: false,
+            studentsList: [],
+            comments: [],
+            textAreaValue: ''
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -34,6 +40,8 @@ class ClassDetail extends Component {
         this.deleteClass = this.deleteClass.bind(this);
         this.archiveClass = this.archiveClass.bind(this);
         this.completeClass = this.completeClass.bind(this);
+        this.getComments = this.getComments.bind(this);
+        this.submitComment = this.submitComment.bind(this);
     }
 
     deleteClass() {
@@ -180,6 +188,59 @@ class ClassDetail extends Component {
         }
     }
 
+    getComments() {
+        const { classId } = this.props.match.params;
+        const url = '/api/comments/' + classId;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => this.setState({comments: data}, function() {
+                if (this.state.comments.length === 0) {
+                    this.setState({noCommentAlert: true, textAreaValue: ''});
+                }
+                else {
+                    this.setState({noCommentAlert: false, textAreaValue: ''});
+                }
+            }));
+
+        /*
+        const s = 'All incoming students must submit official copies of university transcripts/academic records from all previously attended universities along with official test scores (if applicable) to Cornell Tech.To be considered official, the required documents must be received directly from the issuing institution and properly authenticated. If your transcripts/academic records are not in English, you must provide an official English translation in addition to your official transcripts/academic records. If your transcripts/academic records do not state your degree-conferral date, you must also provide an official copy of your degree certificate.';
+        const data = [{name: 'someone', commentText: s, commentDate: '2019-1-1'}, {name: 'someone', commentText: s, commentDate: '2019-1-1'}];
+        this.setState({comments: data});
+        */
+    }
+
+    submitComment(event) {
+        event.preventDefault();
+
+        if (this.props.auth.isAuthenticated) {
+            const { classId } = this.props.match.params;
+            const commentForm = new FormData(event.currentTarget);
+            const commentObj = {};
+    
+            for (let item of commentForm.entries()) {
+                commentObj[item[0]] = item[1];
+            }
+    
+            console.log(commentObj);
+    
+            const url = '/api/comments/' + classId + '/' + this.props.auth.user.id;
+            fetch(url, {
+                method: 'POST',
+                body: JSON.stringify(commentObj),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json())
+                .then(data => this.setState({commentSubmitStatus: data}, () => this.getComments()));
+        }
+        else {
+            this.setState({loginRequired: true});
+            setTimeout(() => {
+                this.props.history.push("/login");
+            }, 2000);
+        }
+    }
+
     componentDidMount() {
         const { classId } = this.props.match.params;
         const url = '/api/classes/' + classId;
@@ -193,11 +254,14 @@ class ClassDetail extends Component {
                             this.setState({isInstructor: true});
                         }
                     }
+                    this.getComments();
                 }));
+        
         /*
         const data = {"_id":"5c8547511c9d44000024fb63","name":"Piano","description":"Piano","price":75,"proposedSchedule":"Monday","instructor":"5c854805e0c8200000afd73a","rating":"9.6","cateogry":"Art"};
         this.setState({currentClass: data});
         */
+        
     }
 
     render() {
@@ -206,12 +270,15 @@ class ClassDetail extends Component {
         const studentData = this.state.studentsList.map(function(data, index) {
             return <StudentDisplay key={index} name={data.userID.name} signupDate={data.date} />
         });
+        const commentData = this.state.comments.map(function (data, index) {
+            return <Comment key={index} name={data.name} commentText={data.commentText} commentDate={data.commentDate} />
+        })
 
         const instructorButtons  =
             <div className='detail-buttons-container'>
                 <Button onClick={this.getStudents} variant="info">See Registered Students</Button>
                 <LinkContainer to={"/edit-class/" + classId}><Button variant="info">Edit Class</Button></LinkContainer>
-                <Button onClick={this.deleteClass} variant="warning" disabled>Delete Class</Button>
+                {/* <Button onClick={this.deleteClass} variant="warning" disabled>Delete Class</Button> */}
                 <Button onClick={this.archiveClass} variant="warning">Archive Class</Button>
             </div>
 
@@ -220,14 +287,9 @@ class ClassDetail extends Component {
                 <Button onClick={this.handleSubmit} variant="info">Register now!</Button>
                 <Button onClick={this.handleWithdraw} variant="warning">Withdraw from Class</Button>
                 <Button variant="info" disabled>Contact Instructor (Coming Soon)</Button>
-                <Button onClick={this.completeClass} variant="warning">Complete Class</Button>
+                <Button onClick={this.completeClass} variant="warning">Mark Class as Completed</Button>
             </div>
 
-        /*
-        if (this.state.successRedirect.result === 'success') {
-
-        }
-        */
         return (
             <div className='detail-page-container'>
                 <Jumbotron>
@@ -266,15 +328,30 @@ class ClassDetail extends Component {
                         </div>
                     </Row>
                     <Row>
-                        { this.state.isInstructor? instructorButtons : studentButtons }
-                    </Row>
-                    <Row>
-                        <div className='detail-comments-container'>
-                        </div>
+                        { this.state.isInstructor ? instructorButtons : studentButtons }
                     </Row>
                     <Row>
                         <div className='student-list-container'>
                             {studentData}
+                        </div>
+                    </Row>
+                    <Row>
+                        <div className='detail-comments-container'>
+                            <h3>Comments</h3>  
+                            { commentData }
+                            <div className='alerts-container'>
+                                { this.state.commentSubmitStatus.status === 'success' ? <Alert variant='success' className='success-alert'>You have successfully submitted your comment!</Alert> : null }
+                                { this.state.commentSubmitStatus.status === 'error' ? <Alert variant='danger' className='error-alert'>Oops, it seems that we have encountered a problem: {this.state.commentSubmitStatus.result}.</Alert> : null }
+                                { this.state.noCommentAlert ? <Alert variant='warning' className='not-comment-alert'>There are no comments yet. Submit your comment below and make it the first one!</Alert> : null }
+                            </div>
+                            <div className='comment-input-container'>
+                                <Form onSubmit={e => this.submitComment(e)}>
+                                    <Form.Group controlId="comment-textarea">
+                                        <Form.Control as="textarea" rows="3" name="commentText" value={this.state.textAreaValue} onChange={e => this.setState({ textAreaValue: e.target.value })}/>
+                                    </Form.Group>
+                                    <Button variant="primary" type="submit">Submit Comment</Button>
+                                </Form>
+                            </div>
                         </div>
                     </Row>
                 </div>

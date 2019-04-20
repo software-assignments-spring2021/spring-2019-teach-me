@@ -1,7 +1,6 @@
 .detail-container {
     width: 60%;
-    margin: 3em auto;
-    
+    margin: 2.5% auto;
 }
 
 .detail-image-container {
@@ -58,4 +57,20 @@
 
 .student-list-container .card-body {
     width: 23em;
+}
+
+.detail-comments-container  {
+    border-top: 1px solid rgba(23, 162, 184, 0.5);
+    margin-left: 4%;
+    margin-right: 4%;
+    width: 100%;
+}
+
+.detail-comments-container h3 {
+    padding-top: 1.5%;
+}
+
+.comment-input-container form{
+    padding-top: 2%;
+    width: 100%;
 }

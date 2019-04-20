@@ -32,7 +32,7 @@ app.get('/api/classes', function(req, res) {
 	Class.find({}, function(err, classes, count) {
 		const returnValue = [];
 		for (let i = 0; i < classes.length; i++) {
-			if(classes[i].archive == false) {
+			if (classes[i].archive === false) {
 				const classAvailable = classes[i].toObject();
 				returnValue.push(classAvailable);
 			}
@@ -87,7 +87,7 @@ app.get('/api/class-history-teach/:userId', function(req, res) {
 	Class.find({instructor: instructorId}, function(err, classes, count) {
 		const returnValue = [];
 		for (let i = 0; i < classes.length; i++) {
-			if(classes[i].archive == false) {
+			if(classes[i].archive === false) {
 				const classAvailable = classes[i].toObject();
 				returnValue.push(classAvailable);
 			}
@@ -106,7 +106,7 @@ app.get('/api/class-history-take/:userId', function(req, res) {
 			const returnValue = [];
 			classData.forEach(c => classes.push(c.classID));
 			for (let i = 0; i < classes.length; i++) {
-				if(classes[i].archive == false && classData[i].complete == false) {
+				if(classes[i].archive === false && classData[i].complete === false) {
 					const classAvailable = classes[i].toObject();
 					returnValue.push(classAvailable);
 				}
@@ -114,6 +114,58 @@ app.get('/api/class-history-take/:userId', function(req, res) {
 			res.json(returnValue);
 		});
 })
+
+app.get('/api/comments/:classId', function(req, res) {
+	const classId = req.params.classId;
+	UserClass
+		.find({classID: classId})
+		.populate('userID')
+		.exec(function(err, data) {
+			const comments = [];
+			for (let item of data) {
+				if (item.comment !== null) {
+					const comment = {};
+					comment.name = item.userID.name;
+					comment.commentText = item.comment;
+
+					const yr = item.commentDate.getFullYear();
+					const mo = item.commentDate.getMonth() + 1;
+					const day = item.commentDate.getDate();
+					const newDate = yr + '-' + mo + '-' + day;
+					comment.commentDate = newDate;
+
+					comments.push(comment);
+				}
+			}
+
+			//console.log(comments);
+			res.json(comments);
+
+		}) ;
+});
+
+app.post('/api/comments/:classId/:userId', function(req, res) {
+	const classId = req.params.classId;
+	const userId = req.params.userId;
+	const comment = req.body.commentText;
+	UserClass.findOne({classID: classId, userID: userId}, function(err, data){
+		if (!data) {
+			res.json({status: 'error', result: 'you have not registered for this class'});
+		}
+		else {
+			if (data.comment !== null) {
+				res.json({status: 'error', result: 'you have already submitted your comment for this class'});
+			}
+			else {
+				data.comment = comment;
+				data.commentDate = new Date();
+				data.save(() => {
+					res.json({status: 'success'})
+				});
+			}
+		}
+	});
+});
 
 app.get('/api/my-account/:userId', function(req, res) {
 	const userId = new mongoose.Types.ObjectId(req.params.userId);
@@ -153,7 +205,7 @@ app.post('/api/create-class', function(req, res) {
         rating: 0,
     	sumOfRating: 0,
     	numOfRating: 0,
-			archive: false
+		archive: false
     });
 	newClass.save((err, newclass) => {
 		if (err) {
@@ -211,10 +263,12 @@ app.post('/api/register-class', function(req, res) {
 
 	UserClass.find({classID: classID, userID: userID}, function(err, duplicateFound) {
 		if (duplicateFound.length > 0) {
-			if(duplicateFound[0].complete == true) {
+			if(duplicateFound[0].complete === true) {
 				res.json({status: 'error', result: 'you have already completed this class'});
 			}
-			else{res.json({status: 'error', result: 'you have already registered for this class.'});}
+			else {
+				res.json({status: 'error', result: 'you have already registered for this class.'});
+			}
 		}
 		else {
 			const newUserClass = new UserClass({
