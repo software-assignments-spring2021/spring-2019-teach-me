@@ -17,6 +17,7 @@ class CreateClass extends Component {
 		
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleCancel = this.handleCancel.bind(this);
+		this.handleUrl = this.handleUrl.bind(this);
 
 		this.state = {
 			successRedirect: undefined
@@ -31,6 +32,10 @@ class CreateClass extends Component {
 		else {
 			this.props.history.push("/login");
 		}
+  	}
+
+  	handleUrl(e) {
+  		
   	}
 
 	handleSubmit(e) {
