@@ -6,6 +6,7 @@ import Alert from 'react-bootstrap/Alert';
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import classnames from "classnames";
+import validator from 'validator';
 
 import './EditClass.css'
 
@@ -16,11 +17,14 @@ class EditClass extends Component {
 
 		this.state = {
 			class: {},
-			successRedirect: undefined
+			successRedirect: undefined,
+			urlError: ''
 		};
 
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleCancel = this.handleCancel.bind(this);
+		this.handleUrl = this.handleUrl.bind(this);
+
 	}
 
 	componentDidMount() {
@@ -67,6 +71,16 @@ class EditClass extends Component {
 		this.setState({successRedirect: {"result": "cancelled"}});
 	}
 
+	handleUrl(e) {
+		const userUrl = e.target.value;
+
+		if (!validator.isURL(userUrl)) {
+			this.setState({urlError: 'That is not a valid url. Please try again'});
+		} else {
+			this.setState({urlError: ''});
+		}
+	}
+
 	render() {
 		if (this.state.successRedirect && (this.state.successRedirect.result === 'success' || this.state.successRedirect.result === 'cancelled')) {
 			return (
@@ -76,7 +90,7 @@ class EditClass extends Component {
 		else if (this.state.class.instructor !== this.props.auth.user.id) {
 			return (
 				<div id='alert'>
-					<Alert variant='danger'>"You are not the instructor of this class so you don not have the permission to edit it."</Alert>
+					<Alert variant='danger'>"You are not the instructor of this class so you do not have the permission to edit it."</Alert>
 				</div>
 			)
 
@@ -96,6 +110,9 @@ class EditClass extends Component {
 						<input type="text" name="proposedSchedule" defaultValue={this.state.class.proposedSchedule} required /><br />
 						<label>Category</label><br />
 						<input type="text" name="category" defaultValue={this.state.class.category} required /><br />
+						<label>Payment Link</label><br />
+						<input type="text" onBlur={this.handleUrl} defaultValue={this.state.class.paymentLink} name="paymentLink" />
+						<label id='urlError'>{this.state.urlError}</label><br />
 						<input type="submit" value="Publish" />
 						<input type="button" value="Cancel" onClick={this.handleCancel} />
 					</form>
