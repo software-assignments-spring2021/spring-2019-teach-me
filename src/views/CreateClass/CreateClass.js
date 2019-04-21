@@ -82,6 +82,8 @@ class CreateClass extends Component {
 						<input type="text" name="proposedSchedule" required /><br />
 						<label>Category</label><br />
 						<input type="text" name="category" required /><br />
+						<label>Payment Link</label><br />
+						<input type="text" name="paymentLink" /><br />
 						<input type="submit" value="Publish" />
 						<input type="button" value="Cancel" onClick={this.handleCancel} />
 					</form>
