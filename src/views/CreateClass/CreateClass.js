@@ -21,7 +21,8 @@ class CreateClass extends Component {
 		this.handleUrl = this.handleUrl.bind(this);
 
 		this.state = {
-			successRedirect: undefined
+			successRedirect: undefined,
+			urlError: ''
 		};
 	}
 
@@ -35,7 +36,13 @@ class CreateClass extends Component {
 	}
 
 	handleUrl(e) {
+		const userUrl = e.target.value;
 
+		if (!validator.isURL(userUrl)) {
+			this.setState({urlError: 'That is not a valid url. Please try again'});
+		} else {
+			this.setState({urlError: ''});
+		}
 	}
 
 	handleSubmit(e) {
@@ -101,7 +108,7 @@ class CreateClass extends Component {
 						<label>Payment Link</label>
 						<br />
 						<input type="text" onBlur={this.handleUrl} name="paymentLink" />
-						<br />
+						<label id='urlError'>{this.state.urlError}</label><br />
 						<input type="submit" value="Publish" />
 						<input
 							type="button"
