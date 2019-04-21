@@ -206,7 +206,8 @@ app.post('/api/create-class', function(req, res) {
         rating: 0,
     	sumOfRating: 0,
     	numOfRating: 0,
-		archive: false
+		archive: false,
+		paymentLink: req.body.paymentLink || ''
     });
 	newClass.save((err, newclass) => {
 		if (err) {
