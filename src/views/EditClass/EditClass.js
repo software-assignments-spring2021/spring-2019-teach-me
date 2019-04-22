@@ -18,11 +18,22 @@ class EditClass extends Component {
 		this.state = {
 			class: {},
 			successRedirect: undefined,
-			urlError: ''
+			urlError: '',
+			originator: new Originator(),
+			careTaker: new CareTaker()
 		};
 
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleCancel = this.handleCancel.bind(this);
+
+		this.handleSave = this.handleSave.bind(this);
+		this.handleRestore = this.handleRestore.bind(this);
+
+		this.handleNameChange = this.handleNameChange.bind(this);
+		this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
+		this.handlePriceChange = this.handlePriceChange.bind(this);
+		this.handleProposedScheduleChange = this.handleProposedScheduleChange.bind(this);
+		this.handleCategoryChange = this.handleCategoryChange.bind(this);
 		this.handleUrl = this.handleUrl.bind(this);
 
 	}
@@ -36,7 +47,19 @@ class EditClass extends Component {
 			console.log(url);
 			fetch(url)
 				.then(response => response.json())
-				.then(data => this.setState({class: data[0]}))
+				.then(data => {
+					this.setState({class: data[0]});
+
+					let originator = Object.assign({}, this.state.originator);
+					originator.name = data[0].name; 
+					originator.description = data[0].description;
+					originator.price = data[0].price;
+					originator.proposedSchedule = data[0].proposedSchedule;
+					originator.category = data[0].category;
+					originator.payment = data[0].payment;
+
+					this.setState({originator});
+				})
 		}
 		else {
 			this.props.history.push("/login");
@@ -71,7 +94,61 @@ class EditClass extends Component {
 		this.setState({successRedirect: {"result": "cancelled"}});
 	}
 
+	handleNameChange(e) {
+		let originator = Object.assign({}, this.state.originator);
+		originator.name = e.target.value; 
+		this.setState({originator});
+	}
+
+	handleDescriptionChange(e) {
+		let originator = Object.assign({}, this.state.originator);
+		originator.description = e.target.value; 
+		this.setState({originator});
+	}
+
+	handlePriceChange(e) {
+		let originator = Object.assign({}, this.state.originator);
+		originator.price = e.target.value; 
+		this.setState({originator});
+	}
+
+	handleProposedScheduleChange(e) {
+		let originator = Object.assign({}, this.state.originator);
+		originator.proposedSchedule = e.target.value; 
+		this.setState({originator});
+	}
+
+	handleCategoryChange(e) {
+		let originator = Object.assign({}, this.state.originator);
+		originator.category = e.target.value; 
+		this.setState({originator});
+	}
+
+	handleSave(e) {
+		this.state.careTaker.SetMemento(this.state.originator.saveState());
+		console.log(this.state.originator);
+		console.log("save");
+	}
+
+	handleRestore(e) {
+		this.state.originator.restoreState(this.state.careTaker.GetMemento());
+		var output = "The values you previously saved are: \n" + 
+		"Name: " + this.state.originator.name + "\n" +
+		"Description: " + this.state.originator.description + "\n" +
+		"Price: " + this.state.originator.price + "\n" +
+		"Proposed Schedule: " + this.state.originator.proposedSchedule + "\n" +
+		"Category: " + this.state.originator.category + "\n" +
+		"Payment Link: " + this.state.originator.payment;
+		alert(output);
+		console.log(this.state.originator);
+		console.log("restore");
+	}
+
 	handleUrl(e) {
+		let originator = Object.assign({}, this.state.originator);
+		originator.payment = e.target.value; 
+		this.setState({originator});
+
 		const userUrl = e.target.value;
 
 		if (!validator.isURL(userUrl)) {
@@ -101,20 +178,22 @@ class EditClass extends Component {
 					<h3>Edit the Class</h3>
 					<form onSubmit={this.handleSubmit}>
 						<label>Name</label><br />
-						<input type="text" name="name" defaultValue={this.state.class.name} required /><br />
+						<input type="text" name="name" defaultValue={this.state.class.name} onChange={this.handleNameChange} required /><br />
 						<label>Description</label><br />
-						<input type="text" name="description" defaultValue={this.state.class.description} required /><br />
+						<input type="text" name="description" defaultValue={this.state.class.description} onChange={this.handleDescriptionChange} required /><br />
 						<label>Price</label><br />
-						<input type="number" name="price" defaultValue={this.state.class.price} required /><br />
+						<input type="number" name="price" defaultValue={this.state.class.price} onChange={this.handlePriceChange} required /><br />
 						<label>Proposed Schedule</label><br />
-						<input type="text" name="proposedSchedule" defaultValue={this.state.class.proposedSchedule} required /><br />
+						<input type="text" name="proposedSchedule" defaultValue={this.state.class.proposedSchedule} onChange={this.handleProposedScheduleChange} required /><br />
 						<label>Category</label><br />
-						<input type="text" name="category" defaultValue={this.state.class.category} required /><br />
+						<input type="text" name="category" defaultValue={this.state.class.category} onChange={this.handleCategoryChange} required /><br />
 						<label>Payment Link</label><br />
 						<input type="text" onBlur={this.handleUrl} defaultValue={this.state.class.paymentLink} name="paymentLink" />
 						<label id='urlError'>{this.state.urlError}</label><br />
 						<input type="submit" value="Publish" />
 						<input type="button" value="Cancel" onClick={this.handleCancel} />
+						<input type="button" value="Save Draft" onClick={this.handleSave} />
+						<input type="button" value="View Draft" onClick={this.handleRestore} />
 					</form>
 				</div>
 			);
@@ -122,6 +201,48 @@ class EditClass extends Component {
 	}
 
 
+}
+
+
+var Originator = function(){
+	this.name = "" ;
+	this.description = "" ;
+	this.price = "" ;
+	this.proposedSchedule = "" ;
+	this.category = "" ;
+	this.payment = "" ;
+
+	this.saveState = function(){
+		return new Memento(this)
+	}
+ 
+	this.restoreState = function(_obj){
+		this.name = _obj.name ;
+		this.description = _obj.description ;
+		this.price = _obj.price ;
+		this.proposedSchedule = _obj.proposedSchedule ;
+		this.category = _obj.category ;
+		this.payment = _obj.payment ;
+	}
+}
+
+var Memento = function(_obj){
+	this.name = _obj.name;
+	this.description = _obj.description;
+	this.price = _obj.price;
+	this.proposedSchedule = _obj.proposedSchedule;
+	this.category = _obj.category;
+	this.payment = _obj.payment;
+}
+
+var CareTaker = function(){
+	var conState = null;
+	this.SetMemento = function(_conState){
+		conState =  _conState;
+	}
+	this.GetMemento = function(){
+		return conState;
+	}
 }
 
 
