@@ -8,6 +8,11 @@ form {
 	margin: auto;
 }
 
+#urlError {
+  color: red;
+  margin-top: none;
+}
+
 input[type=text], input[type=number] {
   width: 100%;
   padding: 12px 20px;

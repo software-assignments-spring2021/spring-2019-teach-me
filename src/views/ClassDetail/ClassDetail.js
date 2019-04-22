@@ -315,6 +315,8 @@ class ClassDetail extends Component {
                                 <p>{classData.proposedSchedule}</p>
                                 <h3>Class Category</h3>
                                 <p>{classData.category}</p>
+                                <h3>Payment Link</h3>
+                                <a href={'https://' + classData.paymentLink} target="_blank">{classData.paymentLink}</a>
                             </div>
                         </Col>
                     </Row>

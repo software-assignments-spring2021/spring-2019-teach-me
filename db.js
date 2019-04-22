@@ -34,7 +34,8 @@ const classSchema = new mongoose.Schema ({
     category: String,
     sumOfRating: Number,
     numOfRating: Number,
-    archive: Boolean
+    archive: Boolean,
+    paymentLink: String
 });
 
 const userClassSchema = new mongoose.Schema ({
