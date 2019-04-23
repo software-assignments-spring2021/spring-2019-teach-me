@@ -3,14 +3,16 @@ const users = require("./routes/api/users");
 const Users = mongoose.model('users');
 
 /*
-const testclassSchema = new mongoose.Schema ({
-    name: String,
-    price: Number,
-    Rating: Number,
-    instructor: String
+const testUserSchema = new mongoose.Schema ({
+    userID: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    userName: String,
+    class: String,
+    rating: Number,
+    sumOfRating: Number,
+    numOfRating: Number
 });
 
-const Testclass =  mongoose.model('Testclass', testclassSchema);
+const TestUser =  mongoose.model('TestUser', testUserSchema);
 */
 
 /*
