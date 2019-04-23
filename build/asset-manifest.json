@@ -1,4 +1,5 @@
 {
+
   "main.css": "/static/css/main.54e48e93.chunk.css",
   "main.js": "/static/js/main.cec5eb62.chunk.js",
   "main.js.map": "/static/js/main.cec5eb62.chunk.js.map",
@@ -12,4 +13,5 @@
   "service-worker.js": "/service-worker.js",
   "static/css/2.8fd5bdc6.chunk.css.map": "/static/css/2.8fd5bdc6.chunk.css.map",
   "static/css/main.54e48e93.chunk.css.map": "/static/css/main.54e48e93.chunk.css.map"
+
 }
