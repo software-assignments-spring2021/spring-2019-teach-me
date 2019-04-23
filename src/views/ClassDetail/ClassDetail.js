@@ -4,7 +4,8 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
-import Form from 'react-bootstrap/Form'
+import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
 import { LinkContainer } from 'react-router-bootstrap';
 import { StudentDisplay } from '../../components/StudentDisplay';
 import { Comment } from '../../components/Comment';
@@ -29,6 +30,8 @@ class ClassDetail extends Component {
             noStudentAlert: false,
             isInstructor: false,
             noCommentAlert: false,
+            archiveModalDisplay: false,
+            completeModalDisplay: false,
             studentsList: [],
             comments: [],
             textAreaValue: ''
@@ -42,10 +45,30 @@ class ClassDetail extends Component {
         this.completeClass = this.completeClass.bind(this);
         this.getComments = this.getComments.bind(this);
         this.submitComment = this.submitComment.bind(this);
+        this.showConfirmArchive = this.showConfirmArchive.bind(this);
+        this.handleCloseArchiveModal = this.handleCloseArchiveModal.bind(this);
+        this.showConfirmComplete = this.showConfirmComplete.bind(this);
+        this.handleCloseCompleteModal = this.handleCloseCompleteModal.bind(this);
     }
 
     deleteClass() {
 
+    }
+
+    showConfirmComplete() {
+        this.setState({completeModalDisplay: true});
+    }
+
+    handleCloseCompleteModal() {
+        this.setState({completeModalDisplay: false});
+    }
+
+    showConfirmArchive() {
+        this.setState({archiveModalDisplay: true});
+    }
+
+    handleCloseArchiveModal() {
+        this.setState({archiveModalDisplay: false});
     }
 
     completeClass() {
@@ -242,6 +265,8 @@ class ClassDetail extends Component {
     }
 
     componentDidMount() {
+
+        
         const { classId } = this.props.match.params;
         const url = '/api/classes/' + classId;
         fetch(url)
@@ -261,7 +286,7 @@ class ClassDetail extends Component {
         const data = {"_id":"5c8547511c9d44000024fb63","name":"Piano","description":"Piano","price":75,"proposedSchedule":"Monday","instructor":"5c854805e0c8200000afd73a","rating":"9.6","cateogry":"Art"};
         this.setState({currentClass: data});
         */
-        
+
     }
 
     render() {
@@ -279,7 +304,17 @@ class ClassDetail extends Component {
                 <Button onClick={this.getStudents} variant="info">See Registered Students</Button>
                 <LinkContainer to={"/edit-class/" + classId}><Button variant="info">Edit Class</Button></LinkContainer>
                 {/* <Button onClick={this.deleteClass} variant="warning" disabled>Delete Class</Button> */}
-                <Button onClick={this.archiveClass} variant="warning">Archive Class</Button>
+                <Button onClick={this.showConfirmArchive} variant="warning">Archive Class</Button>
+                <Modal show={this.state.archiveModalDisplay} onHide={this.handleCloseArchiveModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Confirm Class Archive</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Are you sure that you want to archive this class? If yes, we will notify your students and this class will no longer be open to registration.</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={this.handleCloseArchiveModal} > Oops, go back </Button>
+                        <Button variant="primary" onClick={this.archiveClass}> Yes </Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
 
         const studentButtons =
@@ -287,7 +322,17 @@ class ClassDetail extends Component {
                 <Button onClick={this.handleSubmit} variant="info">Register now!</Button>
                 <Button onClick={this.handleWithdraw} variant="warning">Withdraw from Class</Button>
                 <Button variant="info" disabled>Contact Instructor (Coming Soon)</Button>
-                <Button onClick={this.completeClass} variant="warning">Mark Class as Completed</Button>
+                <Button onClick={this.showConfirmComplete} variant="warning">Mark Class as Completed</Button>
+                <Modal show={this.state.completeModalDisplay} onHide={this.handleCloseCompleteModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Confirm Class Archive</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Are you sure that you want to mark this class as completed? If yes, we will mark this class as completed and notify your instructor.</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={this.handleCloseCompleteModal}>Oops, go back</Button>
+                        <Button variant="primary" onClick={this.completeClass}>Yes</Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
 
         return (
