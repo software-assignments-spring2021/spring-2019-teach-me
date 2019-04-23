@@ -96,6 +96,21 @@ app.get('/api/class-history-teach/:userId', function(req, res) {
 	});
 });
 
+app.get('/api/class-history-taught/:userId', function(req, res) {
+	const userId = new mongoose.Types.ObjectId(req.params.userId);
+	const instructorId = userId;
+	Class.find({instructor: instructorId}, function(err, classes, count) {
+		const returnValue = [];
+		for (let i = 0; i < classes.length; i++) {
+			if(classes[i].archive === true) {
+				const classAvailable = classes[i].toObject();
+				returnValue.push(classAvailable);
+			}
+		}
+		res.json(returnValue);
+	});
+});
+
 app.get('/api/class-history-take/:userId', function(req, res) {
 	const studentId = new mongoose.Types.ObjectId(req.params.userId);
 	UserClass
@@ -114,6 +129,25 @@ app.get('/api/class-history-take/:userId', function(req, res) {
 			res.json(returnValue);
 		});
 })
+
+app.get('/api/class-history-took/:userId', function(req, res) {
+	const studentId = new mongoose.Types.ObjectId(req.params.userId);
+	UserClass
+		.find({userID: studentId})
+		.populate('classID')
+		.exec(function (err, classData) {
+			const classes = [];
+			const returnValue = [];
+			classData.forEach(c => classes.push(c.classID));
+			for (let i = 0; i < classes.length; i++) {
+				if(classData[i].complete === true) {
+					const classAvailable = classes[i].toObject();
+					returnValue.push(classAvailable);
+				}
+			}
+			res.json(returnValue);
+		});
+});
 
 app.get('/api/comments/:classId', function(req, res) {
 	const classId = req.params.classId;
