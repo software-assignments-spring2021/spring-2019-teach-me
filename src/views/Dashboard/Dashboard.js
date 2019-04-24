@@ -17,9 +17,9 @@ return (
         <div className="row">
           <div className="col s12 center-align">
             <h4>
-              <b>Hey there,</b> {user.name.split(" ")[0]}
+              <b>Are you sure you want to log out, </b> {user.name.split(" ")[0]}
               <p className="flow-text grey-text text-darken-1">
-                You are logged into Teach Me
+                Press the button below to confirm.
               </p>
             </h4>
             <button
