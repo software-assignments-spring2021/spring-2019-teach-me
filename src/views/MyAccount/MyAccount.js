@@ -27,6 +27,7 @@ class MyAccount extends Component {
     this.handleEditClick = this.handleEditClick.bind(this);
     this.handleClassHistory = this.handleClassHistory.bind(this);
     this.handleLogOut = this.handleLogOut.bind(this);
+    this.fileSelectedHandler = this.fileSelectedHandler.bind(this);
   }
 
   componentDidMount() {
@@ -112,12 +113,17 @@ class MyAccount extends Component {
       this.props.history.push("/dashboard");
   }
 
+  fileSelectedHandler() {
+
+  }
+
   render() {
     console.log(this.state.instructorRating);
     return (
       <div id='myaccount-page'>
+        <Jumbotron>
         <h3>My Account Page</h3><br />
-
+        </Jumbotron>
         <form onSubmit={this.handleSubmit}>
         <label>Name</label>
         <input type = "text" name = "name" value = {this.state.user.name} readOnly={this.state.IsReadOnly}
@@ -127,8 +133,9 @@ class MyAccount extends Component {
         onChange = {this.handleEmailChange} required/>
         <lable>Rating as Insturctor</lable><Rater total = {5} rating = {this.state.user.instructorRating} interactive = {false}/><br />
         <lable>Rating as Learner</lable><Rater total = {5} rating = {this.state.user.learnerRating} interactive = {false}/><br />
-        <input type = "button" name = "edit" value = "Edit" onClick={this.handleEditClick}/><br />
+        <input type = "button" name = "edit" value = "Edit" onClick={this.handleEditClick}/>
         <input type = "submit" value = "Submit"/>
+        <input type = "file" onClick={this.fileSelectedHandler}/>
         </form>
 
         <input type = "button" name = "viewclasshistory" value = "View Class History" onClick={this.handleClassHistory}/>
