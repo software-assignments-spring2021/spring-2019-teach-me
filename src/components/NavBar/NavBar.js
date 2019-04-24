@@ -29,7 +29,6 @@ class NavBar extends Component {
 						<LinkContainer to="/home"><NavItem className="nav-link">Home</NavItem></LinkContainer>
 						<LinkContainer to="/classes"><NavItem className="nav-link">Class Listing</NavItem></LinkContainer>
 						<LinkContainer to="/instructors"><NavItem className="nav-link">Instructor Listing</NavItem></LinkContainer>
-						<LinkContainer to="/teach-others"><NavItem className="nav-link">Teach Others</NavItem></LinkContainer>
 						<LinkContainer to="/about"><NavItem className="nav-link">About</NavItem></LinkContainer>
 					</Nav>
 					<Nav>
