@@ -34,6 +34,7 @@ class NavBar extends Component {
 						<NavDropdown title="Quick Access" id="collasible-nav-dropdown">
 							<LinkContainer to="/class-history"><NavDropdown.Item href="#action/3.1">My Class History</NavDropdown.Item></LinkContainer>
 							<LinkContainer to="/create-class"><NavDropdown.Item href="#action/3.1">Publish New Class</NavDropdown.Item></LinkContainer>
+						</NavDropdown>
 					</Nav>
 				</Navbar>
 			)
