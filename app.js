@@ -20,7 +20,8 @@ app.use(
 );
 app.use(bodyParser.json());
 
-app.get("/api/instructor/:userId/info", function(req, res) {
+app.get('/api/instructor/:userId/info', function(req, res) {
+
 	const userId = req.params.userId;
 	console.log(userId);
 	Users.find({ _id: userId }, function(err, info) {
@@ -453,9 +454,25 @@ app.get("/api/instructors", function(req, res) {
 	});
 });
 
-app.get("/*", function(req, res) {
-	res.sendFile(path.join(__dirname, "build", "index.html"));
+
+
+app.post('/api/rate-learner', function(req, res) {
+	// console.log(req.body);
+
+	Users.findOneAndUpdate({_id: req.body.userId}, {sumOfRatingAsLearner:req.body.newSumOfRatingAsLearner,numOfRatingAsLearner:req.body.newNumOfRatingAsLearner}, {new:true}, function(err, classes) {
+		if (err) {
+			console.log("fail");
+		}
+		else {
+			console.log("success");
+		}
+	});
 });
+
+app.get('/*', function(req, res) {
+	res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 
 /*
 // Temporary
