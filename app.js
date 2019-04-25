@@ -405,6 +405,22 @@ app.get('/*', function(req, res) {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
+app.post('/api/rate-learner', function(req, res) {
+	// console.log(req.body);
+
+	Users.findOneAndUpdate({_id: req.body.userId}, {sumOfRatingAsLearner:req.body.newSumOfRatingAsLearner,numOfRatingAsLearner:req.body.newNumOfRatingAsLearner}, {new:true}, function(err, classes) {
+		if (err) {
+			console.log("fail");
+		}
+		else {
+			console.log("success");
+		}
+	});
+});
+
+app.get('/*', function(req, res) {
+	res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 
 /*
