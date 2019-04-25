@@ -105,7 +105,7 @@ class Instructors extends Component {
 	render() {
 
 		const instructorListData = this.state.instructorListing.map((data, index) => {
-			return <InstructorDisplay key={index} name={data.name} introduction={data.introduction} rating={data.rating} slug={data._id}/>
+			return <InstructorDisplay key={index} name={data.name} introduction={data.introduction} rating={data.rating} slug={data._id} userProfilePic={data.profilePicURL}/>
 		});
 
 		const INSTRUCTORS_PER_PAGE = 4;

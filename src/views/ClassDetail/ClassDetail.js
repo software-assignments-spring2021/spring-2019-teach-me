@@ -293,10 +293,10 @@ class ClassDetail extends Component {
         const { classId } = this.props.match.params;
         const classData = this.state.currentClass;
         const studentData = this.state.studentsList.map(function(data, index) {
-            return <StudentDisplay key={index} name={data.userID.name} signupDate={data.date} userID={data.userID._id} />
+            return <StudentDisplay key={index} name={data.userID.name} signupDate={data.date} userID={data.userID._id} userProfilePic={data.userID.profilePicURL}/>
         });
         const commentData = this.state.comments.map(function (data, index) {
-            return <Comment key={index} name={data.name} commentText={data.commentText} commentDate={data.commentDate} userID={data.userID} />
+            return <Comment key={index} name={data.name} commentText={data.commentText} commentDate={data.commentDate} userID={data.userID} userProfilePic={data.userProfilePic}/>
         })
 
         const instructorButtons  =
@@ -345,7 +345,7 @@ class ClassDetail extends Component {
                     <Row>
                         <Col sm={5}>
                             <div className='detail-image-container'>
-                                <img alt='instructor profile' src='/images/default-user.png' className='instructor-image'></img>
+                                <img alt='instructor profile' src={classData.instructorProfilePic} className='instructor-image'></img>
                                 <p>Class taught by:</p>
                                 <LinkContainer to={'/instructor/' + classData.instructorID} className='instructor-link'><h5>{classData.instructorName}</h5></LinkContainer>
                             </div>
@@ -379,7 +379,7 @@ class ClassDetail extends Component {
                     </Row>
                     <Row>
                         <div className='student-list-container'>
-                            {studentData}
+                            { studentData }
                         </div>
                     </Row>
                     <Row>

@@ -1,6 +1,7 @@
 //https://www.robinwieruch.de/react-fetching-data/
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import Alert from 'react-bootstrap/Alert';
 import Jumbotron from "react-bootstrap/Jumbotron";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -17,6 +18,7 @@ class MyAccount extends Component {
 			IsReadOnly: true,
 			imageIsReadOnly: true,
 			user: {},
+			profileUploadSuccess: {},
 			successCheck: undefined,
 			instructorRating: 0.0,
 			learnerRating: 0.0
@@ -117,7 +119,20 @@ class MyAccount extends Component {
 		this.props.history.push("/dashboard");
 	}
 
-	fileSelectedHandler() {}
+	fileSelectedHandler(e) {
+		const formData = new FormData();
+		formData.append('profile-pic', e.target.files[0]);
+		console.log(formData);
+		console.log(e.target.files);
+
+		const url = '/api/images/' + this.state.userId;
+		fetch(url, {
+			method: 'POST',
+			body: formData
+		}).then(res => res.json())
+		.then(data => this.setState({profileUploadSuccess: data}));
+			
+	}
 
 	render() {
 		console.log(this.state.instructorRating);
@@ -125,6 +140,7 @@ class MyAccount extends Component {
 			<div id="myaccount-page">
 				<Jumbotron>
 					<h3>My Account Page</h3>
+					<img alt='user profile' src={this.state.user.profilePicURL} className='profile-image'></img>
 					<br />
 				</Jumbotron>
 				<form onSubmit={this.handleSubmit}>
@@ -168,8 +184,9 @@ class MyAccount extends Component {
 						onClick={this.handleEditClick}
 					/>
 					<input type="submit" value="Submit" />
-					<input type="file" onClick={this.fileSelectedHandler} />
+					<input type="file" name="profile-pic" onChange={this.fileSelectedHandler} />
 				</form>
+				{ this.state.profileUploadSuccess.result === 'success' ? <Alert variant='success' className='success-alert'>You have successfully uploaded a new profile image!</Alert> : null }
 
 				<input
 					type="button"

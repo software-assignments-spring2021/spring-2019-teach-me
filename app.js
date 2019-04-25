@@ -5,11 +5,29 @@ const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const users = require("./routes/api/users");
+const multer = require("multer");
+const cloudinary = require("cloudinary");
+const cloudinaryStorage = require("multer-storage-cloudinary");
 
 const Class = mongoose.model('Class');
 const Users = mongoose.model('users');
 const UserClass = mongoose.model('UserClass');
 const app = express();
+
+cloudinary.config({
+	cloud_name: 'dezvvcopx',
+	api_key: '386634463162269',
+	api_secret: '1Qx9LZsY2bnVye4FopbuU5F3kaM'
+});
+
+const storage = cloudinaryStorage({
+	cloudinary: cloudinary,
+	folder: "user-profile",
+	allowedFormats: ["jpg", "png"],
+	transformation: [{ width: 110, height: 110, crop: "limit" }]
+});
+
+const parser = multer({ storage: storage });
 
 app.use(express.static(path.join(__dirname, 'build')));
 
@@ -52,6 +70,7 @@ app.get('/api/classes/:classId', function(req, res) {
 			classData = classData.toObject();
 			classData.instructorName = classData.instructor.name;
 			classData.instructorID = classData.instructor._id;
+			classData.instructorProfilePic = classData.instructor.profilePicURL;
 			classData.instructor.password = null;
 			res.json(classData);
 		});
@@ -162,6 +181,7 @@ app.get('/api/comments/:classId', function(req, res) {
 					comment.userID = item.userID._id;
 					comment.name = item.userID.name;
 					comment.commentText = item.comment;
+					comment.userProfilePic = item.userID.profilePicURL;
 
 					const yr = item.commentDate.getFullYear();
 					const mo = item.commentDate.getMonth() + 1;
@@ -395,6 +415,35 @@ app.get('/api/instructors', function(req, res) {
 		}
 		res.json(returnValue);
 	});
+});
+
+app.post('/api/images/:userId', parser.single("profile-pic"), (req, res) => {
+	//console.log(req.file) // to see what is returned to you
+
+	Users.findById(req.params.userId, function(err, user) {
+		user.profilePicURL = req.file.url;
+		user.profilePicPublicID = req.file.public_id;
+		user.save((err, modifiedUser) => {
+			if (err) {
+				res.json({result: err});
+			}
+			else {
+				res.json({result: 'success'});
+			}
+		});
+	});
+
+
+	/*
+	const image = {};
+	image.url = req.file.url;
+	image.id = req.file.public_id;
+
+
+	Image.create(image) // save image information in database
+	  .then(newImage => res.json(newImage))
+	  .catch(err => console.log(err));
+	  */
 });
 
 app.get('/*', function(req, res) {

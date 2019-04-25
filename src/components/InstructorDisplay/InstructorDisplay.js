@@ -9,7 +9,7 @@ class InstructorDisplay extends Component {
         return(
             <Card>
                 <Card.Body>
-                    <Card.Img className="instructor-img" src="/images/default-user.png"></Card.Img>
+                    <Card.Img className="instructor-img" src={this.props.userProfilePic}></Card.Img>
                     <Card.Title>{this.props.name}</Card.Title>
                     <Card.Text>{this.props.introduction}</Card.Text>
                     <Card.Text className="italics-text">Rating: {this.props.rating}</Card.Text>

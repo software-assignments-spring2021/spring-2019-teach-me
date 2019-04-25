@@ -36,6 +36,14 @@ const UserSchema = new Schema({
   numOfRatingAsLearner: {
     type: Number,
     default: 0
+  },
+  profilePicURL: {
+    type: String,
+    default: '/images/default-user.png'
+  },
+  profilePicPublicID: {
+    type: String,
+    default: null
   }
 });
 module.exports = User = mongoose.model("users", UserSchema);

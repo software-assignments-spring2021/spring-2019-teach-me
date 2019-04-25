@@ -77,7 +77,7 @@ class Classes extends Component {
 
 	render() {
 		const classListData = this.state.classListing.map(function(data, index) {
-			return <ClassDisplay key={index} title={data.name} description={data.description} price={data.price} instructor={data.instructor} rating={data.rating} category={data.category} slug={data._id}/>
+			return <ClassDisplay key={index} title={data.name} description={data.description} price={data.price} instructor={data.instructor} rating={data.rating} category={data.category} slug={data._id} />
 		});
 
 		const CLASSES_PER_PAGE = 4;
