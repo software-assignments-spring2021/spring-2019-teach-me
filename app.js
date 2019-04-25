@@ -329,12 +329,10 @@ app.post("/api/register-class", function(req, res) {
 				if (err) {
 					console.log(err);
 				} else {
-					console.log(classes);
 					Users.findOne({ _id: classes.instructor }, function(
 						err,
 						instructors
 					) {
-						console.log(instructors);
 						if (err) {
 							console.log(err);
 						} else {
@@ -353,7 +351,6 @@ app.post("/api/register-class", function(req, res) {
 							if (err) {
 								res.json({ status: "error", result: err });
 							} else {
-								console.log(instructorEmail);
 								res.json({
 									status: "success",
 									result: "registered for",
