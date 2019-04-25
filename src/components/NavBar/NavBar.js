@@ -19,7 +19,6 @@ class NavBar extends Component {
 
 	render() {
 		if (this.props.auth.isAuthenticated) {
-			console.log(this.props.auth);
 			return (
 				<Navbar bg="primary" variant="dark">
 					<LinkContainer to="/home">
