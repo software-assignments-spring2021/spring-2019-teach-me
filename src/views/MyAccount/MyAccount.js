@@ -34,10 +34,8 @@ class MyAccount extends Component {
 
 	componentDidMount() {
 		if (this.props.auth.isAuthenticated) {
-			console.log("correct!");
 			this.setState({ userId: this.props.auth.user.id }, function() {
 				const url = "/api/my-account/" + this.state.userId;
-				console.log(url);
 				fetch(url)
 					.then(response => response.json())
 					.then(data => this.setState({ user: data[0] }));
@@ -90,8 +88,6 @@ class MyAccount extends Component {
 			newUserObj[userInput[0]] = userInput[1];
 		}
 
-		console.log(newUserObj);
-
 		const url = "/api/my-account/" + this.state.userId;
 		fetch(url, {
 			method: "POST",
@@ -135,7 +131,6 @@ class MyAccount extends Component {
 	}
 
 	render() {
-		console.log(this.state.instructorRating);
 		return (
 			<div id="myaccount-page">
 				<Jumbotron>

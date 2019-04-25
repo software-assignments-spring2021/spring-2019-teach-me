@@ -19,6 +19,8 @@ import ClassDetail from './views/ClassDetail/ClassDetail';
 import PrivateRoute from "./views/private-route/PrivateRoute";
 import { Dashboard } from "./views/Dashboard";
 import { InstructorProfile } from './views/InstructorProfile'
+import { About } from './views/about'
+
 
 import { Provider } from "react-redux";
 import { store } from "./store";
@@ -68,10 +70,12 @@ export const Routes = () => {
 				<Route exact path="/login" component={Login} />
 				<Route exact path="/register" component={Register} />
 				<Route exact path="/instructor/:userId/info" component={InstructorProfile} />
+				<Route exact path="/about" component={About} />
 				<Route component={NoMatch} />
 			</Switch>
 		</div>
 		</Router>
 		</Provider>
+		
 	);
 };
