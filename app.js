@@ -308,15 +308,17 @@ app.post('/api/register-class', function(req, res) {
 		}
 		else {
 			let instructorEmail = '';
-			Class.find({_id: classID}, function(err, classes, count) {
+			Class.findOne({_id: classID}, function(err, classes) {
 				if (err) {
 					instructorEmail = 'Please contact us to reach your instructor';
 				} else {
-					Users.findOne({_id: classes.instructor}, function(err, instructors, count) {
+					console.log(classes);
+					Users.findOne({_id: classes.instructor}, function(err, instructors) {
+						console.log(instructors);
 						if (err) {
-							instructorEmail = 'Please contact us to reach your instructor';
+							instructorEmail = 'Please contact us to reach your new instructor';
 						} else {
-							instructorEmail = `Please contact your instructor at ${instructors.email}`;
+							instructorEmail = `Please contact your new instructor at ${instructors.email}`;
 						}
 					});
 				}
@@ -330,7 +332,7 @@ app.post('/api/register-class', function(req, res) {
 
 			newUserClass.save(function(err, userClass) {
 				if (err) {
-					res.json({status: 'error', result: err, instructorEmail: instructorEmail});
+					res.json({status: 'error', result: err, instructorEmail: ''});
 				}
 				else {
 					res.json({status: 'success', result: 'registered for', instructorEmail: instructorEmail});
