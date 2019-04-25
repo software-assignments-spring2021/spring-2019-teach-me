@@ -47,15 +47,20 @@ app.get('/api/instructor/:userId/info', function(req, res) {
 });
 
 app.get('/api/classes', function(req, res) {
-	Class.find({}, function(err, classes, count) {
-		const returnValue = [];
-		for (let i = 0; i < classes.length; i++) {
-			if (classes[i].archive === false) {
-				const classAvailable = classes[i].toObject();
-				returnValue.push(classAvailable);
+	Class
+		.find({})
+		.populate('instructor')
+		.exec(function(err, classes, count) {
+			const returnValue = [];
+			for (let i = 0; i < classes.length; i++) {
+				if (classes[i].archive === false) {
+					const classAvailable = classes[i].toObject();
+					classAvailable.instructorName = classAvailable.instructor.name;
+					classAvailable.instructorProfilePic = classAvailable.instructor.profilePicURL;
+					returnValue.push(classAvailable);
+				}
 			}
-		}
-		res.json(returnValue);
+			res.json(returnValue);
 	});
 });
 
@@ -103,15 +108,20 @@ app.get('/api/get-students/:classId', function(req, res) {
 app.get('/api/class-history-teach/:userId', function(req, res) {
 	const userId = new mongoose.Types.ObjectId(req.params.userId);
 	const instructorId = userId;
-	Class.find({instructor: instructorId}, function(err, classes, count) {
-		const returnValue = [];
-		for (let i = 0; i < classes.length; i++) {
-			if(classes[i].archive === false) {
-				const classAvailable = classes[i].toObject();
-				returnValue.push(classAvailable);
+	Class
+		.find({instructor: instructorId})
+		.populate('instructor')
+		.exec(function(err, classes, count) {
+			const returnValue = [];
+			for (let i = 0; i < classes.length; i++) {
+				if(classes[i].archive === false) {
+					const classAvailable = classes[i].toObject();
+					classAvailable.instructorName = classAvailable.instructor.name;
+					classAvailable.instructorProfilePic = classAvailable.instructor.profilePicURL;
+					returnValue.push(classAvailable);
+				}
 			}
-		}
-		res.json(returnValue);
+			res.json(returnValue);
 	});
 });
 
@@ -131,10 +141,14 @@ app.get('/api/class-history-taught/:userId', function(req, res) {
 });
 
 app.get('/api/class-history-take/:userId', function(req, res) {
+	console.log('take')
 	const studentId = new mongoose.Types.ObjectId(req.params.userId);
 	UserClass
 		.find({userID: studentId})
-		.populate('classID')
+		.populate({
+			path: 'classID',
+			populate: {path: 'instructor'}
+		})
 		.exec(function (err, classData) {
 			const classes = [];
 			const returnValue = [];
@@ -142,7 +156,10 @@ app.get('/api/class-history-take/:userId', function(req, res) {
 			for (let i = 0; i < classes.length; i++) {
 				if(classes[i].archive === false && classData[i].complete === false) {
 					const classAvailable = classes[i].toObject();
+					classAvailable.instructorName = classAvailable.instructor.name;
+					classAvailable.instructorProfilePic = classAvailable.instructor.profilePicURL;
 					returnValue.push(classAvailable);
+					console.log(classAvailable);
 				}
 			}
 			res.json(returnValue);
