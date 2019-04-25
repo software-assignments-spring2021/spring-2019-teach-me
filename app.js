@@ -20,6 +20,10 @@ app.use(
 );
 app.use(bodyParser.json());
 
+app.get('/about', function(req, res) {
+	res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 app.get('/api/instructor/:userId/info', function(req, res) {
 	const userId = req.params.userId;
 	console.log(userId);
