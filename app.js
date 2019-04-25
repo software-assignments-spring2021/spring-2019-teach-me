@@ -20,7 +20,7 @@ app.use(
 );
 app.use(bodyParser.json());
 
-app.get('/api/about', function(req, res) {
+app.get('/about', function(req, res) {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
