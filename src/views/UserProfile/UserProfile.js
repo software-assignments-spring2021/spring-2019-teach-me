@@ -5,20 +5,27 @@ import Col from 'react-bootstrap/Col'
 import Alert from 'react-bootstrap/Alert';
 import Pagination from "react-js-pagination";
 import { ClassDisplay } from '../../components/ClassDisplay';
+import Rater from 'react-rater'
+
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import classnames from "classnames";
 
 import './UserProfile.css'
 
 class UserProfile extends Component {
 
     constructor(props) {
-		super(props);
+        super(props);
 
-		this.state = {
+        this.state = {
             currentUser: {},
             classesTaken: [],
             activePage: 1,
             noClassWarning: false
         };
+
+        this.rateLearner = this.rateLearner.bind(this);
     }
 
 
@@ -54,6 +61,40 @@ class UserProfile extends Component {
         // } 
     }
 
+    rateLearner(e) {
+
+        if (this.props.auth.isAuthenticated) {
+
+            console.log(e.rating);
+
+            const newRatingObj = {};
+
+            const newSumOfRatingAsLearner = this.state.currentUser.sumOfRatingAsLearner + e.rating;
+            console.log(newSumOfRatingAsLearner);
+            newRatingObj.newSumOfRatingAsLearner = newSumOfRatingAsLearner;
+            const newNumOfRatingAsLearner = this.state.currentUser.numOfRatingAsLearner + 1;
+            console.log(newNumOfRatingAsLearner);
+            newRatingObj.newNumOfRatingAsLearner = newNumOfRatingAsLearner;
+
+            const userId = this.props.match.params.userId;
+            newRatingObj.userId = userId;
+            const instructorId = this.props.auth.user.id;
+            newRatingObj.instructorId = instructorId;
+            console.log(newRatingObj);
+
+            fetch("/api/rate-learner/", {
+                method: "POST",
+                body: JSON.stringify(newRatingObj),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+        }
+        else {
+            this.props.history.push("/login");
+        }
+    }
+
     handlePageChange(pg) {
         this.setState({activePage: pg});
     }
@@ -76,8 +117,8 @@ class UserProfile extends Component {
         return (
             <div className='detail-page-container'>
                 <Jumbotron>
-					<h1>Profile: {userData.name}</h1>
-				</Jumbotron>
+                    <h1>Profile: {userData.name}</h1>
+                </Jumbotron>
                 <div className='detail-container'>
                     <Row>
                         <Col sm={5}>
@@ -99,12 +140,9 @@ class UserProfile extends Component {
                     <Row>
                         <div className='rating-container'>
                             <h3>Rating</h3>
-                            <h2 id="rating">{userData.learnerRating}</h2>
-                            <form onSubmit={this.handleSubmit}>
-                                <label>Rate this class: </label>
-                                <input type="number" name="rating" required />
-                                <input type="submit" value="Submit" />
-                            </form>
+                            <Rater total = {5} rating = {userData.learnerRating} interactive = {false}/>
+                            <p>Rate this class: </p>
+                            <Rater total={5} onRate={this.rateLearner} />
                         </div>
                     </Row>
                     <Row>
@@ -130,4 +168,12 @@ class UserProfile extends Component {
 }
 
 
-export default UserProfile;
+UserProfile.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(UserProfile);
