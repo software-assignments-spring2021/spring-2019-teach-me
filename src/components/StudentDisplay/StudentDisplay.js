@@ -11,7 +11,7 @@ class StudentDisplay extends Component {
             <Card>
                 <LinkContainer to={"/user/" + this.props.userID}>
                     <Card.Body>
-                        <Card.Img className="student-img" src="/images/default-user.png"></Card.Img>
+                        <Card.Img className="student-img" src={this.props.userProfilePic}></Card.Img>
                         <Card.Title>{this.props.name}</Card.Title>
                         <Card.Text>Registered on: {this.props.signupDate}</Card.Text>
                     </Card.Body>
