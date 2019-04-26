@@ -135,7 +135,7 @@ class MyAccount extends Component {
 			<div id="myaccount-page">
 				<Jumbotron>
 					<h3>My Account Page</h3>
-					<img alt='user profile' src={this.state.user.profilePicURL} className='profile-image'></img>
+					<img alt='user profile' width='110px' height='110px' src={this.state.user.profilePicURL} className='profile-image'></img>
 					<br />
 				</Jumbotron>
 				<form onSubmit={this.handleSubmit}>

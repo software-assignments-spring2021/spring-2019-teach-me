@@ -138,7 +138,6 @@ app.get("/api/class-history-taught/:userId", function(req, res) {
 });
 
 app.get('/api/class-history-take/:userId', function(req, res) {
-	console.log('take')
 	const studentId = new mongoose.Types.ObjectId(req.params.userId);
 	UserClass
 		.find({userID: studentId})
@@ -159,7 +158,6 @@ app.get('/api/class-history-take/:userId', function(req, res) {
 					classAvailable.instructorName = classAvailable.instructor.name;
 					classAvailable.instructorProfilePic = classAvailable.instructor.profilePicURL;
 					returnValue.push(classAvailable);
-					console.log(classAvailable);
 				}
 			}
 			res.json(returnValue);
