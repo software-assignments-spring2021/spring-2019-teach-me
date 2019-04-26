@@ -19,6 +19,7 @@ class MyAccount extends Component {
 			userId: undefined,
 			IsReadOnly: true,
 			imageIsReadOnly: true,
+			pleaseWait: false,
 			user: {},
 			profileUploadSuccess: {},
 			successCheck: {},
@@ -120,6 +121,8 @@ class MyAccount extends Component {
 	}
 
 	fileSelectedHandler(e) {
+		this.setState({pleaseWait: true});
+
 		const formData = new FormData();
 		formData.append('profile-pic', e.target.files[0]);
 		//console.log(formData);
@@ -130,7 +133,7 @@ class MyAccount extends Component {
 			method: 'POST',
 			body: formData
 		}).then(res => res.json())
-		.then(data => this.setState({profileUploadSuccess: data}));
+		.then(data => this.setState({profileUploadSuccess: data, pleaseWait: false}));
 	}
 
 	render() {
@@ -151,7 +154,9 @@ class MyAccount extends Component {
 									className="instructor-image"
 								/>
 								<h5>Change My Profile Picture:</h5>
-								{ this.state.profileUploadSuccess.result === 'success' ? <Alert variant='success' className='success-alert'>You have successfully uploaded a new profile image!</Alert> : null }
+								<p className='italics-text'>Please upload only jpg, jpeg and png files. A square image is recommended as your image will be automatically resized to 110px * 110px.</p>
+								{ this.state.pleaseWait ? <Alert variant='info' className='success-alert'>Please wait while we upload your image...</Alert> : null }
+								{ this.state.profileUploadSuccess.result === 'success' ? <Alert variant='success' className='success-alert'>You have successfully uploaded a new profile image! Refresh the page to see the changes.</Alert> : null }
 								<input type="file" name="profile-pic" onChange={this.fileSelectedHandler} />
 							</div>
 						</Col>
