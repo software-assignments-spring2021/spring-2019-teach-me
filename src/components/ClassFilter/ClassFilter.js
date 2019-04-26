@@ -10,7 +10,8 @@ class ClassFilter extends Component {
 		this.state = {
             maxPrice: 'Max Price...',
             minRating: 'Min Rating...',
-            classCategory: 'Class Category...'
+            classCategory: 'Class Category...',
+            isArchived: 'See Archived/Completed Classes...'
 		};
     }
     
@@ -26,8 +27,13 @@ class ClassFilter extends Component {
                 this.props.filterResults(this.state);
             });
         }
-        else {
+        else if (filterType === 'classCategory'){
             this.setState({classCategory: e.target.value}, () => {
+                this.props.filterResults(this.state);
+            });
+        }
+        else {
+            this.setState({isArchived: e.target.value}, () => {
                 this.props.filterResults(this.state);
             });
         }
@@ -58,6 +64,17 @@ class ClassFilter extends Component {
                         <option>Language</option>
                     </Form.Control>
                 </Form.Group>
+                { this.props.displayArchiveOptions 
+                    ? 
+                    <Form.Group controlId="isArchived" onChange={this.filterResults.bind(this)}>
+                        <Form.Control as="select" >
+                            <option value={undefined}>See Archived/Completed Classes...</option>
+                            <option value="show">Show All Classes</option>
+                            <option value="hide">Hide Archived/Completed Classes</option>
+                        </Form.Control>
+                    </Form.Group>
+                    : 
+                    null}
             </Form>
         );
     }

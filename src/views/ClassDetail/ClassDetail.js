@@ -90,9 +90,9 @@ class ClassDetail extends Component {
 				}
 			})
 				.then(response => response.json())
-				.then(data => this.setState({ successRedirect: data }));
+				.then(data => this.setState({ successRedirect: data, completeModalDisplay: false }));
 		} else {
-			this.setState({ loginRequired: true });
+			this.setState({ loginRequired: true, completeModalDisplay: false });
 			setTimeout(() => {
 				this.props.history.push("/login");
 			}, 2000);
@@ -120,10 +120,10 @@ class ClassDetail extends Component {
 					}
 				})
 					.then(response => response.json())
-					.then(data => this.setState({ successRedirect: data }));
+					.then(data => this.setState({ successRedirect: data, archiveModalDisplay: false}));
 			}
 		} else {
-			this.setState({ loginRequired: true });
+			this.setState({ loginRequired: true, archiveModalDisplay: false });
 			setTimeout(() => {
 				this.props.history.push("/login");
 			}, 2000);

@@ -4,10 +4,17 @@
     margin: 0 auto;
 }
 
+.class-history-nav {
+    width: 60% !important;
+    margin: 0 auto !important;
+}
+
 .class-history-nav a {
     color: #17a2b8;
 }
 
 .filter-container-ch {
     margin-top: 3%;
+    width: 80% !important;
+    margin: 3rem auto !important;
 }

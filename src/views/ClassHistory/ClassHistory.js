@@ -29,6 +29,7 @@ class ClassHistory extends Component {
 		};
 	}
 
+	/*
 	displayTaught() {
 		this.setState({activePage:1});
 		const url = '/api/class-history-taught/' + this.state.userID;
@@ -43,10 +44,11 @@ class ClassHistory extends Component {
 					this.setState({noTeachClassWarning: false, noTakeClassWarning: false, classListing:data, allClasses: data});
 				}
 			});}
-
+	*/
+	
 	displayTeach() {
-		this.setState({activePage:1});
-		this.setState({currentSection:0});
+		this.setState({activePage: 1, filterWarning: false});
+		//this.setState({currentSection:0});
 		const url = '/api/class-history-teach/' + this.state.userID;
 		console.log(url);
 		fetch(url)
@@ -72,6 +74,7 @@ class ClassHistory extends Component {
 		*/
 	}
 
+	/*
 	displayTook() {
 		this.setState({activePage:1});
 		const url = '/api/class-history-took/' + this.state.userID
@@ -86,10 +89,11 @@ class ClassHistory extends Component {
 					this.setState({noTakeClassWarning: false, noTeachClassWarning: false, classListing:data, allClasses: data});
 				}
 			});}
+	*/
 
 	displayTake() {
-		this.setState({activePage:1});
-		this.setState({currentSection:1});
+		this.setState({activePage: 1, filterWarning: false});
+		//this.setState({currentSection:1});
 		const url = '/api/class-history-take/' + this.state.userID
 		console.log(url);
 		fetch(url)
@@ -112,8 +116,6 @@ class ClassHistory extends Component {
 		}
 		*/
 	}
-
-
 
 	componentDidMount() {
 		// If logged in and user navigates to Login page, should redirect them to dashboard
@@ -156,6 +158,12 @@ class ClassHistory extends Component {
 				}
 			}
 
+			if (query['isArchived'] !== 'See Archived/Completed Classes...') {
+				if (query['isArchived'] === 'hide' && (c.archive === true || c.complete === true)) {
+					includeInResult = false;
+				}
+			}
+
 			if (includeInResult) {
 				filteredClasses.push(c);
 			}
@@ -170,6 +178,7 @@ class ClassHistory extends Component {
 
 	}
 
+	/*
 	handleArchive() {
 
 		//console.log(this.state.archive);
@@ -180,6 +189,7 @@ class ClassHistory extends Component {
 		}
 
 	}
+	*/
 
   	render() {
 		const classListData = this.state.classListing.map(function(data, index) {
@@ -198,7 +208,6 @@ class ClassHistory extends Component {
 				<Jumbotron>
 					<h1>My Class History</h1>
 					<p>Below are the classes you have either taught or taken at TeachMe.</p>
-					<input type="button" name="archive" value="Archive Or Not" onClick={this.handleArchive.bind(this)}/>
 				</Jumbotron>
 				<Nav fill variant="tabs" defaultActiveKey="teach" className="class-history-nav">
 					<Nav.Item>
@@ -209,7 +218,7 @@ class ClassHistory extends Component {
 					</Nav.Item>
 				</Nav>
 				<div className='filter-container filter-container-ch'>
-						<ClassFilter filterResults={this.filterResults.bind(this)}/>
+						<ClassFilter filterResults={this.filterResults.bind(this)} displayArchiveOptions={true}/>
 					</div>
 					<div className='class-listing-display'>
 						{toDisplay}
