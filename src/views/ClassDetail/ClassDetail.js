@@ -312,7 +312,8 @@ class ClassDetail extends Component {
 					key={index}
 					name={data.userID.name}
 					signupDate={data.date}
-					userID={data.userID._id}
+                    userID={data.userID._id}
+                    userProfilePic={data.userID.profilePicURL}
 				/>
 			);
 		});
@@ -323,7 +324,8 @@ class ClassDetail extends Component {
 					name={data.name}
 					commentText={data.commentText}
 					commentDate={data.commentDate}
-					userID={data.userID}
+                    userID={data.userID}
+                    userProfilePic={data.userProfilePic}
 				/>
 			);
 		});
@@ -419,7 +421,7 @@ class ClassDetail extends Component {
 							<div className="detail-image-container">
 								<img
 									alt="instructor profile"
-									src="/images/default-user.png"
+									src={classData.instructorProfilePic}
 									className="instructor-image"
 								/>
 								<p>Class taught by:</p>
