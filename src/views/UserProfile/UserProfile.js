@@ -88,7 +88,9 @@ class UserProfile extends Component {
                 headers: {
                     "Content-Type": "application/json"
                 }
-            });
+            })
+                .then(response => response.json())
+                .then(data => console.log(data));
         }
         else {
             this.props.history.push("/login");

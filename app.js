@@ -514,16 +514,47 @@ app.post('/api/images/:userId', parser.single("profile-pic"), (req, res) => {
 });
 
 app.post('/api/rate-learner', function(req, res) {
-	// console.log(req.body);
+	console.log(req.body);
 
-	Users.findOneAndUpdate({_id: req.body.userId}, {sumOfRatingAsLearner:req.body.newSumOfRatingAsLearner,numOfRatingAsLearner:req.body.newNumOfRatingAsLearner}, {new:true}, function(err, classes) {
-		if (err) {
-			console.log("fail");
-		}
-		else {
-			console.log("success");
-		}
-	});
+	UserClass
+		.find({userID: req.body.userId})
+		.populate({
+			path: 'classID',
+			populate: {path: 'instructor'}
+		})
+		.exec(function (err, classData) {
+
+			var isInstructor = false;
+
+			for (let i = 0; i < classData.length; i++) {
+				const classObj = classData[i].toObject();
+				// console.log(classObj.classID.instructor._id);
+				if (req.body.instructorId == classObj.classID.instructor._id) {
+					console.log("is instructor");
+					isInstructor = true;
+					break;
+				}
+			}
+
+			// console.log(isInstructor);
+
+			if (isInstructor) {
+				Users.findOneAndUpdate({_id: req.body.userId}, {sumOfRatingAsLearner:req.body.newSumOfRatingAsLearner,numOfRatingAsLearner:req.body.newNumOfRatingAsLearner}, {new:true}, function(err, classes) {
+					if (err) {
+						res.json({ result: err });
+					} else {
+						res.json({ result: "success" });
+					}
+				});
+			}
+			else {
+				res.json({
+					status: "error",
+					result:
+						"you are not an instructor of the student"
+				});
+			}
+		});
 
 });
 
