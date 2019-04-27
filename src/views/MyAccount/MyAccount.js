@@ -1,7 +1,9 @@
 //https://www.robinwieruch.de/react-fetching-data/
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import Alert from 'react-bootstrap/Alert';
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Alert from "react-bootstrap/Alert";
+import Button from "react-bootstrap/Button";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -17,9 +19,10 @@ class MyAccount extends Component {
 			userId: undefined,
 			IsReadOnly: true,
 			imageIsReadOnly: true,
+			pleaseWait: false,
 			user: {},
 			profileUploadSuccess: {},
-			successCheck: undefined,
+			successCheck: {},
 			instructorRating: 0.0,
 			learnerRating: 0.0
 		};
@@ -77,8 +80,10 @@ class MyAccount extends Component {
 	}
 
 	handleSubmit(event) {
+		/*
 		this.setState({ successCheck: { result: "success" } });
 		alert("A new profile is submitted! ");
+		*/
 		event.preventDefault();
 
 		const newUserData = new FormData(event.target);
@@ -116,89 +121,117 @@ class MyAccount extends Component {
 	}
 
 	fileSelectedHandler(e) {
+		this.setState({pleaseWait: true});
+
 		const formData = new FormData();
 		formData.append('profile-pic', e.target.files[0]);
-		console.log(formData);
-		console.log(e.target.files);
+		//console.log(formData);
+		//console.log(e.target.files);
 
 		const url = '/api/images/' + this.state.userId;
 		fetch(url, {
 			method: 'POST',
 			body: formData
 		}).then(res => res.json())
-		.then(data => this.setState({profileUploadSuccess: data}));
-			
+		.then(data => this.setState({profileUploadSuccess: data, pleaseWait: false}));
 	}
 
 	render() {
 		return (
 			<div id="myaccount-page">
 				<Jumbotron>
-					<h3>My Account Page</h3>
-					<img alt='user profile' width='110px' height='110px' src={this.state.user.profilePicURL} className='profile-image'></img>
-					<br />
+					<h1>Welcome {this.state.user.name}</h1>
+					<p>You can view and change your account information here.</p>
 				</Jumbotron>
-				<form onSubmit={this.handleSubmit}>
-					<label>Name</label>
-					<input
-						type="text"
-						name="name"
-						value={this.state.user.name}
-						readOnly={this.state.IsReadOnly}
-						onChange={this.handleNameChange}
-						required
-					/>
-					<br />
-					<label>Email</label>
-					<input
-						type="text"
-						name="email"
-						value={this.state.user.email}
-						readOnly={this.state.IsReadOnly}
-						onChange={this.handleEmailChange}
-						required
-					/>
-					<lable>Rating as Insturctor</lable>
-					<Rater
-						total={5}
-						rating={this.state.user.instructorRating}
-						interactive={false}
-					/>
-					<br />
-					<lable>Rating as Learner</lable>
-					<Rater
-						total={5}
-						rating={this.state.user.learnerRating}
-						interactive={false}
-					/>
-					<br />
-					<input
-						type="button"
-						name="edit"
-						value="Edit"
-						onClick={this.handleEditClick}
-					/>
-					<input type="submit" value="Submit" />
-					<input type="file" name="profile-pic" onChange={this.fileSelectedHandler} />
-				</form>
-				{ this.state.profileUploadSuccess.result === 'success' ? <Alert variant='success' className='success-alert'>You have successfully uploaded a new profile image!</Alert> : null }
-
-				<input
-					type="button"
-					name="viewclasshistory"
-					value="View Class History"
-					onClick={this.handleClassHistory}
-				/>
-				<input
-					type="button"
-					name="logout"
-					value="Log out"
-					onClick={this.handleLogOut}
-				/>
+				<div class='my-account-container'>
+					<Row>
+						<Col sm={5}>
+							<div className="detail-image-container">
+								<h3>My Profile Picture</h3>
+								<img
+									alt="my profile"
+									src={this.state.user.profilePicURL}
+									className="instructor-image"
+								/>
+								<h5>Change My Profile Picture:</h5>
+								<p className='italics-text'>Please upload only jpg, jpeg and png files. A square image is recommended as your image will be automatically resized to 110px * 110px.</p>
+								{ this.state.pleaseWait ? <Alert variant='info' className='success-alert'>Please wait while we upload your image...</Alert> : null }
+								{ this.state.profileUploadSuccess.result === 'success' ? <Alert variant='success' className='success-alert'>You have successfully uploaded a new profile image! Refresh the page to see the changes.</Alert> : null }
+								<input type="file" name="profile-pic" onChange={this.fileSelectedHandler} />
+							</div>
+						</Col>
+						<Col sm={7}>
+							<div className="detail-text-container">
+								<div className="my-personal-info">
+									<h3>My Personal Info</h3>
+									<form onSubmit={this.handleSubmit}>
+										<label>Name</label>
+										<input
+											type="text"
+											name="name"
+											value={this.state.user.name}
+											readOnly={this.state.IsReadOnly}
+											onChange={this.handleNameChange}
+											required
+										/>
+										<br />
+										<label>Email</label>
+										<input
+											type="text"
+											name="email"
+											value={this.state.user.email}
+											readOnly={this.state.IsReadOnly}
+											onChange={this.handleEmailChange}
+											required
+										/>
+										<br />
+										<div className='edit-info-buttons'>
+											{ this.state.successCheck.result === 'success' ? <Alert variant='success' className='success-alert'>You have successfully edited your personal info!</Alert> : null }
+											<Button onClick={this.handleEditClick} variant='info'>
+												Edit My Personal Info
+											</Button>
+											<Button type='submit' variant='primary'>
+												Save Changes
+											</Button>
+										</div>
+										{/*<input type="submit" value="Submit" />*/}
+									</form>
+								</div>
+								<div class="my-ratings">
+									<h3>My Ratings</h3>
+									<h5>Rating as Insturctor</h5>
+									<Rater
+										total={5}
+										rating={this.state.user.instructorRating}
+										interactive={false}
+									/>
+									<br />
+									<h5>Rating as Learner</h5>
+									<Rater
+										total={5}
+										rating={this.state.user.learnerRating}
+										interactive={false}
+									/>
+								</div>
+							</div>
+						</Col>
+					</Row>	
+					<Row>
+						<div className='other-page-buttons'>
+							<Button onClick={this.handleClassHistory} variant='info'>
+								View My Class History
+							</Button>
+							<Button onClick={this.handleLogOut} variant='warning'>
+								Log Out
+							</Button>
+						</div>
+					</Row>
+				</div>
 			</div>
 		);
 	}
-}
+};
+
 MyAccount.propTypes = {
 	auth: PropTypes.object.isRequired,
 	history: PropTypes.object.isRequired

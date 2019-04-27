@@ -6,3 +6,11 @@
 .bold-text {
     font-weight: bold;
 }
+
+.pagination-container .active {
+    background-color: #17a2b8 !important;
+}
+
+.pagination li {
+    height: auto !important;
+}

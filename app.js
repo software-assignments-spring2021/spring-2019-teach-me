@@ -37,7 +37,6 @@ app.get('/about', function(req, res) {
 });
 
 app.get('/api/instructor/:userId/info', function(req, res) {
-
 	const userId = req.params.userId;
 	console.log(userId);
 	Users.find({ _id: userId }, function(err, info) {
@@ -111,17 +110,18 @@ app.get("/api/class-history-teach/:userId", function(req, res) {
 		.exec(function(err, classes, count) {
 			const returnValue = [];
 			for (let i = 0; i < classes.length; i++) {
-				if(classes[i].archive === false) {
-					const classAvailable = classes[i].toObject();
-					classAvailable.instructorName = classAvailable.instructor.name;
-					classAvailable.instructorProfilePic = classAvailable.instructor.profilePicURL;
-					returnValue.push(classAvailable);
-				}
+				const classAvailable = classes[i].toObject();
+				classAvailable.instructorName = classAvailable.instructor.name;
+				classAvailable.instructorProfilePic = classAvailable.instructor.profilePicURL;
+				returnValue.push(classAvailable);
 			}
 			res.json(returnValue);
 	});
 });
 
+//DEPRECATED - now all classes are fetched from the same api & 
+//filtering is now done at the front end
+/*
 app.get("/api/class-history-taught/:userId", function(req, res) {
 	const userId = new mongoose.Types.ObjectId(req.params.userId);
 	const instructorId = userId;
@@ -136,6 +136,7 @@ app.get("/api/class-history-taught/:userId", function(req, res) {
 		res.json(returnValue);
 	});
 });
+*/
 
 app.get('/api/class-history-take/:userId', function(req, res) {
 	const studentId = new mongoose.Types.ObjectId(req.params.userId);
@@ -148,22 +149,28 @@ app.get('/api/class-history-take/:userId', function(req, res) {
 		.exec(function (err, classData) {
 			const classes = [];
 			const returnValue = [];
-			classData.forEach(c => classes.push(c.classID));
-			for (let i = 0; i < classes.length; i++) {
-				if (
-					classes[i].archive === false &&
-					classData[i].complete === false
-				) {
-					const classAvailable = classes[i].toObject();
-					classAvailable.instructorName = classAvailable.instructor.name;
-					classAvailable.instructorProfilePic = classAvailable.instructor.profilePicURL;
-					returnValue.push(classAvailable);
-				}
+
+			for (let i = 0; i < classData.length; i++) {
+				const classObj = classData[i].toObject();
+				const c = classObj.classID;
+				c.complete = classObj.complete;
+				classes.push(c);
 			}
+
+			for (let i = 0; i < classes.length; i++) {
+				const classAvailable = classes[i];
+				classAvailable.instructorName = classAvailable.instructor.name;
+				classAvailable.instructorProfilePic = classAvailable.instructor.profilePicURL;
+				returnValue.push(classAvailable);
+			}
+
 			res.json(returnValue);
 		});
 });
 
+//DEPRECATED - now all classes are fetched from the same api & 
+//filtering is now done at the front end
+/*
 app.get("/api/class-history-took/:userId", function(req, res) {
 	const studentId = new mongoose.Types.ObjectId(req.params.userId);
 	UserClass.find({ userID: studentId })
@@ -181,6 +188,7 @@ app.get("/api/class-history-took/:userId", function(req, res) {
 			res.json(returnValue);
 		});
 });
+*/
 
 app.get("/api/comments/:classId", function(req, res) {
 	const classId = req.params.classId;
@@ -428,7 +436,7 @@ app.post("/api/archive-class", function(req, res) {
 		if (err) {
 			res.json({ result: err });
 		} else {
-			res.json({ result: "success" });
+			res.json({ status: "success", result: "archived" });
 		}
 	});
 });
@@ -447,7 +455,7 @@ app.post("/api/complete-class", function(req, res) {
 					result: "you have not registered for this class yet."
 				});
 			} else {
-				res.json({ status: "success", result: "complete" });
+				res.json({ status: "success", result: "completed" });
 			}
 		}
 	);

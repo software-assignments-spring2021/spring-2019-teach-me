@@ -14,3 +14,9 @@
 .bg-primary {
 	background-color: #17a2b8 !important;
 }
+
+.dropdown-menu {
+	right: 0px !important;
+	width: 12rem !important;
+	left: auto !important;
+}
