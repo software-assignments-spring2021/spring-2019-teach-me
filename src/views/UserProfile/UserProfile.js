@@ -54,7 +54,7 @@ class UserProfile extends Component {
                 }
             });
 
-        // const data2 = [{"_id":"5c8547511c9d44000024fb63","name":"Piano","description":"Piano","price":10,"proposedSchedule":"Monday","instructor":"5cae87f7241167dc0675a704","rating":"9.6","category":"Music"},{"_id":"5cb12adbb5966c04c0927891","name":"violin","description":"learn how to play violin","price":100,"proposedSchedule":"Mon, Wed 1-2pm","instructor":"5cafbea33b93c520a141dfa7","category":"Music","rating":0,"sumOfRating":0,"numOfRating":0,"__v":0}];
+        // const data2 = [{"_id":"5c8547511c9d44000024fb63","name":"Piano","description":"Piano","price":10,"proposedSchedule":"Monday","instructor":{"sumOfRatingAsInstructor":-1,"numOfRatingAsInstructor":-1,"sumOfRatingAsLearner":0,"numOfRatingAsLearner":0,"profilePicURL":"/images/default-user.png","profilePicPublicID":null,"_id":"5cae87f7241167dc0675a704","name":"DerekTest","email":"ch2699@nyu.edu","password":"$2a$10$i8zH3LVNTJ/.My/Ms0PsgOCQshBTRbAKCJ5gCWKJ/VNDJvij7PpSC","date":"2019-04-11T00:19:03.364Z","__v":0},"rating":"9.6","category":"Music","archive":false,"complete":false,"instructorName":"DerekTest","instructorProfilePic":"/images/default-user.png"},{"_id":"5cb12adbb5966c04c0927891","name":"violin","description":"learn how to play violin","price":100,"proposedSchedule":"Mon, Wed 1-2pm","instructor":{"sumOfRatingAsInstructor":0,"numOfRatingAsInstructor":0,"sumOfRatingAsLearner":42,"numOfRatingAsLearner":10,"profilePicURL":"/images/default-user.png","profilePicPublicID":null,"_id":"5cafbea33b93c520a141dfa7","introduction":"hello","name":"test","email":"hi@test.com","password":"$2a$10$tL1NRESoZ8sfZRhxvOOpHeL17yDi5cHLS98XZVVUWAU6U89di/Tsi","date":"2019-04-11T22:24:35.651Z","__v":0},"category":"Music","rating":0,"sumOfRating":0,"numOfRating":0,"archive":false,"__v":0,"complete":false,"instructorName":"test","instructorProfilePic":"/images/default-user.png"}];
         // this.setState({classesTaken: data2});
         // if (data2.length === 0) {
         //     this.setState({noClassWarning: true});
@@ -88,7 +88,9 @@ class UserProfile extends Component {
                 headers: {
                     "Content-Type": "application/json"
                 }
-            });
+            })
+                .then(response => response.json())
+                .then(data => console.log(data));
         }
         else {
             this.props.history.push("/login");
@@ -104,7 +106,7 @@ class UserProfile extends Component {
         const userData = this.state.currentUser;
 
         const classListData = this.state.classesTaken.map(function(data, index) {
-            return <ClassDisplay key={index} title={data.name} description={data.description} price={data.price} instructor={data.instructor} rating={data.rating} category={data.category} slug={data._id}/>
+            return <ClassDisplay key={index} title={data.name} description={data.description} price={data.price} instructor={data.instructorName} rating={data.rating} category={data.category} slug={data._id} instructorProfilePic={data.instructorProfilePic}/>
         });
         
         const CLASSES_PER_PAGE = 4;
@@ -123,7 +125,11 @@ class UserProfile extends Component {
                     <Row>
                         <Col sm={5}>
                             <div className='detail-image-container'>
-                                <img alt='user profile' src='/images/default-user.png' className='user-image'></img>
+                                <img
+                                    alt="user profile"
+                                    src={userData.profilePicURL}
+                                    className="user-image"
+                                />
                             </div>
                         </Col>
                         <Col sm={7}>
@@ -141,7 +147,7 @@ class UserProfile extends Component {
                         <div className='rating-container'>
                             <h3>Rating</h3>
                             <Rater total = {5} rating = {userData.learnerRating} interactive = {false}/>
-                            <p>Rate this class: </p>
+                            <p>Rate this learner: </p>
                             <Rater total={5} onRate={this.rateLearner} />
                         </div>
                     </Row>
