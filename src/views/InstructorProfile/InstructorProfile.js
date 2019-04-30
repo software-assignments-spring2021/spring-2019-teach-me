@@ -68,7 +68,7 @@ class InstructorProfile extends Component {
         <p>{instructor.description}</p>
         <hr />
         <div>
-          <strong>Rating:</strong>  He/She is a <Rater total={5} onRate={this.rateInstructor()} /> Instructor.
+          <strong>Rating:</strong>  He/She is a {this.instructorRating()}<Rater total={5} onRate={this.rateInstructor()} /> Instructor.
         </div>
         <hr />
         <h4>Comments</h4>

@@ -19,7 +19,7 @@ import ClassDetail from "./views/ClassDetail/ClassDetail";
 import PrivateRoute from "./views/private-route/PrivateRoute";
 import { Dashboard } from "./views/Dashboard";
 import { InstructorProfile } from "./views/InstructorProfile";
-import { About } from "./views/about";
+import { About } from "./views/About";
 
 import { Provider } from "react-redux";
 import { store } from "./store";
