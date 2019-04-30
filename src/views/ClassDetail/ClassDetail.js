@@ -9,6 +9,7 @@ import Modal from "react-bootstrap/Modal";
 import { LinkContainer } from "react-router-bootstrap";
 import { StudentDisplay } from "../../components/StudentDisplay";
 import { Comment } from "../../components/Comment";
+import Rater from 'react-rater'
 
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -50,6 +51,11 @@ class ClassDetail extends Component {
 		this.handleCloseCompleteModal = this.handleCloseCompleteModal.bind(
 			this
 		);
+		this.rateClass = this.rateClass.bind(this);
+	}
+
+	rateClass(e) {
+		console.log("rate");
 	}
 
 	deleteClass() {}
@@ -508,6 +514,14 @@ class ClassDetail extends Component {
 							{studentData}
 						</div>
 					</Row>
+                    <Row>
+                        <div className='rating-container'>
+                            <h3>Rating</h3>
+                            <Rater total = {5} rating = {classData.rating} interactive = {false}/>
+                            <p>Rate this class: </p>
+							<Rater total={5} onRate={this.rateClass} />
+                        </div>
+                    </Row>
 					<Row>
 						<div className="detail-comments-container">
 							<h3>Comments</h3>

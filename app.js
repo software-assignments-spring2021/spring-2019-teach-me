@@ -74,6 +74,17 @@ app.get("/api/classes/:classId", function(req, res) {
 			classData.instructorID = classData.instructor._id;
 			classData.instructorProfilePic = classData.instructor.profilePicURL;
 			classData.instructor.password = null;
+
+			var rating = 0;
+			if (classData.sumOfRating >= 0 && classData.numOfRating >= 0) {
+				rating = classData.sumOfRating / classData.numOfRating;
+				if (Number.isNaN(rating)) {
+					rating = 0;
+				}
+			}
+
+			classData.rating = rating;
+
 			res.json(classData);
 		});
 });

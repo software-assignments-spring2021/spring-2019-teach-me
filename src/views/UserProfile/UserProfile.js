@@ -60,7 +60,6 @@ class UserProfile extends Component {
         // if (data2.length === 0) {
         //     this.setState({noClassWarning: true});
         // } 
-
     }
 
     rateLearner(e) {
