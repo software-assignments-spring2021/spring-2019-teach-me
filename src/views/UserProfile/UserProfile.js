@@ -22,7 +22,8 @@ class UserProfile extends Component {
             currentUser: {},
             classesTaken: [],
             activePage: 1,
-            noClassWarning: false
+            noClassWarning: false,
+            ratingSubmitStatus: {}
         };
 
         this.rateLearner = this.rateLearner.bind(this);
@@ -59,6 +60,7 @@ class UserProfile extends Component {
         // if (data2.length === 0) {
         //     this.setState({noClassWarning: true});
         // } 
+
     }
 
     rateLearner(e) {
@@ -90,7 +92,7 @@ class UserProfile extends Component {
                 }
             })
                 .then(response => response.json())
-                .then(data => console.log(data));
+                .then(data => this.setState({ ratingSubmitStatus: data }));
         }
         else {
             this.props.history.push("/login");
@@ -149,6 +151,27 @@ class UserProfile extends Component {
                             <Rater total = {5} rating = {userData.learnerRating} interactive = {false}/>
                             <p>Rate this learner: </p>
                             <Rater total={5} onRate={this.rateLearner} />
+                            {this.state.ratingSubmitStatus.status ===
+                            "success" ? (
+                                <Alert
+                                    variant="success"
+                                    className="success-alert"
+                                >
+                                    You have successfully submitted your
+                                    rating!
+                                </Alert>
+                            ) : null}
+                            {this.state.ratingSubmitStatus.status ===
+                            "error" ? (
+                                <Alert
+                                    variant="danger"
+                                    className="error-alert"
+                                >
+                                    Oops, it seems that we have encountered
+                                    a problem:{" "}
+                                    {this.state.ratingSubmitStatus.result}.
+                                </Alert>
+                            ) : null}
                         </div>
                     </Row>
                     <Row>

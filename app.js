@@ -541,9 +541,13 @@ app.post('/api/rate-learner', function(req, res) {
 			if (isInstructor) {
 				Users.findOneAndUpdate({_id: req.body.userId}, {sumOfRatingAsLearner:req.body.newSumOfRatingAsLearner,numOfRatingAsLearner:req.body.newNumOfRatingAsLearner}, {new:true}, function(err, classes) {
 					if (err) {
-						res.json({ result: err });
+						res.json({
+							status: "error",
+							result:
+								err
+						});
 					} else {
-						res.json({ result: "success" });
+						res.json({ status: "success" });
 					}
 				});
 			}
