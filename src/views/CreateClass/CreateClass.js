@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import Jumbotron from "react-bootstrap/Jumbotron";
+import Button from "react-bootstrap/Button";
 
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -83,15 +84,21 @@ class CreateClass extends Component {
 		} else {
 			return (
 				<div id="submit-form">
-					<h3>Create a Class</h3>
-					<form onSubmit={this.handleSubmit}>
+					<Jumbotron>
+						<h1>Publish a New Class</h1>
+						<p>Want to teach a new class? Fill in the details below and publish it!</p>
+					</Jumbotron>
+					<form className='create-class-form' onSubmit={this.handleSubmit}>
 						<label>Name</label>
 						<br />
 						<input type="text" name="name" required />
 						<br />
-						<label>Description</label>
+						<label>One-Sentence Description</label>
 						<br />
 						<input type="text" name="description" required />
+						<label>Longer Description of the Class</label>
+						<br />
+						<input type="text" name="about" required />
 						<br />
 						<label>Price</label>
 						<br />
@@ -109,12 +116,14 @@ class CreateClass extends Component {
 						<br />
 						<input type="text" onBlur={this.handleUrl} name="paymentLink" />
 						<label id='urlError'>{this.state.urlError}</label><br />
-						<input type="submit" value="Publish" />
-						<input
-							type="button"
-							value="Cancel"
-							onClick={this.handleCancel}
-						/>
+						<div className='create-class-buttons'>
+							<Button type='submit' variant='primary'>
+								Submit
+							</Button>
+							<Button type="button" onClick={this.handleCancel}>
+								Cancel
+							</Button>
+						</div>
 					</form>
 				</div>
 			);

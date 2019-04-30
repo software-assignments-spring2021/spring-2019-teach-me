@@ -282,6 +282,7 @@ app.post("/api/create-class", function(req, res) {
 	//console.log(req.body);
 	const newClass = new Class({
 		name: req.body.name,
+		about: req.body.about,
 		description: req.body.description,
 		price: req.body.price,
 		proposedSchedule: req.body.proposedSchedule,
