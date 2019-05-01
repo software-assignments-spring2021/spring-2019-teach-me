@@ -74,6 +74,17 @@ app.get("/api/classes/:classId", function(req, res) {
 			classData.instructorID = classData.instructor._id;
 			classData.instructorProfilePic = classData.instructor.profilePicURL;
 			classData.instructor.password = null;
+
+			var rating = 0;
+			if (classData.sumOfRating >= 0 && classData.numOfRating >= 0) {
+				rating = classData.sumOfRating / classData.numOfRating;
+				if (Number.isNaN(rating)) {
+					rating = 0;
+				}
+			}
+
+			classData.rating = rating;
+
 			res.json(classData);
 		});
 });
@@ -541,9 +552,13 @@ app.post('/api/rate-learner', function(req, res) {
 			if (isInstructor) {
 				Users.findOneAndUpdate({_id: req.body.userId}, {sumOfRatingAsLearner:req.body.newSumOfRatingAsLearner,numOfRatingAsLearner:req.body.newNumOfRatingAsLearner}, {new:true}, function(err, classes) {
 					if (err) {
-						res.json({ result: err });
+						res.json({
+							status: "error",
+							result:
+								err
+						});
 					} else {
-						res.json({ result: "success" });
+						res.json({ status: "success" });
 					}
 				});
 			}
