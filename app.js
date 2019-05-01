@@ -44,6 +44,11 @@ app.get('/api/instructor/:userId/info', function(req, res) {
 	});
 });
 
+app.get('/api/instructor/:userId/comments', function(req, res) {
+	const userId = req.params.userId;
+	
+});
+
 app.get('/api/classes', function(req, res) {
 	Class
 		.find({})
