@@ -38,15 +38,46 @@ app.get('/about', function(req, res) {
 
 app.get('/api/instructor/:userId/info', function(req, res) {
 	const userId = req.params.userId;
-	console.log(userId);
 	Users.find({ _id: userId }, function(err, info) {
 		res.json(info);
 	});
 });
 
-app.get('/api/instructor/:userId/comments', function(req, res) {
-	const userId = req.params.userId;
-	
+app.get("/api/instructor/:userId/comments", function(req, res) {
+	const instructorId = req.params.userId;
+	const comments = [];
+	Class.find({ instructor: instructorId }, function(err, classes) {
+		res.json(classes);
+	})
+});
+
+app.get("/api/comments/:classId", function(req, res) {
+	const classId = req.params.classId;
+	UserClass.find({ classID: classId })
+		.populate("userID")
+		.exec(function(err, data) {
+			const comments = [];
+			for (let item of data) {
+				if (item.comment !== null) {
+					const comment = {};
+					comment.userID = item.userID._id;
+					comment.name = item.userID.name;
+					comment.commentText = item.comment;
+					comment.userProfilePic = item.userID.profilePicURL;
+
+					const yr = item.commentDate.getFullYear();
+					const mo = item.commentDate.getMonth() + 1;
+					const day = item.commentDate.getDate();
+					const newDate = yr + "-" + mo + "-" + day;
+					comment.commentDate = newDate;
+
+					comments.push(comment);
+				}
+			}
+
+			//console.log(comments);
+			res.json(comments);
+		});
 });
 
 app.get('/api/classes', function(req, res) {
@@ -205,35 +236,6 @@ app.get("/api/class-history-took/:userId", function(req, res) {
 		});
 });
 */
-
-app.get("/api/comments/:classId", function(req, res) {
-	const classId = req.params.classId;
-	UserClass.find({ classID: classId })
-		.populate("userID")
-		.exec(function(err, data) {
-			const comments = [];
-			for (let item of data) {
-				if (item.comment !== null) {
-					const comment = {};
-					comment.userID = item.userID._id;
-					comment.name = item.userID.name;
-					comment.commentText = item.comment;
-					comment.userProfilePic = item.userID.profilePicURL;
-
-					const yr = item.commentDate.getFullYear();
-					const mo = item.commentDate.getMonth() + 1;
-					const day = item.commentDate.getDate();
-					const newDate = yr + "-" + mo + "-" + day;
-					comment.commentDate = newDate;
-
-					comments.push(comment);
-				}
-			}
-
-			//console.log(comments);
-			res.json(comments);
-		});
-});
 
 app.post("/api/comments/:classId/:userId", function(req, res) {
 	const classId = req.params.classId;
