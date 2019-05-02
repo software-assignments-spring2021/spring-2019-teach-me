@@ -298,7 +298,7 @@ app.post("/api/create-class", function(req, res) {
 		if (err) {
 			res.json({ result: err });
 		} else {
-			res.json({ result: "success" });
+			res.json({ result: "success", newClassID: newclass._id });
 		}
 	});
 

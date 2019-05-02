@@ -3,6 +3,10 @@
     margin: auto;
 }
 
+.category-select {
+  display: block !important;
+}
+
 .create-class-buttons {
 	margin: 1rem auto;
 	text-align: center;

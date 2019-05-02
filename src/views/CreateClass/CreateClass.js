@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
 
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -22,7 +23,7 @@ class CreateClass extends Component {
 		this.handleUrl = this.handleUrl.bind(this);
 
 		this.state = {
-			successRedirect: undefined,
+			successRedirect: {},
 			urlError: ''
 		};
 	}
@@ -67,7 +68,14 @@ class CreateClass extends Component {
 			}
 		})
 			.then(response => response.json())
-			.then(data => this.setState({ successRedirect: data }));
+			.then(data => this.setState({ successRedirect: data },  () => {
+				if (this.state.successRedirect.result === 'success') {
+					setTimeout(() => {
+						const url = '/classes/' + this.state.successRedirect.newClassID;
+						this.props.history.push(url);
+					}, 3500);
+				}
+			}));
 	}
 
 	handleCancel(e) {
@@ -76,9 +84,7 @@ class CreateClass extends Component {
 
 	render() {
 		if (
-			this.state.successRedirect &&
-			(this.state.successRedirect.result === "success" ||
-				this.state.successRedirect.result === "cancelled")
+			this.state.successRedirect && this.state.successRedirect.result === "cancelled"
 		) {
 			return <Redirect to="/class-history" />;
 		} else {
@@ -110,12 +116,22 @@ class CreateClass extends Component {
 						<br />
 						<label>Category</label>
 						<br />
-						<input type="text" name="category" required />
+						<select className="category-select" name="category">
+							<option value="Art/Creative">Art/Creative</option>
+							<option value="Music">Music</option>
+							<option value="Technology">Technology</option>
+							<option value="Language">Language</option>
+							<option value="Sports">Sports</option>
+							<option value="Lifestyle">Lifestyle</option>
+							<option value="Business">Business</option>
+							<option value="Miscellaneous">Miscellaneous</option>
+						</select>
 						<br />
 						<label>Payment Link</label>
 						<br />
 						<input type="text" onBlur={this.handleUrl} name="paymentLink" />
 						<label id='urlError'>{this.state.urlError}</label><br />
+						{this.state.successRedirect.result === "success" ? <Alert variant="success">You have successfully published a new class! We are now taking you to the class detail page of your new class.</Alert> : null}
 						<div className='create-class-buttons'>
 							<Button type='submit' variant='primary'>
 								Submit
