@@ -1,6 +1,8 @@
 //https://www.robinwieruch.de/react-fetching-data/
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
+import Jumbotron from "react-bootstrap/Jumbotron";
+import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 
 import PropTypes from "prop-types";
@@ -17,7 +19,7 @@ class EditClass extends Component {
 
 		this.state = {
 			class: {},
-			successRedirect: undefined,
+			successRedirect: {},
 			urlError: '',
 			originator: new Originator(),
 			careTaker: new CareTaker()
@@ -31,6 +33,7 @@ class EditClass extends Component {
 
 		this.handleNameChange = this.handleNameChange.bind(this);
 		this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
+		this.handleAboutChange = this.handleAboutChange.bind(this);
 		this.handlePriceChange = this.handlePriceChange.bind(this);
 		this.handleProposedScheduleChange = this.handleProposedScheduleChange.bind(this);
 		this.handleCategoryChange = this.handleCategoryChange.bind(this);
@@ -87,7 +90,14 @@ class EditClass extends Component {
 				'Content-Type': 'application/json'
 			}
 		}).then(response => response.json())
-			.then(data => this.setState({successRedirect: data}));
+			.then(data => this.setState({ successRedirect: data },  () => {
+				if (this.state.successRedirect.result === 'success') {
+					setTimeout(() => {
+						const url = '/classes/' + classId;
+						this.props.history.push(url);
+					}, 3500);
+				}
+			}));
 	}
 
 	handleCancel(e) {
@@ -95,6 +105,12 @@ class EditClass extends Component {
 	}
 
 	handleNameChange(e) {
+		let originator = Object.assign({}, this.state.originator);
+		originator.name = e.target.value; 
+		this.setState({originator});
+	}
+
+	handleAboutChange(e) {
 		let originator = Object.assign({}, this.state.originator);
 		originator.name = e.target.value; 
 		this.setState({originator});
@@ -159,7 +175,7 @@ class EditClass extends Component {
 	}
 
 	render() {
-		if (this.state.successRedirect && (this.state.successRedirect.result === 'success' || this.state.successRedirect.result === 'cancelled')) {
+		if (this.state.successRedirect && this.state.successRedirect.result === 'cancelled') {
 			return (
 				<Redirect to='/home' />
 			)
@@ -175,25 +191,42 @@ class EditClass extends Component {
 		else {
 			return (
 				<div id='edit-form'>
-					<h3>Edit the Class</h3>
-					<form onSubmit={this.handleSubmit}>
+					<Jumbotron>
+						<h1>Edit Class: {this.state.class.name}</h1>
+						<p>You can edit the details of your class below.</p>
+					</Jumbotron>
+					<form className='edit-class-form' onSubmit={this.handleSubmit}>
 						<label>Name</label><br />
 						<input type="text" name="name" defaultValue={this.state.class.name} onChange={this.handleNameChange} required /><br />
-						<label>Description</label><br />
+						<label>One-Sentence Description</label><br />
 						<input type="text" name="description" defaultValue={this.state.class.description} onChange={this.handleDescriptionChange} required /><br />
+						<label>Longer Description of the Class</label><br />
+						<input type="text" name="about" defaultValue={this.state.class.about} onChange={this.handleAboutChange} required /><br />
 						<label>Price</label><br />
 						<input type="number" name="price" defaultValue={this.state.class.price} onChange={this.handlePriceChange} required /><br />
 						<label>Proposed Schedule</label><br />
 						<input type="text" name="proposedSchedule" defaultValue={this.state.class.proposedSchedule} onChange={this.handleProposedScheduleChange} required /><br />
 						<label>Category</label><br />
-						<input type="text" name="category" defaultValue={this.state.class.category} onChange={this.handleCategoryChange} required /><br />
+						<select className="category-select" defaultValue={this.state.class.category} onChange={this.handleCategoryChange} name="category" required>
+							<option value="Art/Creative">Art/Creative</option>
+							<option value="Music">Music</option>
+							<option value="Technology">Technology</option>
+							<option value="Language">Language</option>
+							<option value="Sports">Sports</option>
+							<option value="Lifestyle">Lifestyle</option>
+							<option value="Business">Business</option>
+							<option value="Miscellaneous">Miscellaneous</option>
+						</select>
 						<label>Payment Link</label><br />
 						<input type="text" onBlur={this.handleUrl} defaultValue={this.state.class.paymentLink} name="paymentLink" />
 						<label id='urlError'>{this.state.urlError}</label><br />
-						<input type="submit" value="Publish" />
-						<input type="button" value="Cancel" onClick={this.handleCancel} />
-						<input type="button" value="Save Draft" onClick={this.handleSave} />
-						<input type="button" value="View Draft" onClick={this.handleRestore} />
+						{this.state.successRedirect.result === "success" ? <Alert variant="success">Your changes have been saved. We are now taking you to the class detail page of this class.</Alert> : null}
+						<div className='edit-class-buttons'>
+							<Button type="submit" variant='primary'>Save Changes</Button>
+							<Button variant='danger' onClick={this.handleCancel}>Abort Changes</Button>
+							<Button variant='info' onClick={this.handleSave}>Save Draft</Button>
+							<Button variant='danger' onClick={this.handleRestore}>Restore Saved Draft</Button>
+						</div>
 					</form>
 				</div>
 			);

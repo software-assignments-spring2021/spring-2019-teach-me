@@ -5,6 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import Pagination from "react-js-pagination";
 import { ClassDisplay } from '../../components/ClassDisplay';
 import { ClassFilter } from '../../components/ClassFilter';
+import ReactDOM from 'react-dom';
 
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -48,9 +49,9 @@ class ClassHistory extends Component {
 	
 	displayTeach() {
 		this.setState({activePage: 1, filterWarning: false});
-		//this.setState({currentSection:0});
+		ReactDOM.findDOMNode(this.filterForm).reset();
+
 		const url = '/api/class-history-teach/' + this.state.userID;
-		console.log(url);
 		fetch(url)
 			.then(response => response.json())
 			.then((data) => {
@@ -93,9 +94,9 @@ class ClassHistory extends Component {
 
 	displayTake() {
 		this.setState({activePage: 1, filterWarning: false});
-		//this.setState({currentSection:1});
+		ReactDOM.findDOMNode(this.filterForm).reset();
+
 		const url = '/api/class-history-take/' + this.state.userID
-		console.log(url);
 		fetch(url)
 			.then(response => response.json())
 			.then((data) => {
@@ -218,7 +219,7 @@ class ClassHistory extends Component {
 					</Nav.Item>
 				</Nav>
 				<div className='filter-container filter-container-ch'>
-						<ClassFilter filterResults={this.filterResults.bind(this)} displayArchiveOptions={true}/>
+						<ClassFilter ref={ form => this.filterForm = form } filterResults={this.filterResults.bind(this)} displayArchiveOptions={true}/>
 					</div>
 					<div className='class-listing-display'>
 						{toDisplay}

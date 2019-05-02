@@ -1,11 +1,19 @@
-#submit-form {
+.create-class-form{
     width: 60%;
     margin: auto;
 }
 
-form {
-	width: 80%;
-	margin: auto;
+.category-select {
+  display: block !important;
+}
+
+.create-class-buttons {
+	margin: 1rem auto;
+	text-align: center;
+}
+
+.create-class-buttons button{
+	margin: 1rem;
 }
 
 #urlError {

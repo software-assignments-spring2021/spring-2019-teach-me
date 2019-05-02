@@ -1,17 +1,21 @@
-#edit-form {
+.edit-class-form{
   width: 60%;
   margin: auto;
+}
+
+.edit-class-buttons {
+margin: 1rem auto;
+text-align: center;
+}
+
+.edit-class-buttons button{
+margin: 1rem;
 }
 
 #alert {
   width: 60%;
   margin: auto;
   margin-top: 20px;
-}
-
-form {
-	width: 80%;
-	margin: auto;
 }
 
 input[type=text], input[type=number] {
