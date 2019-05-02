@@ -621,6 +621,53 @@ app.post('/api/rate-class', function(req, res) {
 	});
 });
 
+app.post("/api/rate-instructor", function(req,res) {
+	console.log(req.body);
+
+	UserClass
+		.find({userID: req.body.userId})
+		.populate({
+			path: 'classID',
+			populate: {path: 'instructor'}
+		})
+		.exec(function (err, classData) {
+
+		 var isStudent = false;
+
+		 for (let i = 0; i < classData.length; i++) {
+			 const classObj = classData[i].toObject();
+
+			 if(req.body.instructorId == classObj.classID.instructor._id) {
+				 isStudent = true;
+				 break;
+			 }
+		 }
+
+		 if (isStudent) {
+			 Users.findOneAndUpdate({_id: req.body.instructorId}, {sumOfRatingAsInstructor:req.body.newSumOfRatingAsInstructor,numOfRatingAsInstructor:req.body.newNumOfRatingAsInstructor}, {new:true}, function(err, classes) {
+				 if (err) {
+					 res.json({
+						 status: "error",
+						 result:
+							 err
+					 });
+				 } else {
+					 res.json({ status: "success" });
+				 }
+			 });
+		 }
+		 else {
+			 res.json({
+				 status: "error",
+				 result:
+					 "you are not an student of the instructor"
+			 });
+		 }
+	});
+
+});
+
+
 app.get("/*", function(req, res) {
 	res.sendFile(path.join(__dirname, "build", "index.html"));
 });
