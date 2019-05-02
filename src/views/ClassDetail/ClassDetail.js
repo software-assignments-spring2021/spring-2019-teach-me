@@ -34,7 +34,8 @@ class ClassDetail extends Component {
 			completeModalDisplay: false,
 			studentsList: [],
 			comments: [],
-			textAreaValue: ""
+			textAreaValue: "",
+			ratingSubmitStatus: {}
 		};
 
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -55,7 +56,40 @@ class ClassDetail extends Component {
 	}
 
 	rateClass(e) {
-		console.log("rate");
+
+        if (this.props.auth.isAuthenticated) {
+
+            console.log(e.rating);
+
+            const newRatingObj = {};
+
+            const newSumOfRating = this.state.currentClass.sumOfRating + e.rating;
+            console.log(newSumOfRating);
+            newRatingObj.newSumOfRating = newSumOfRating;
+            const newNumOfRating = this.state.currentClass.numOfRating + 1;
+            console.log(newNumOfRating);
+            newRatingObj.newNumOfRating = newNumOfRating;
+
+            const userId = this.props.auth.user.id;
+            newRatingObj.userId = userId;
+            const classId = this.props.match.params.classId;
+            newRatingObj.classId = classId;
+            console.log(newRatingObj);
+
+            fetch("/api/rate-class/", {
+                method: "POST",
+                body: JSON.stringify(newRatingObj),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(response => response.json())
+                .then(data => this.setState({ ratingSubmitStatus: data }));
+        }
+        else {
+            this.props.history.push("/login");
+        }
+
 	}
 
 	deleteClass() {}
@@ -520,6 +554,27 @@ class ClassDetail extends Component {
                             <Rater total = {5} rating = {classData.rating} interactive = {false}/>
                             <p>Rate this class: </p>
 							<Rater total={5} onRate={this.rateClass} />
+                            {this.state.ratingSubmitStatus.status ===
+                            "success" ? (
+                                <Alert
+                                    variant="success"
+                                    className="success-alert"
+                                >
+                                    You have successfully submitted your
+                                    rating!
+                                </Alert>
+                            ) : null}
+                            {this.state.ratingSubmitStatus.status ===
+                            "error" ? (
+                                <Alert
+                                    variant="danger"
+                                    className="error-alert"
+                                >
+                                    Oops, it seems that we have encountered
+                                    a problem:{" "}
+                                    {this.state.ratingSubmitStatus.result}.
+                                </Alert>
+                            ) : null}
                         </div>
                     </Row>
 					<Row>

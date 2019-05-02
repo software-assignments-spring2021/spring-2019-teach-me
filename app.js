@@ -82,8 +82,27 @@ app.get("/api/classes/:classId", function(req, res) {
 					rating = 0;
 				}
 			}
-
 			classData.rating = rating;
+
+			console.log(classData.sumOfRating);
+			if (!(classData.sumOfRating >= 0)) {
+				classData.sumOfRating = 0;
+				console.log("1");
+			}
+			else {
+				console.log("2");
+			}
+
+			console.log(classData.numOfRating);
+			if (!(classData.numOfRating >= 0)) {
+				classData.numOfRating = 0;
+				console.log("3");
+			}
+			else {
+				console.log("4");
+			}
+
+			console.log(classData);
 
 			res.json(classData);
 		});
@@ -572,6 +591,38 @@ app.post('/api/rate-learner', function(req, res) {
 			}
 		});
 
+});
+
+
+app.post('/api/rate-class', function(req, res) {
+	console.log(req.body);
+
+	UserClass.findOne({ classID: req.body.classId, userID: req.body.userId }, function(
+		err,
+		data
+	) {
+		if (!data) {
+			res.json({
+				status: "error",
+				result: "you have not registered for this class"
+			});
+		} else {
+			Class.findOneAndUpdate({ _id: req.body.classId }, {sumOfRating:req.body.newSumOfRating,numOfRating:req.body.newNumOfRating}, { new: true }, function(
+				err,
+				classes
+			) {
+				if (err) {
+					res.json({
+						status: "error",
+						result:
+							err
+					});
+				} else {
+					res.json({ status: "success" });
+				}
+			});
+		}
+	});
 });
 
 app.get('/*', function(req, res) {
