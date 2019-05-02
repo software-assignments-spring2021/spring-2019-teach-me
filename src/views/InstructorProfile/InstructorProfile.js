@@ -110,7 +110,7 @@ class InstructorProfile extends Component {
 			<div className="instructor-profile-page">
 				<h3 className="title">Instructor {instructor.name}</h3>
 				<h4>Students Rating</h4>
-				<Rater total={5} rating={this.instructorRating() interactive={false}} />
+				<Rater total={5} rating={this.instructorRating()} interactive={false} />
 				<hr />
 				<h4>Description</h4>
 				<p>{instructor.description}</p>
