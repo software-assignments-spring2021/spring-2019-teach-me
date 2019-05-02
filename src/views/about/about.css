@@ -1,3 +1,23 @@
 .bold-text {
     font-weight: bold;
 }
+
+
+.jumbotron {
+    width: 60%;
+    margin: 2.5% auto;
+}
+
+
+
+.pagination-container .active {
+    background-color: #17a2b8 !important;
+}
+
+
+
+.pagination li {
+    height: auto !important;
+}
+
+
