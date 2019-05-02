@@ -23,7 +23,7 @@ const storage = cloudinaryStorage({
 
 const parser = multer({ storage: storage });
 
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, "build")));
 
 app.use(
 	bodyParser.urlencoded({
@@ -32,34 +32,71 @@ app.use(
 );
 app.use(bodyParser.json());
 
-app.get('/about', function(req, res) {
-	res.sendFile(path.join(__dirname, 'build', 'index.html'));
+app.get("/about", function(req, res) {
+	res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-app.get('/api/instructor/:userId/info', function(req, res) {
+app.get("/api/instructor/:userId/info", function(req, res) {
 	const userId = req.params.userId;
-	console.log(userId);
 	Users.find({ _id: userId }, function(err, info) {
 		res.json(info);
 	});
 });
 
-app.get('/api/classes', function(req, res) {
-	Class
-		.find({})
-		.populate('instructor')
+app.get("/api/instructor/:userId/comments", function(req, res) {
+	const instructorId = req.params.userId;
+	const comments = [];
+	Class.find({ instructor: instructorId }, function(err, classes) {
+		res.json(classes);
+	});
+});
+
+app.get("/api/comments/:classId", function(req, res) {
+	const classId = req.params.classId;
+	UserClass.find({ classID: classId })
+		.populate("userID")
+		.exec(function(err, data) {
+			const comments = [];
+			for (let item of data) {
+				if (item.comment !== null) {
+					const comment = {};
+					comment.userID = item.userID._id;
+					comment.name = item.userID.name;
+					comment.commentText = item.comment;
+					comment.userProfilePic = item.userID.profilePicURL;
+
+					const yr = item.commentDate.getFullYear();
+					const mo = item.commentDate.getMonth() + 1;
+					const day = item.commentDate.getDate();
+					const newDate = yr + "-" + mo + "-" + day;
+					comment.commentDate = newDate;
+
+					comments.push(comment);
+				}
+			}
+
+			//console.log(comments);
+			res.json(comments);
+		});
+});
+
+app.get("/api/classes", function(req, res) {
+	Class.find({})
+		.populate("instructor")
 		.exec(function(err, classes, count) {
 			const returnValue = [];
 			for (let i = 0; i < classes.length; i++) {
 				if (classes[i].archive === false) {
 					const classAvailable = classes[i].toObject();
-					classAvailable.instructorName = classAvailable.instructor.name;
-					classAvailable.instructorProfilePic = classAvailable.instructor.profilePicURL;
+					classAvailable.instructorName =
+						classAvailable.instructor.name;
+					classAvailable.instructorProfilePic =
+						classAvailable.instructor.profilePicURL;
 					returnValue.push(classAvailable);
 				}
 			}
 			res.json(returnValue);
-	});
+		});
 });
 
 app.get("/api/classes/:classId", function(req, res) {
@@ -115,22 +152,22 @@ app.get("/api/get-students/:classId", function(req, res) {
 app.get("/api/class-history-teach/:userId", function(req, res) {
 	const userId = new mongoose.Types.ObjectId(req.params.userId);
 	const instructorId = userId;
-	Class
-		.find({instructor: instructorId})
-		.populate('instructor')
+	Class.find({ instructor: instructorId })
+		.populate("instructor")
 		.exec(function(err, classes, count) {
 			const returnValue = [];
 			for (let i = 0; i < classes.length; i++) {
 				const classAvailable = classes[i].toObject();
 				classAvailable.instructorName = classAvailable.instructor.name;
-				classAvailable.instructorProfilePic = classAvailable.instructor.profilePicURL;
+				classAvailable.instructorProfilePic =
+					classAvailable.instructor.profilePicURL;
 				returnValue.push(classAvailable);
 			}
 			res.json(returnValue);
-	});
+		});
 });
 
-//DEPRECATED - now all classes are fetched from the same api & 
+//DEPRECATED - now all classes are fetched from the same api &
 //filtering is now done at the front end
 /*
 app.get("/api/class-history-taught/:userId", function(req, res) {
@@ -149,15 +186,14 @@ app.get("/api/class-history-taught/:userId", function(req, res) {
 });
 */
 
-app.get('/api/class-history-take/:userId', function(req, res) {
+app.get("/api/class-history-take/:userId", function(req, res) {
 	const studentId = new mongoose.Types.ObjectId(req.params.userId);
-	UserClass
-		.find({userID: studentId})
+	UserClass.find({ userID: studentId })
 		.populate({
-			path: 'classID',
-			populate: {path: 'instructor'}
+			path: "classID",
+			populate: { path: "instructor" }
 		})
-		.exec(function (err, classData) {
+		.exec(function(err, classData) {
 			const classes = [];
 			const returnValue = [];
 
@@ -171,7 +207,8 @@ app.get('/api/class-history-take/:userId', function(req, res) {
 			for (let i = 0; i < classes.length; i++) {
 				const classAvailable = classes[i];
 				classAvailable.instructorName = classAvailable.instructor.name;
-				classAvailable.instructorProfilePic = classAvailable.instructor.profilePicURL;
+				classAvailable.instructorProfilePic =
+					classAvailable.instructor.profilePicURL;
 				returnValue.push(classAvailable);
 			}
 
@@ -179,7 +216,7 @@ app.get('/api/class-history-take/:userId', function(req, res) {
 		});
 });
 
-//DEPRECATED - now all classes are fetched from the same api & 
+//DEPRECATED - now all classes are fetched from the same api &
 //filtering is now done at the front end
 /*
 app.get("/api/class-history-took/:userId", function(req, res) {
@@ -200,35 +237,6 @@ app.get("/api/class-history-took/:userId", function(req, res) {
 		});
 });
 */
-
-app.get("/api/comments/:classId", function(req, res) {
-	const classId = req.params.classId;
-	UserClass.find({ classID: classId })
-		.populate("userID")
-		.exec(function(err, data) {
-			const comments = [];
-			for (let item of data) {
-				if (item.comment !== null) {
-					const comment = {};
-					comment.userID = item.userID._id;
-					comment.name = item.userID.name;
-					comment.commentText = item.comment;
-					comment.userProfilePic = item.userID.profilePicURL;
-
-					const yr = item.commentDate.getFullYear();
-					const mo = item.commentDate.getMonth() + 1;
-					const day = item.commentDate.getDate();
-					const newDate = yr + "-" + mo + "-" + day;
-					comment.commentDate = newDate;
-
-					comments.push(comment);
-				}
-			}
-
-			//console.log(comments);
-			res.json(comments);
-		});
-});
 
 app.post("/api/comments/:classId/:userId", function(req, res) {
 	const classId = req.params.classId;
@@ -508,7 +516,7 @@ app.get("/api/instructors", function(req, res) {
 	});
 });
 
-app.post('/api/images/:userId', parser.single("profile-pic"), (req, res) => {
+app.post("/api/images/:userId", parser.single("profile-pic"), (req, res) => {
 	//console.log(req.file) // to see what is returned to you
 
 	Users.findById(req.params.userId, function(err, user) {
@@ -516,26 +524,23 @@ app.post('/api/images/:userId', parser.single("profile-pic"), (req, res) => {
 		user.profilePicPublicID = req.file.public_id;
 		user.save((err, modifiedUser) => {
 			if (err) {
-				res.json({result: err});
-			}
-			else {
-				res.json({result: 'success'});
+				res.json({ result: err });
+			} else {
+				res.json({ result: "success" });
 			}
 		});
 	});
 });
 
-app.post('/api/rate-learner', function(req, res) {
+app.post("/api/rate-learner", function(req, res) {
 	console.log(req.body);
 
-	UserClass
-		.find({userID: req.body.userId})
+	UserClass.find({ userID: req.body.userId })
 		.populate({
-			path: 'classID',
-			populate: {path: 'instructor'}
+			path: "classID",
+			populate: { path: "instructor" }
 		})
-		.exec(function (err, classData) {
-
+		.exec(function(err, classData) {
 			var isInstructor = false;
 
 			for (let i = 0; i < classData.length; i++) {
@@ -551,33 +556,36 @@ app.post('/api/rate-learner', function(req, res) {
 			// console.log(isInstructor);
 
 			if (isInstructor) {
-				Users.findOneAndUpdate({_id: req.body.userId}, {sumOfRatingAsLearner:req.body.newSumOfRatingAsLearner,numOfRatingAsLearner:req.body.newNumOfRatingAsLearner}, {new:true}, function(err, classes) {
-					if (err) {
-						res.json({
-							status: "error",
-							result:
-								err
-						});
-					} else {
-						res.json({ status: "success" });
+				Users.findOneAndUpdate(
+					{ _id: req.body.userId },
+					{
+						sumOfRatingAsLearner: req.body.newSumOfRatingAsLearner,
+						numOfRatingAsLearner: req.body.newNumOfRatingAsLearner
+					},
+					{ new: true },
+					function(err, classes) {
+						if (err) {
+							res.json({
+								status: "error",
+								result: err
+							});
+						} else {
+							res.json({ status: "success" });
+						}
 					}
-				});
-			}
-			else {
+				);
+			} else {
 				res.json({
 					status: "error",
-					result:
-						"you are not an instructor of the student"
+					result: "you are not an instructor of the student"
 				});
 			}
 		});
-
 });
 
-app.get('/*', function(req, res) {
-	res.sendFile(path.join(__dirname, 'build', 'index.html'));
+app.get("/*", function(req, res) {
+	res.sendFile(path.join(__dirname, "build", "index.html"));
 });
-
 
 /*
 // Temporary

@@ -1,15 +1,19 @@
 import React, { Component } from "react";
 import Rater from "react-rater";
 import "react-rater/lib/react-rater.css";
-
+import Alert from "react-bootstrap/Alert";
 import "./InstructorProfile.css";
+import { Comment } from "../../components/Comment";
 
 class InstructorProfile extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			instructor: {}
+			instructor: {},
+			comments: [],
+			noCommentAlert: true,
+			textAreaValue: ""
 		};
 	}
 
@@ -41,7 +45,41 @@ class InstructorProfile extends Component {
 		const { userId } = this.props.match.params;
 		fetch("/api/instructor/" + userId + "/info")
 			.then(response => response.json())
-			.then(data => this.setState({ instructor: data[0] }));
+			.then(data => {
+				this.setState({ instructor: data[0] });
+				this.getComments();
+			});
+
+	}
+
+	getComments() {
+		const { userId } = this.props.match.params;
+		fetch("/api/instructor/" + userId + "/comments")
+			.then(response => response.json())
+			.then(data => {
+				for (let item of data) {
+					fetch("/api/comments/" + item._id)
+					.then(response => response.json())
+					.then(data => {
+						data.map(function(comment, index) {
+							comment['className'] = item.name;
+						})
+						this.setState({ comments: this.state.comments.concat(data) }, function() {
+							if (this.state.comments.length === 0) {
+								this.setState({
+									noCommentAlert: true,
+									textAreaValue: ""
+								});
+							} else {
+								this.setState({
+									noCommentAlert: false,
+									textAreaValue: ""
+								});
+							}
+				})
+					});
+				}
+			});
 	}
 
 	render() {
@@ -53,33 +91,44 @@ class InstructorProfile extends Component {
 				</div>
 			);
 		}
+
+		const commentData = this.state.comments.map(function(data, index) {
+			return (
+				<Comment
+					key={index}
+					name={data.name}
+					className={data.className}
+					commentText={data.commentText}
+					commentDate={data.commentDate}
+                    userID={data.userID}
+                    userProfilePic={data.userProfilePic}
+				/>
+			);
+		});
+
 		return (
 			<div className="instructor-profile-page">
 				<h3 className="title">Instructor {instructor.name}</h3>
 				<h4>Students Rating</h4>
-				<Rater total={5} rating={this.instructorRating()} />
+				<Rater total={5} rating={this.instructorRating()} interactive={false} />
 				<hr />
 				<h4>Description</h4>
 				<p>{instructor.description}</p>
 				<hr />
 				<hr />
-				<h4>Comments</h4>
 				<br />
-				{instructor.comments === undefined ? (
-					<div className="no-comments">No comments yet.</div>
-				) : (
-					instructor.comments.map(comment => (
-						<div className="comment">
-							<span className="comment-name">{comment.name}</span>
-							<br />
-							<span className="comment-content">
-								{comment.content}
-							</span>
-							<br />
-							<span className="comment-date">{comment.date}</span>
-						</div>
-					))
-				)}
+				<div className="detail-comments-container">
+							<h3>Comments</h3>
+							{commentData}
+								{this.state.noCommentAlert ? (
+									<Alert
+										variant="warning"
+										className="not-comment-alert"
+									>
+										There are no comments yet for this instructor.
+									</Alert>
+								) : null}
+				</div>
 			</div>
 		);
 	}
