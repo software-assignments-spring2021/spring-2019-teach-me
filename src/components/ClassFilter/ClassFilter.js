@@ -47,21 +47,29 @@ class ClassFilter extends Component {
                         <option value={undefined}>Max Price...</option>
                         <option value={50}>$50</option>
                         <option value={100}>$100</option>
+                        <option value={200}>$200</option>
                     </Form.Control>
                 </Form.Group>
                 <Form.Group controlId="minRating" onChange={this.filterResults.bind(this)}>
                     <Form.Control as="select" >
                         <option value={undefined}>Min Rating...</option>
                         <option>8</option>
+                        <option>8.5</option>
                         <option>9</option>
+                        <option>9.5</option>
                     </Form.Control>
                 </Form.Group>
                 <Form.Group controlId="classCategory" onChange={this.filterResults.bind(this)}>
                     <Form.Control as="select" >
                         <option value={undefined}>Class Category...</option>
-                        <option>Music</option>
-                        <option>Art</option>
-                        <option>Language</option>
+                        <option value="Art/Creative">Art/Creative</option>
+                        <option value="Music">Music</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Language">Language</option>
+                        <option value="Sports">Sports</option>
+                        <option value="Lifestyle">Lifestyle</option>
+                        <option value="Business">Business</option>
+                        <option value="Miscellaneous">Miscellaneous</option>
                     </Form.Control>
                 </Form.Group>
                 { this.props.displayArchiveOptions 

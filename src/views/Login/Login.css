@@ -1,3 +1,28 @@
 .btn {
 	background-color: #17a2b8 !important;
 }
+
+.login-form {
+	width: 60%;
+	margin: 4rem auto;
+}
+
+.login-input-fields {
+	margin-top: 2rem;
+}
+
+#email, #password {
+	margin-top: 0.5rem;
+}
+
+.input-field-2 {
+	margin-bottom: 0;
+}
+
+.login-buttons > button {
+	width: 150px;
+	border-radius: 3px;
+	letter-spacing: 1.5px;
+	margin-top: 1rem;
+	color: white;
+}
