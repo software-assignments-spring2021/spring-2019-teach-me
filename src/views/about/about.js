@@ -1,5 +1,6 @@
 import React from 'react';
 import './About.css'
+import Jumbotron from "react-bootstrap/Jumbotron";
 
 const About = props => {
 	return (
