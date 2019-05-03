@@ -4,6 +4,8 @@ import "react-rater/lib/react-rater.css";
 import Alert from "react-bootstrap/Alert";
 import "./InstructorProfile.css";
 import { Comment } from "../../components/Comment";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
 class InstructorProfile extends Component {
 	constructor(props) {
@@ -25,12 +27,42 @@ class InstructorProfile extends Component {
 		return sumOfRatingAsInstructor / numOfRatingAsInstructor;
 	}
 
-	rateInstructor(rating) {
-		const { userId } = this.props.match.params;
-		fetch("/api/instructor/" + userId + "/rating", {
-			method: "POST",
-			body: rating
-		}).then(response => {});
+	rateInstructor(event) {
+
+		if(this.props.auth.isAuthenticated) {
+			console.log(this.state.instructor)
+			console.log(event.rating);
+
+			const newRatingObj = {};
+
+			const newSumOfRatingAsInstructor = this.state.instructor.sumOfRatingAsInstructor + event.rating;
+			console.log(newSumOfRatingAsInstructor);
+			newRatingObj.newSumOfRatingAsInstructor = newSumOfRatingAsInstructor;
+			const newNumOfRatingAsInstructor = this.state.instructor.numOfRatingAsInstructor + 1;
+			console.log(newNumOfRatingAsInstructor);
+			newRatingObj.newNumOfRatingAsInstructor = newNumOfRatingAsInstructor;
+
+			const instructorId = this.props.match.params.userId;
+			newRatingObj.instructorId = instructorId;
+			const userId = this.props.auth.user.id;
+			newRatingObj.userId = userId;
+			console.log(newRatingObj);
+
+			fetch("/api/rate-instructor/", {
+				method: "POST",
+				body: JSON.stringify(newRatingObj),
+				headers: {
+					"Content-Type": "application/json"
+				}
+			})
+					.then(response => response.json())
+					.then(data => this.setState({rateSuccess: data}));
+
+		}
+
+		else {
+			this.props.history.push("/login");
+		}
 	}
 
 	addComment(comment) {
@@ -112,6 +144,9 @@ class InstructorProfile extends Component {
 				<h4>Students Rating</h4>
 				<Rater total={5} rating={this.instructorRating()} interactive={false} />
 				<hr />
+				<h4>Rating</h4>
+				<Rater total={5} onRate={this.rateInstructor.bind(this)} />
+				<hr />
 				<h4>Description</h4>
 				<p>{instructor.description}</p>
 				<hr />
@@ -134,4 +169,12 @@ class InstructorProfile extends Component {
 	}
 }
 
-export default InstructorProfile;
+InstructorProfile.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(InstructorProfile);
