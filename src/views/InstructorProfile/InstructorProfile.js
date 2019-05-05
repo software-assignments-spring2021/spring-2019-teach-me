@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import Rater from "react-rater";
 import "react-rater/lib/react-rater.css";
 import Alert from "react-bootstrap/Alert";
+import Pagination from "react-js-pagination";
 import "./InstructorProfile.css";
 import { Comment } from "../../components/Comment";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { ClassDisplay } from '../../components/ClassDisplay';
 
 class InstructorProfile extends Component {
 	constructor(props) {
@@ -197,14 +199,14 @@ class InstructorProfile extends Component {
 		return (
 			<div className="instructor-profile-page">
 				<h3 className="title">Instructor {instructor.name}</h3>
-				<h4>Students Rating</h4>
+				<h4>Current Rating</h4>
 				<Rater
 					total={5}
 					rating={this.instructorRating()}
 					interactive={false}
 				/>
 				<hr />
-				<h4>Rating</h4>
+				<h4>Rate this instructor</h4>
 				<Rater total={5} onRate={this.rateInstructor.bind(this)} />
 				<hr />
 				<h4>Description</h4>
