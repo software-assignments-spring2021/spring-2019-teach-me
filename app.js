@@ -504,23 +504,33 @@ app.post("/api/my-account/:userId", function(req, res) {
 });
 
 app.get("/api/instructors", function(req, res) {
-	Users.find({}, function(err, users, count) {
-		const returnValue = [];
-		for (let i = 0; i < users.length; i++) {
-			const newUser = users[i].toObject();
-			if (newUser.numOfRatingAsInstructor >= 0) {
-				var rating =
-					newUser.sumOfRatingAsInstructor /
-					newUser.numOfRatingAsInstructor;
-				if (Number.isNaN(rating)) {
-					rating = 0;
-				}
-				newUser.rating = rating;
-				returnValue.push(newUser);
+	Class
+		.find({})
+		.populate('instructor')
+		.exec(function(err, classes, count) {
+			const instructors = [];
+			for (let i = 0; i < classes.length; i++) {
+				const temp = classes[i].toObject();
+				const instructor = temp.instructor;
+				instructor.numOfRatingAsInstructor < 1 ? instructor.rating = 'N/A' : instructor.rating = (instructor.sumOfRatingAsInstructor / instructor.numOfRatingAsInstructor).toFixed(2);
+				instructors.push(instructor);
 			}
-		}
-		res.json(returnValue);
-	});
+
+			const uniqueID = []
+			const uniqueInstructors = [];
+			
+			//removing duplicates in array
+			for (let i = 0; i < instructors.length; i++) {
+				const current = instructors[i];
+				const currentID = current._id;
+				if (uniqueID.indexOf(currentID.toString()) === -1) {
+					uniqueID.push(currentID.toString());
+					uniqueInstructors.push(current);
+				}
+			}
+
+			res.json(uniqueInstructors);
+		});
 });
 
 app.post("/api/images/:userId", parser.single("profile-pic"), (req, res) => {
