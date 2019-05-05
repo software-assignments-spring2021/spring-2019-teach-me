@@ -7,7 +7,7 @@ import "./InstructorProfile.css";
 import { Comment } from "../../components/Comment";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { ClassDisplay } from '../../components/ClassDisplay';
+import { ClassDisplay } from "../../components/ClassDisplay";
 
 class InstructorProfile extends Component {
 	constructor(props) {
@@ -196,6 +196,10 @@ class InstructorProfile extends Component {
 			);
 		});
 
+		const divStyle = {
+			width: '100%'
+		};
+
 		return (
 			<div className="instructor-profile-page">
 				<h3 className="title">Instructor {instructor.name}</h3>
@@ -214,16 +218,7 @@ class InstructorProfile extends Component {
 				<hr />
 				<hr />
 				<br />
-				<div className="detail-comments-container">
-					<h3>Comments</h3>
-					{commentData}
-					{this.state.noCommentAlert ? (
-						<Alert variant="warning" className="not-comment-alert">
-							There are no comments yet for this instructor.
-						</Alert>
-					) : null}
-				</div>
-				<div className="class-listing-display">
+				<div className="class-listing-display" style={divStyle}>
 					<h3>Available Classes</h3>
 					{toDisplay}
 					{this.state.noTeachClassWarning ? (
@@ -241,6 +236,15 @@ class InstructorProfile extends Component {
 							onChange={this.handlePageChange.bind(this)}
 						/>
 					</div>
+				</div>
+				<div className="detail-comments-container">
+					<h3>Comments</h3>
+					{commentData}
+					{this.state.noCommentAlert ? (
+						<Alert variant="warning" className="not-comment-alert">
+							There are no comments yet for this instructor.
+						</Alert>
+					) : null}
 				</div>
 			</div>
 		);
