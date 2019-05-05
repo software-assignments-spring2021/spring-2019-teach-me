@@ -15,7 +15,11 @@ class InstructorProfile extends Component {
 			instructor: {},
 			comments: [],
 			noCommentAlert: true,
-			textAreaValue: ""
+			textAreaValue: "",
+			classListing: [],
+			noTeachClassWarning: false,
+			activePage: 1,
+			currentSection: 0
 		};
 	}
 
