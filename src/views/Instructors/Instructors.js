@@ -24,35 +24,7 @@ class Instructors extends Component {
 	componentDidMount() {
 		fetch('/api/instructors')
 			.then(response => response.json())
-			.then(data => {
-				this.setState({instructorListing: data, allInstructors: data}, () => {
-
-					const allInstructors = this.state.allInstructors;
-					var total = {};
-
-						for (let i = 0; i < allInstructors.length; i++) {
-							var temp = [];
-							// console.log(temp);
-							const url = '/api/class-history-teach/' + allInstructors[i]._id;
-							console.log(url);
-							fetch(url)
-								.then(response => response.json())
-								.then(data => {
-									console.log(data);
-									for (let j = 0; j < data.length; j++) {
-										// console.log(data[j]);
-										temp.push(data[j].category);
-									}
-									// console.log(temp);
-									total[i] = temp;
-									temp = [];
-								})
-						}
-
-					console.log(total);
-					this.setState({categories: total});
-				});
-			})
+			.then(data => this.setState({instructorListing: data, allInstructors: data}));	
 	}
 
 	handlePageChange(pg) {
