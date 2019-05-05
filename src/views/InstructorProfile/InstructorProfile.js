@@ -31,19 +31,38 @@ class InstructorProfile extends Component {
 		return sumOfRatingAsInstructor / numOfRatingAsInstructor;
 	}
 
+	displayTeach() {
+		const { userId } = this.props.match.params;
+		this.setState({ activePage: 1, filterWarning: false });
+		const url = "/api/class-history-teach/" + userId;
+		fetch(url)
+			.then(response => response.json())
+			.then(data => {
+				if (data.length === 0) {
+					this.setState({
+						noTeachClassWarning: true,
+						classListing: data,
+						allClasses: data
+					});
+				} else {
+					this.setState({
+						noTeachClassWarning: false,
+						classListing: data,
+						allClasses: data
+					});
+				}
+			});
+	}
+
 	rateInstructor(event) {
-
-		if(this.props.auth.isAuthenticated) {
-			console.log(this.state.instructor)
-			console.log(event.rating);
-
+		if (this.props.auth.isAuthenticated) {
 			const newRatingObj = {};
 
-			const newSumOfRatingAsInstructor = this.state.instructor.sumOfRatingAsInstructor + event.rating;
-			console.log(newSumOfRatingAsInstructor);
+			const newSumOfRatingAsInstructor =
+				this.state.instructor.sumOfRatingAsInstructor + event.rating;
 			newRatingObj.newSumOfRatingAsInstructor = newSumOfRatingAsInstructor;
-			const newNumOfRatingAsInstructor = this.state.instructor.numOfRatingAsInstructor + 1;
-			console.log(newNumOfRatingAsInstructor);
+			const newNumOfRatingAsInstructor =
+				this.state.instructor.numOfRatingAsInstructor + 1;
 			newRatingObj.newNumOfRatingAsInstructor = newNumOfRatingAsInstructor;
 
 			const instructorId = this.props.match.params.userId;
@@ -59,12 +78,9 @@ class InstructorProfile extends Component {
 					"Content-Type": "application/json"
 				}
 			})
-					.then(response => response.json())
-					.then(data => this.setState({rateSuccess: data}));
-
-		}
-
-		else {
+				.then(response => response.json())
+				.then(data => this.setState({ rateSuccess: data }));
+		} else {
 			this.props.history.push("/login");
 		}
 	}
@@ -85,7 +101,11 @@ class InstructorProfile extends Component {
 				this.setState({ instructor: data[0] });
 				this.getComments();
 			});
+		this.displayTeach();
+	}
 
+	handlePageChange(pg) {
+		this.setState({ activePage: pg });
 	}
 
 	getComments() {
@@ -95,30 +115,62 @@ class InstructorProfile extends Component {
 			.then(data => {
 				for (let item of data) {
 					fetch("/api/comments/" + item._id)
-					.then(response => response.json())
-					.then(data => {
-						data.map(function(comment, index) {
-							comment['className'] = item.name;
-						})
-						this.setState({ comments: this.state.comments.concat(data) }, function() {
-							if (this.state.comments.length === 0) {
-								this.setState({
-									noCommentAlert: true,
-									textAreaValue: ""
-								});
-							} else {
-								this.setState({
-									noCommentAlert: false,
-									textAreaValue: ""
-								});
-							}
-				})
-					});
+						.then(response => response.json())
+						.then(data => {
+							data.map(function(comment, index) {
+								comment["className"] = item.name;
+							});
+							this.setState(
+								{ comments: this.state.comments.concat(data) },
+								function() {
+									if (this.state.comments.length === 0) {
+										this.setState({
+											noCommentAlert: true,
+											textAreaValue: ""
+										});
+									} else {
+										this.setState({
+											noCommentAlert: false,
+											textAreaValue: ""
+										});
+									}
+								}
+							);
+						});
 				}
 			});
 	}
 
 	render() {
+		const classListData = this.state.classListing.map(function(
+			data,
+			index
+		) {
+			return (
+				<ClassDisplay
+					key={index}
+					title={data.name}
+					description={data.description}
+					price={data.price}
+					instructor={data.instructorName}
+					rating={data.rating}
+					category={data.category}
+					slug={data._id}
+					instructorProfilePic={data.instructorProfilePic}
+				/>
+			);
+		});
+
+		const CLASSES_PER_PAGE = 4;
+
+		const startIdx = (this.state.activePage - 1) * CLASSES_PER_PAGE;
+		const endIdx = startIdx + CLASSES_PER_PAGE;
+		const toDisplay = classListData.slice(startIdx, endIdx);
+		const pageRange = Math.min(
+			5,
+			classListData.length / CLASSES_PER_PAGE + 1
+		);
+
 		const { instructor } = this.state;
 		if (instructor.name === undefined) {
 			return (
@@ -136,8 +188,8 @@ class InstructorProfile extends Component {
 					className={data.className}
 					commentText={data.commentText}
 					commentDate={data.commentDate}
-                    userID={data.userID}
-                    userProfilePic={data.userProfilePic}
+					userID={data.userID}
+					userProfilePic={data.userProfilePic}
 				/>
 			);
 		});
@@ -146,7 +198,11 @@ class InstructorProfile extends Component {
 			<div className="instructor-profile-page">
 				<h3 className="title">Instructor {instructor.name}</h3>
 				<h4>Students Rating</h4>
-				<Rater total={5} rating={this.instructorRating()} interactive={false} />
+				<Rater
+					total={5}
+					rating={this.instructorRating()}
+					interactive={false}
+				/>
 				<hr />
 				<h4>Rating</h4>
 				<Rater total={5} onRate={this.rateInstructor.bind(this)} />
@@ -157,16 +213,32 @@ class InstructorProfile extends Component {
 				<hr />
 				<br />
 				<div className="detail-comments-container">
-							<h3>Comments</h3>
-							{commentData}
-								{this.state.noCommentAlert ? (
-									<Alert
-										variant="warning"
-										className="not-comment-alert"
-									>
-										There are no comments yet for this instructor.
-									</Alert>
-								) : null}
+					<h3>Comments</h3>
+					{commentData}
+					{this.state.noCommentAlert ? (
+						<Alert variant="warning" className="not-comment-alert">
+							There are no comments yet for this instructor.
+						</Alert>
+					) : null}
+				</div>
+				<div className="class-listing-display">
+					<h3>Available Classes</h3>
+					{toDisplay}
+					{this.state.noTeachClassWarning ? (
+						<Alert variant="danger">
+							This instructor is not teaching any classes at this
+							time.
+						</Alert>
+					) : null}
+					<div className="pagination-container">
+						<Pagination
+							activePage={this.state.activePage}
+							itemsCountPerPage={CLASSES_PER_PAGE}
+							totalItemsCount={classListData.length}
+							pageRangeDisplayed={pageRange}
+							onChange={this.handlePageChange.bind(this)}
+						/>
+					</div>
 				</div>
 			</div>
 		);
@@ -174,11 +246,11 @@ class InstructorProfile extends Component {
 }
 
 InstructorProfile.propTypes = {
-    auth: PropTypes.object.isRequired
+	auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth
+	auth: state.auth
 });
 
 export default connect(mapStateToProps)(InstructorProfile);
