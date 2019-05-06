@@ -140,7 +140,7 @@ class UserProfile extends Component {
                                 <h3>Email</h3>
                                 <p>{userData.email}</p>
                                 <h3>Introduction</h3>
-                                { userData.introduction === undefined ? <p>[This user has not provided introduction.] </p> : <p>{userData.introduction}</p> }
+                                { userData.introduction !== undefined ? <p>{userData.introduction}</p> : <Alert variant="warning">This user has not provided a self-introduction.</Alert>}
                             </div>
                         </Col>
                     </Row>
@@ -148,6 +148,7 @@ class UserProfile extends Component {
                         <div className='rating-container'>
                             <h3>Rating</h3>
                             <Rater total = {5} rating = {userData.learnerRating} interactive = {false}/>
+                            {userData.learnerRating ? <p className='rating-number'>{userData.learnerRating.toFixed(2)}</p> : null}
                             <p>Rate this learner: </p>
                             <Rater total={5} onRate={this.rateLearner} />
                             {this.state.ratingSubmitStatus.status ===
@@ -174,7 +175,7 @@ class UserProfile extends Component {
                         </div>
                     </Row>
                     <Row>
-                        <div className='class-history-container'>
+                        <div className='class-history-container class-history-container-2'>
                             <h3>Classes Taken by {userData.name}</h3>
                             {toDisplay}
                             { this.state.noClassWarning ? <Alert variant='danger'>It seems that the user have not taken any class at this time.</Alert> : null }

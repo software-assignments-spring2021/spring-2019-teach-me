@@ -15,6 +15,7 @@ class Register extends Component {
       email: "",
       password: "",
       password2: "",
+      introduction: "",
       errors: {}
     };
   }
@@ -39,13 +40,14 @@ onChange = e => {
   };
 onSubmit = e => {
     e.preventDefault();
-const newUser = {
-      name: this.state.name,
-      email: this.state.email,
-      password: this.state.password,
-      password2: this.state.password2
-    };
-this.props.registerUser(newUser, this.props.history); 
+    const newUser = {
+          name: this.state.name,
+          email: this.state.email,
+          password: this.state.password,
+          password2: this.state.password2,
+          introduction: this.state.introduction
+        };
+    this.props.registerUser(newUser, this.props.history); 
   };
 
 
@@ -90,6 +92,20 @@ return (
               />
               <label htmlFor="email">Email</label>
               <span className="red-text">{errors.email}</span>
+            </div>
+            <div className="input-field">
+              <input
+                onChange={this.onChange}
+                value={this.state.introduction}
+                error={errors.introduction}
+                id="introduction"
+                type="text"
+                className={classnames("", {
+                  invalid: errors.introduction
+                })}
+              />
+              <label htmlFor="introduction">A short introduction about yourself (as an Instructor and/or a Learner)</label>
+              <span className="red-text">{errors.introduction}</span>
             </div>
             <div className="input-field">
               <input
