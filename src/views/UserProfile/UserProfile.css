@@ -19,7 +19,7 @@
     margin-bottom: 1em;
 }
 
-.rating-container {
+.rating-container, .class-history-container-2 {
     border-top: 1px solid rgba(23, 162, 184, 0.5);
     margin-left: 4%;
     margin-right: 4%;

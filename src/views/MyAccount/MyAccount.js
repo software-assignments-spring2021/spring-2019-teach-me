@@ -29,6 +29,7 @@ class MyAccount extends Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleNameChange = this.handleNameChange.bind(this);
 		this.handleEmailChange = this.handleEmailChange.bind(this);
+		this.handleIntroductionChange = this.handleIntroductionChange.bind(this);
 		this.handleEditClick = this.handleEditClick.bind(this);
 		this.handleClassHistory = this.handleClassHistory.bind(this);
 		this.handleLogOut = this.handleLogOut.bind(this);
@@ -76,6 +77,12 @@ class MyAccount extends Component {
 	handleEmailChange(event) {
 		let newUser = this.state.user;
 		newUser.email = event.target.value;
+		this.setState({ user: newUser });
+	}
+
+	handleIntroductionChange(event) {
+		let newUser = this.state.user;
+		newUser.introduction = event.target.value;
 		this.setState({ user: newUser });
 	}
 
@@ -182,6 +189,16 @@ class MyAccount extends Component {
 											value={this.state.user.email}
 											readOnly={this.state.IsReadOnly}
 											onChange={this.handleEmailChange}
+											required
+										/>
+										<br />
+										<label>Self Introduction</label>
+										<input
+											type="text"
+											name="introduction"
+											value={this.state.user.introduction}
+											readOnly={this.state.IsReadOnly}
+											onChange={this.handleIntroductionChange}
 											required
 										/>
 										<br />

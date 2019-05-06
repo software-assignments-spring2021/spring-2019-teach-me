@@ -8,6 +8,28 @@
     padding-bottom: 20px;
 }
 
+.class-listing-display {
+    border-top: 1px solid rgba(23,162,184,.5);
+}
+
+.class-listing-display > h3 {
+    padding-top: 1.5%;
+}
+
+.react-rater, .rating-number {
+    display: inline-block;
+}
+
+.rating-number {
+    margin-left: 2%;
+    font-weight: bold;
+}
+
+.detail-comments-container-2 {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
 .comment {
     margin: 10px;
     height: 90px;

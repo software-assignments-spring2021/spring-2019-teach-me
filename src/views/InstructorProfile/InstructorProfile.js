@@ -21,7 +21,8 @@ class InstructorProfile extends Component {
 			classListing: [],
 			noTeachClassWarning: false,
 			activePage: 1,
-			currentSection: 0
+			currentSection: 0,
+			ratingSubmitStatus: {}
 		};
 	}
 
@@ -81,7 +82,7 @@ class InstructorProfile extends Component {
 				}
 			})
 				.then(response => response.json())
-				.then(data => this.setState({ rateSuccess: data }));
+				.then(data => this.setState({ ratingSubmitStatus: data }));
 		} else {
 			this.props.history.push("/login");
 		}
@@ -100,7 +101,11 @@ class InstructorProfile extends Component {
 		fetch("/api/instructor/" + userId + "/info")
 			.then(response => response.json())
 			.then(data => {
-				this.setState({ instructor: data[0] });
+				const instructorObj = data[0];
+				if (!instructorObj.introduction || instructorObj.introduction.length < 1) {
+					instructorObj.introduction = undefined;
+				}
+				this.setState({ instructor: instructorObj });
 				this.getComments();
 			});
 		this.displayTeach();
@@ -209,13 +214,34 @@ class InstructorProfile extends Component {
 					rating={this.instructorRating()}
 					interactive={false}
 				/>
+				<p className="rating-number">{this.instructorRating().toFixed(2)}</p>
 				<hr />
 				<h4>Rate this instructor</h4>
 				<Rater total={5} onRate={this.rateInstructor.bind(this)} />
+				{this.state.ratingSubmitStatus.status ===
+					"success" ? (
+						<Alert
+							variant="success"
+							className="success-alert"
+						>
+							You have successfully submitted your
+							rating!
+						</Alert>
+					) : null}
+				{this.state.ratingSubmitStatus.status ===
+					"error" ? (
+						<Alert
+							variant="danger"
+							className="error-alert"
+						>
+							Oops, it seems that we have encountered
+							a problem:{" "}
+							{this.state.ratingSubmitStatus.result}.
+						</Alert>
+					) : null}
 				<hr />
 				<h4>Description</h4>
-				<p>{instructor.description}</p>
-				<hr />
+				{instructor.introduction ? <p>{instructor.introduction}</p> : <Alert variant="warning">This instructor has not provided a self-introduction.</Alert>}
 				<hr />
 				<br />
 				<div className="class-listing-display" style={divStyle}>
@@ -237,7 +263,7 @@ class InstructorProfile extends Component {
 						/>
 					</div>
 				</div>
-				<div className="detail-comments-container">
+				<div className="detail-comments-container detail-comments-container-2">
 					<h3>Comments</h3>
 					{commentData}
 					{this.state.noCommentAlert ? (

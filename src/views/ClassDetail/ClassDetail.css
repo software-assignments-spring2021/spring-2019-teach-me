@@ -53,6 +53,7 @@
 
 .student-list-container .card {
     margin: 1em;
+    cursor: pointer;
 }
 
 .student-list-container .card-body {
