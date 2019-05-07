@@ -31,7 +31,13 @@ class InstructorProfile extends Component {
 			sumOfRatingAsInstructor,
 			numOfRatingAsInstructor
 		} = this.state.instructor;
-		return sumOfRatingAsInstructor / numOfRatingAsInstructor;
+
+		if (numOfRatingAsInstructor < 1) {
+			return undefined;
+		}
+		else {
+			return sumOfRatingAsInstructor / numOfRatingAsInstructor;
+		}
 	}
 
 	displayTeach() {
@@ -209,12 +215,23 @@ class InstructorProfile extends Component {
 			<div className="instructor-profile-page">
 				<h3 className="title">Instructor {instructor.name}</h3>
 				<h4>Current Rating</h4>
-				<Rater
-					total={5}
-					rating={this.instructorRating()}
-					interactive={false}
-				/>
-				<p className="rating-number">{this.instructorRating().toFixed(2)}</p>
+				{this.instructorRating() ? 
+					<div className="current-rating-container">
+						<Rater
+							total={5}
+							rating={this.instructorRating()}
+							interactive={false}
+						/>
+						<p className="rating-number">{this.instructorRating().toFixed(2)}</p>
+					</div>
+				:
+					<Alert
+						variant="warning"
+						className="error-alert"
+					>
+						We don't have enough rating for this instructor yet.
+					</Alert>
+				}
 				<hr />
 				<h4>Rate this instructor</h4>
 				<Rater total={5} onRate={this.rateInstructor.bind(this)} />

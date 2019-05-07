@@ -34,7 +34,7 @@
 }
 
 .detail-buttons-container, .alerts-container {
-    text-align: center;
+    /* text-align: center; */
     margin: 0 auto;
 }
 
@@ -58,6 +58,11 @@
 
 .student-list-container .card-body {
     width: 23em;
+}
+
+.rate-class-label {
+    margin-top: 1.5%;
+    margin-bottom: 0;
 }
 
 .detail-comments-container  {
