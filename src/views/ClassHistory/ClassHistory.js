@@ -148,7 +148,7 @@ class ClassHistory extends Component {
 			}
 
 			if (query['minRating'] !== 'Min Rating...') {
-				if (c.rating < parseFloat(query['minRating'])) {
+				if (c.rating === 'Not Available' || c.rating < parseFloat(query['minRating'])) {
 					includeInResult = false;
 				}
 			}

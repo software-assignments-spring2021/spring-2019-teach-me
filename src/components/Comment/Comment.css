@@ -1,0 +1,8 @@
+.user-profile-link {
+    color: #17a2b8!important;
+}
+
+.user-profile-link:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}

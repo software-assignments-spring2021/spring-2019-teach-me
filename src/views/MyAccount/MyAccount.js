@@ -217,18 +217,35 @@ class MyAccount extends Component {
 								<div class="my-ratings">
 									<h3>My Ratings</h3>
 									<h5>Rating as Insturctor</h5>
-									<Rater
-										total={5}
-										rating={this.state.user.instructorRating}
-										interactive={false}
-									/>
+									{this.state.user.instructorRating ?
+										<div className='current-rating-container'>
+											<Rater total = {5} rating = {this.state.user.instructorRating} interactive = {false}/>
+											<p className="rating-number">{this.state.user.instructorRating}</p>
+										</div>
+									:
+										<Alert
+											variant="warning"
+											className="error-alert"
+										>
+											You don't have enough rating as an instructor yet.
+										</Alert>
+									}
 									<br />
 									<h5>Rating as Learner</h5>
-									<Rater
-										total={5}
-										rating={this.state.user.learnerRating}
-										interactive={false}
-									/>
+									{this.state.user.learnerRating ?
+										<div className='current-rating-container'>
+											<Rater total = {5} rating = {this.state.user.learnerRating} interactive = {false}/>
+											<p className="rating-number">{this.state.user.learnerRating}</p>
+										</div>
+									:
+										<Alert
+											variant="warning"
+											className="error-alert"
+										>
+											You don't have enough rating as a learner yet.
+										</Alert>
+									}
+									<br />
 								</div>
 							</div>
 						</Col>

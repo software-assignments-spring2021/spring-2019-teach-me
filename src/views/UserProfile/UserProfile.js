@@ -36,7 +36,7 @@ class UserProfile extends Component {
         console.log(url);
         fetch(url)
           .then(response => response.json())
-          .then(data => this.setState({currentUser:data[0]}))
+          .then(data => this.setState({currentUser: data[0]}))
         
         // const data = {"sumOfRatingAsInstructor":0,"numOfRatingAsInstructor":0,"sumOfRatingAsLearner":0,"numOfRatingAsLearner":0,"_id":"5cafbea33b93c520a141dfa7","name":"test","email":"hi@test.com","password":"$2a$10$tL1NRESoZ8sfZRhxvOOpHeL17yDi5cHLS98XZVVUWAU6U89di/Tsi","date":"2019-04-11T22:24:35.651Z","__v":0,"instructorRating":0,"learnerRating":0};
         // this.setState({currentUser: data});
@@ -147,9 +147,20 @@ class UserProfile extends Component {
                     <Row>
                         <div className='rating-container'>
                             <h3>Rating</h3>
-                            <Rater total = {5} rating = {userData.learnerRating} interactive = {false}/>
-                            {userData.learnerRating ? <p className='rating-number'>{userData.learnerRating.toFixed(2)}</p> : null}
-                            <p>Rate this learner: </p>
+                            {userData.learnerRating ?
+								<div className='current-rating-container'>
+									<Rater total = {5} rating = {userData.learnerRating} interactive = {false}/>
+									<p className="rating-number">{userData.learnerRating}</p>
+								</div>
+							:
+								<Alert
+									variant="warning"
+									className="error-alert"
+								>
+									We don't have enough rating for this learner yet.
+								</Alert>
+                            }
+                            <h4 className="rate-class-label">Rate this learner: </h4>
                             <Rater total={5} onRate={this.rateLearner} />
                             {this.state.ratingSubmitStatus.status ===
                             "success" ? (

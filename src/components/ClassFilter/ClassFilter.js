@@ -53,10 +53,10 @@ class ClassFilter extends Component {
                 <Form.Group controlId="minRating" onChange={this.filterResults.bind(this)}>
                     <Form.Control as="select" >
                         <option value={undefined}>Min Rating...</option>
-                        <option>8</option>
-                        <option>8.5</option>
-                        <option>9</option>
-                        <option>9.5</option>
+                        <option>3</option>
+                        <option>3.5</option>
+                        <option>4</option>
+                        <option>4.5</option>
                     </Form.Control>
                 </Form.Group>
                 <Form.Group controlId="classCategory" onChange={this.filterResults.bind(this)}>

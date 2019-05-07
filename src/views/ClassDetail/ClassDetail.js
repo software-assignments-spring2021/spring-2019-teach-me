@@ -551,8 +551,20 @@ class ClassDetail extends Component {
                     <Row>
                         <div className='rating-container'>
                             <h3>Rating</h3>
-                            <Rater total = {5} rating = {classData.rating} interactive = {false}/>
-                            <p>Rate this class: </p>
+							{classData.rating ?
+								<div className='current-rating-container'>
+									<Rater total = {5} rating = {classData.rating} interactive = {false}/>
+									<p className="rating-number">{classData.rating}</p>
+								</div>
+							:
+								<Alert
+									variant="warning"
+									className="error-alert"
+								>
+									We don't have enough rating for this class yet.
+								</Alert>
+							}
+                            <h4 className="rate-class-label">Rate this class: </h4>
 							<Rater total={5} onRate={this.rateClass} />
                             {this.state.ratingSubmitStatus.status ===
                             "success" ? (

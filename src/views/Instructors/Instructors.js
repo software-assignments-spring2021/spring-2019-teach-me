@@ -69,7 +69,7 @@ class Instructors extends Component {
 			const c = allInstructors[i];
 
 			if (query['minRating'] !== 'Min Rating...') {
-				if (c.rating < parseFloat(query['minRating'])) {
+				if (c.rating === 'Not Available' || c.rating < parseFloat(query['minRating'])) {
 					includeInResult = false;
 				}
 			}

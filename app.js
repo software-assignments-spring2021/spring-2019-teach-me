@@ -88,10 +88,15 @@ app.get("/api/classes", function(req, res) {
 			for (let i = 0; i < classes.length; i++) {
 				if (classes[i].archive === false) {
 					const classAvailable = classes[i].toObject();
-					classAvailable.instructorName =
-						classAvailable.instructor.name;
-					classAvailable.instructorProfilePic =
-						classAvailable.instructor.profilePicURL;
+
+					classAvailable.instructorName = classAvailable.instructor.name;
+					classAvailable.instructorProfilePic = classAvailable.instructor.profilePicURL;
+
+					classAvailable.rating = 'Not Available';
+					if (classAvailable.numOfRating > 0) {
+						classAvailable.rating = (classAvailable.sumOfRating / classAvailable.numOfRating).toFixed(2);
+					}
+
 					returnValue.push(classAvailable);
 				}
 			}
@@ -111,7 +116,13 @@ app.get("/api/classes/:classId", function(req, res) {
 			classData.instructorID = classData.instructor._id;
 			classData.instructorProfilePic = classData.instructor.profilePicURL;
 			classData.instructor.password = null;
+			classData.rating = undefined;
+			
+			if (classData.numOfRating > 0) {
+				classData.rating = (classData.sumOfRating / classData.numOfRating).toFixed(2);
+			}
 
+			/*
 			var rating = 0;
 			if (classData.sumOfRating >= 0 && classData.numOfRating >= 0) {
 				rating = classData.sumOfRating / classData.numOfRating;
@@ -120,6 +131,7 @@ app.get("/api/classes/:classId", function(req, res) {
 				}
 			}
 			classData.rating = rating;
+			*/
 
 			if (!(classData.sumOfRating >= 0)) {
 				classData.sumOfRating = 0;
@@ -128,7 +140,7 @@ app.get("/api/classes/:classId", function(req, res) {
 			if (!(classData.numOfRating >= 0)) {
 				classData.numOfRating = 0;
 			}
-
+			
 			res.json(classData);
 		});
 });
@@ -166,10 +178,16 @@ app.get("/api/class-history-teach/:userId", function(req, res) {
 			for (let i = 0; i < classes.length; i++) {
 				const classAvailable = classes[i].toObject();
 				classAvailable.instructorName = classAvailable.instructor.name;
-				classAvailable.instructorProfilePic =
-					classAvailable.instructor.profilePicURL;
+				classAvailable.instructorProfilePic = classAvailable.instructor.profilePicURL;
+
+				classAvailable.rating = 'Not Available';
+				if (classAvailable.numOfRating > 0) {
+					classAvailable.rating = (classAvailable.sumOfRating / classAvailable.numOfRating).toFixed(2);
+				}
+
 				returnValue.push(classAvailable);
 			}
+
 			res.json(returnValue);
 		});
 });
@@ -214,8 +232,13 @@ app.get("/api/class-history-take/:userId", function(req, res) {
 			for (let i = 0; i < classes.length; i++) {
 				const classAvailable = classes[i];
 				classAvailable.instructorName = classAvailable.instructor.name;
-				classAvailable.instructorProfilePic =
-					classAvailable.instructor.profilePicURL;
+				classAvailable.instructorProfilePic = classAvailable.instructor.profilePicURL;
+
+				classAvailable.rating = 'Not Available';
+				if (classAvailable.numOfRating > 0) {
+					classAvailable.rating = (classAvailable.sumOfRating / classAvailable.numOfRating).toFixed(2);
+				}
+
 				returnValue.push(classAvailable);
 			}
 
@@ -281,24 +304,18 @@ app.get("/api/my-account/:userId", function(req, res) {
 	Users.find({ _id: userId }, function(err, userinfo) {
 		const returnuser = [];
 		const returnValue = userinfo[0].toObject();
-		if (returnValue.numOfRatingAsInstructor >= 0) {
-			var instructorRating =
-				(returnValue.sumOfRatingAsInstructor * 1.0) /
-				returnValue.numOfRatingAsInstructor;
-			if (Number.isNaN(instructorRating)) {
-				instructorRating = 0;
-			}
-			returnValue.instructorRating = instructorRating;
+		returnValue.instructorRating = undefined;
+		returnValue.learnerRating = undefined;
+
+		if (returnValue.numOfRatingAsInstructor > 0) {
+			returnValue.instructorRating = (returnValue.sumOfRatingAsInstructor / returnValue.numOfRatingAsInstructor).toFixed(2);
 		}
-		if (returnValue.numOfRatingAsLearner >= 0) {
-			var learnerRating =
-				(returnValue.sumOfRatingAsLearner * 1.0) /
-				returnValue.numOfRatingAsLearner;
-			if (Number.isNaN(learnerRating)) {
-				learnerRating = 0;
-			}
-			returnValue.learnerRating = learnerRating;
+
+		if (returnValue.numOfRatingAsLearner > 0) {
+			returnValue.learnerRating = (returnValue.sumOfRatingAsLearner / returnValue.numOfRatingAsLearner).toFixed(2);
 		}
+
+		//console.log(returnValue);
 		returnuser.push(returnValue);
 		res.json(returnuser);
 	});
@@ -512,7 +529,7 @@ app.get("/api/instructors", function(req, res) {
 			for (let i = 0; i < classes.length; i++) {
 				const temp = classes[i].toObject();
 				const instructor = temp.instructor;
-				instructor.numOfRatingAsInstructor < 1 ? instructor.rating = 'N/A' : instructor.rating = (instructor.sumOfRatingAsInstructor / instructor.numOfRatingAsInstructor).toFixed(2);
+				instructor.numOfRatingAsInstructor < 1 ? instructor.rating = 'Not Available' : instructor.rating = (instructor.sumOfRatingAsInstructor / instructor.numOfRatingAsInstructor).toFixed(2);
 				instructors.push(instructor);
 			}
 
@@ -550,7 +567,7 @@ app.post("/api/images/:userId", parser.single("profile-pic"), (req, res) => {
 });
 
 app.post("/api/rate-learner", function(req, res) {
-	console.log(req.body);
+	//console.log(req.body);
 
 	UserClass.find({ userID: req.body.userId })
 		.populate({
@@ -564,7 +581,7 @@ app.post("/api/rate-learner", function(req, res) {
 				const classObj = classData[i].toObject();
 				// console.log(classObj.classID.instructor._id);
 				if (req.body.instructorId == classObj.classID.instructor._id) {
-					console.log("is instructor");
+					//console.log("is instructor");
 					isInstructor = true;
 					break;
 				}
@@ -632,7 +649,7 @@ app.post('/api/rate-class', function(req, res) {
 });
 
 app.post("/api/rate-instructor", function(req,res) {
-	console.log(req.body);
+	//console.log(req.body);
 
 	UserClass
 		.find({userID: req.body.userId})
