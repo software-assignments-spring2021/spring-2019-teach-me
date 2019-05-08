@@ -36,7 +36,7 @@ class InstructorProfile extends Component {
 			return undefined;
 		}
 		else {
-			return sumOfRatingAsInstructor / numOfRatingAsInstructor;
+			return (sumOfRatingAsInstructor / numOfRatingAsInstructor).toFixed(2);
 		}
 	}
 
@@ -78,7 +78,12 @@ class InstructorProfile extends Component {
 			newRatingObj.instructorId = instructorId;
 			const userId = this.props.auth.user.id;
 			newRatingObj.userId = userId;
-			console.log(newRatingObj);
+
+			const updatedInstructor = this.state.instructor;
+			updatedInstructor['sumOfRatingAsInstructor'] = newSumOfRatingAsInstructor;
+			updatedInstructor['numOfRatingAsInstructor'] = newNumOfRatingAsInstructor;
+
+			this.setState({ instructor: updatedInstructor });
 
 			fetch("/api/rate-instructor/", {
 				method: "POST",
@@ -222,7 +227,7 @@ class InstructorProfile extends Component {
 							rating={this.instructorRating()}
 							interactive={false}
 						/>
-						<p className="rating-number">{this.instructorRating().toFixed(2)}</p>
+						<p className="rating-number">{this.instructorRating()} (based on {this.state.instructor.numOfRatingAsInstructor} reviews)</p>
 					</div>
 				:
 					<Alert
