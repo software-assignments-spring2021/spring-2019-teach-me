@@ -1,10 +1,72 @@
-.jumbotron {
-    width: 60%;
-    margin: 2.5% auto;
+.homepage-header {
+    background-image: url('https://res.cloudinary.com/dezvvcopx/image/upload/v1557272477/universe-1566159_1920_c2bzgn.jpg');
+    min-height: 18rem;
+}
+
+.homepage-header h1, .homepage-header p {
+    color: white;
+    text-align: center;
+}
+
+.homepage-header h1 {
+    padding-top: 3.5rem;
+    margin-bottom: 1.5%; 
+}  
+
+.intro-text { 
+    max-width: 45%;
+    margin: 0 auto;
+    border-top: 1px solid white;
+}
+
+.intro-text p {
+    margin-top: 2%; 
+}
+
+.registration-link {
+    text-decoration: underline;
+}
+
+.registration-link:hover {
+    cursor: pointer;
+    font-weight: bold;
 }
 
 .bold-text {
     font-weight: bold;
+}
+
+.featured-container {
+    width: 60%;
+    margin: 2% auto;
+}
+
+.featured-nav {
+    text-align: center;
+}
+
+.featured-container .nav-item {
+    width: 50%;
+}
+
+.featured-container .nav-pills .nav-link.active {
+    background-color: #17a2b8 !important;
+}
+
+.featured-container .nav-link.active a{
+    background-color: white !important;
+}
+
+.featured-container .nav-item a {
+    color: #17a2b8;
+}
+
+.featured-classes-display {
+    border: none !important;
+}
+
+.all-classes-btn-container {
+    text-align: center;
 }
 
 .pagination-container .active {

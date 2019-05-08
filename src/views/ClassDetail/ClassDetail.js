@@ -15,7 +15,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import classnames from "classnames";
 
-import "./ClassDetail.css";
+import "./ClassDetail.css"; 
 
 class ClassDetail extends Component {
 	constructor(props) {
