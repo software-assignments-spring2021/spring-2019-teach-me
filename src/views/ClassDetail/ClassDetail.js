@@ -76,6 +76,13 @@ class ClassDetail extends Component {
             newRatingObj.classId = classId;
             // console.log(newRatingObj);
 
+            const updatedClass = this.state.currentClass;
+            updatedClass['sumOfRating'] = newSumOfRating;
+            updatedClass['numOfRating'] = newNumOfRating;
+            updatedClass['rating'] = (newSumOfRating / newNumOfRating).toFixed(2);
+
+            this.setState({ currentClass: updatedClass });
+
             fetch("/api/rate-class/", {
                 method: "POST",
                 body: JSON.stringify(newRatingObj),
@@ -554,7 +561,7 @@ class ClassDetail extends Component {
 							{classData.rating ?
 								<div className='current-rating-container'>
 									<Rater total = {5} rating = {classData.rating} interactive = {false}/>
-									<p className="rating-number">{classData.rating}</p>
+									<p className="rating-number">{classData.rating} (based on {classData.numOfRating} reviews)</p>
 								</div>
 							:
 								<Alert
