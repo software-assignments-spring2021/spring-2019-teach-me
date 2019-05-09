@@ -2,6 +2,7 @@ import React, { Component }from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
+import Typed from 'react-typed';
 
 import { ClassDisplay } from '../../components/ClassDisplay';
 import { InstructorDisplay } from '../../components/InstructorDisplay';
@@ -66,6 +67,14 @@ class Home extends Component {
 	}
 
 	render() {
+		const typed = 
+			<Typed 
+				strings={['JavaScript', 'Guitar', 'Piano', 'Painting', 'Bitcoin', 'HTML', 'French']} 
+				typeSpeed={65} 
+				backSpeed={50} 
+				shuffle={true}
+				loop
+			/>;
 
 		const classListData = this.state.featuredClasses.map(function(data, index) {
 			return <ClassDisplay key={index} title={data.name} description={data.description} price={data.price} instructor={data.instructorName} rating={data.rating} category={data.category} slug={data._id} instructorProfilePic={data.instructorProfilePic}/>
@@ -91,7 +100,7 @@ class Home extends Component {
 		return (
 			<div className="homepage-container">
 				<div className="homepage-header">
-					<h1>Welcome to TeachMe</h1>
+					<h1>Teach me {typed} </h1>
 					<div className="intro-text">
 						<p>From programming to piano, TeachMe offers a variety of classes to learn from. Want to teach your skill to others? Publish your own class - only the sky's the limit. </p>
 						<p className="bold-text">To get started, <LinkContainer className="registration-link" to='/register'><span>register an account</span></LinkContainer> and start taking and/or teaching classes! </p>

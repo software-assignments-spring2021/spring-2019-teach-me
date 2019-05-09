@@ -33,7 +33,7 @@ class UserProfile extends Component {
     componentDidMount() {
         const { userId } = this.props.match.params;
         const url = '/api/my-account/' + userId;
-        console.log(url);
+        //console.log(url);
         fetch(url)
           .then(response => response.json())
           .then(data => this.setState({currentUser: data[0]}))
@@ -43,7 +43,7 @@ class UserProfile extends Component {
         // console.log(data.Introduction);
 
         const url2 = '/api/class-history-take/' + userId;
-        console.log(url2);
+        //console.log(url2);
         fetch(url2)
             .then(response => response.json())
             .then((data) => {
@@ -66,22 +66,28 @@ class UserProfile extends Component {
 
         if (this.props.auth.isAuthenticated) {
 
-            console.log(e.rating);
+            //console.log(e.rating);
 
             const newRatingObj = {};
 
             const newSumOfRatingAsLearner = this.state.currentUser.sumOfRatingAsLearner + e.rating;
-            console.log(newSumOfRatingAsLearner);
+            //console.log(newSumOfRatingAsLearner);
             newRatingObj.newSumOfRatingAsLearner = newSumOfRatingAsLearner;
             const newNumOfRatingAsLearner = this.state.currentUser.numOfRatingAsLearner + 1;
-            console.log(newNumOfRatingAsLearner);
+            //console.log(newNumOfRatingAsLearner);
             newRatingObj.newNumOfRatingAsLearner = newNumOfRatingAsLearner;
 
             const userId = this.props.match.params.userId;
             newRatingObj.userId = userId;
             const instructorId = this.props.auth.user.id;
             newRatingObj.instructorId = instructorId;
-            console.log(newRatingObj);
+            //console.log(newRatingObj);
+
+            const updatedUser = this.state.currentUser;
+			updatedUser['sumOfRatingAsLearner'] = newSumOfRatingAsLearner;
+            updatedUser['numOfRatingAsLearner'] = newNumOfRatingAsLearner;
+            updatedUser['learnerRating'] = (newSumOfRatingAsLearner / newNumOfRatingAsLearner).toFixed(2);
+			this.setState({ instructor: updatedUser });
 
             fetch("/api/rate-learner/", {
                 method: "POST",
@@ -105,6 +111,7 @@ class UserProfile extends Component {
     render() {
         const { classId } = this.props.match.params;
         const userData = this.state.currentUser;
+        //
 
         const classListData = this.state.classesTaken.map(function(data, index) {
             return <ClassDisplay key={index} title={data.name} description={data.description} price={data.price} instructor={data.instructorName} rating={data.rating} category={data.category} slug={data._id} instructorProfilePic={data.instructorProfilePic}/>
@@ -150,7 +157,7 @@ class UserProfile extends Component {
                             {userData.learnerRating ?
 								<div className='current-rating-container'>
 									<Rater total = {5} rating = {userData.learnerRating} interactive = {false}/>
-									<p className="rating-number">{userData.learnerRating}</p>
+									<p className="rating-number">{userData.learnerRating} (based on {userData.numOfRatingAsLearner} reviews)</p>
 								</div>
 							:
 								<Alert

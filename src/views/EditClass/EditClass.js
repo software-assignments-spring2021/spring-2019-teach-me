@@ -47,7 +47,7 @@ class EditClass extends Component {
 			// console.log(this.props.auth);
 			const { classId } = this.props.match.params;
 			const url = '/api/edit-class/' + classId;
-			console.log(url);
+			//console.log(url);
 			fetch(url)
 				.then(response => response.json())
 				.then(data => {
@@ -79,7 +79,7 @@ class EditClass extends Component {
 			newClassObj[userInput[0]] = userInput[1];
 		}
 
-		console.log(newClassObj);
+		//console.log(newClassObj);
 
 		const { classId } = this.props.match.params;
 		const url = '/api/edit-class/' + classId;
@@ -142,8 +142,8 @@ class EditClass extends Component {
 
 	handleSave(e) {
 		this.state.careTaker.SetMemento(this.state.originator.saveState());
-		console.log(this.state.originator);
-		console.log("save");
+		//console.log(this.state.originator);
+		//console.log("save");
 	}
 
 	handleRestore(e) {
@@ -156,8 +156,8 @@ class EditClass extends Component {
 		"Category: " + this.state.originator.category + "\n" +
 		"Payment Link: " + this.state.originator.payment;
 		alert(output);
-		console.log(this.state.originator);
-		console.log("restore");
+		//console.log(this.state.originator);
+		//console.log("restore");
 	}
 
 	handleUrl(e) {

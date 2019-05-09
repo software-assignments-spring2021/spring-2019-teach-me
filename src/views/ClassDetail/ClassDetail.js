@@ -126,7 +126,7 @@ class ClassDetail extends Component {
 			newUserClassPair.classID = classId;
 			newUserClassPair.complete = true;
 
-			console.log(newUserClassPair);
+			//console.log(newUserClassPair);
 
 			const url = "/api/complete-class";
 			fetch(url, {
@@ -156,7 +156,7 @@ class ClassDetail extends Component {
 				newClassObj.classID = classId;
 				newClassObj.archive = true;
 
-				console.log(newClassObj);
+				//console.log(newClassObj);
 				const url = "/api/archive-class";
 				fetch(url, {
 					method: "POST",
@@ -300,7 +300,7 @@ class ClassDetail extends Component {
 				commentObj[item[0]] = item[1];
 			}
 
-			console.log(commentObj);
+			//console.log(commentObj);
 
 			const url =
 				"/api/comments/" + classId + "/" + this.props.auth.user.id;

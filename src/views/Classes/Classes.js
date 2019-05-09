@@ -35,7 +35,7 @@ class Classes extends Component {
 	}
 
 	filterResults(query) {
-		console.log(query);
+		//console.log(query);
 		const allClasses = this.state.allClasses;
 		let filteredClasses = [];
 
@@ -65,7 +65,7 @@ class Classes extends Component {
 			}
 		}
 
-		console.log(filteredClasses.length);
+		//console.log(filteredClasses.length);
 		if (filteredClasses.length === 0) {
 			this.setState({showWarning: true, classListing: filteredClasses, activePage: 1});
 		}

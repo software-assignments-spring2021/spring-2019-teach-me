@@ -58,7 +58,7 @@ class CreateClass extends Component {
 
 		const instructorId = this.props.auth.user.id;
 		newClassObj.instructorId = instructorId;
-		console.log(newClassObj);
+		//console.log(newClassObj);
 
 		fetch("/api/create-class/", {
 			method: "POST",

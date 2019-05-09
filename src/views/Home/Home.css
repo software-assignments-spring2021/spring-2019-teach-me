@@ -13,6 +13,10 @@
     margin-bottom: 1.5%; 
 }  
 
+.typed-container {
+    display: inline-block;
+}
+
 .intro-text { 
     max-width: 45%;
     margin: 0 auto;

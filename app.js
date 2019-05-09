@@ -262,7 +262,7 @@ app.get("/api/class-history-take/:userId", function(req, res) {
 			//console.log(classData);
 			for (let i = 0; i < classData.length; i++) {
 				const classObj = classData[i].toObject();
-				console.log(classObj);
+				//console.log(classObj);
 				const c = classObj.classID;
 				//console.log(c);
 				c.complete = classObj.complete;
