@@ -12,12 +12,10 @@ Those who continue to pursue their passions, whether they are dramatic, musical 
 ## How to contribute
 Thank you for your interest in contributing! Please check out our [contributing guidelines](https://github.com/nyu-software-engineering/teach-me/blob/master/CONTRIBUTING.md) for detailed instructions regarding project contributions. To get a better grasp of what we are trying to accomplish, please also take a look at our [project requirements](https://github.com/nyu-software-engineering/teach-me/blob/master/REQUIREMENTS.md).
 
-## How to build and test
-
 ## Latest builds status Travis.ci
 [![Build Status](https://travis-ci.com/nyu-software-engineering/teach-me.svg?branch=master)](https://travis-ci.com/nyu-software-engineering/teach-me)
 
-
+## How to build and test
 ### Build instructions
 1. Clone the repository to your local machine using the command line `$ git clone https://github.com/nyu-software-engineering/teach-me.git`
 2. Install [nodejs and npm](https://www.npmjs.com/get-npm)
