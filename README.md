@@ -1,4 +1,5 @@
 # Teach Me
+See a live version of the web app [here](https://teach-me-web-app.herokuapp.com/)!
 
 ## Description
 **Teach Me** is a software project designed to connect users to teach each other creative skills. **Teach Me** provides creatively skilled individuals (musicians, artists etc.) with an additional source of income, while allowing non-skilled individuals to explore skills that they might be interested in learning.
@@ -20,11 +21,13 @@ Thank you for your interest in contributing! Please check out our [contributing 
 ### Build instructions
 1. Clone the repository to your local machine using the command line `$ git clone https://github.com/nyu-software-engineering/teach-me.git`
 2. Install [nodejs and npm](https://www.npmjs.com/get-npm)
-3. Make sure you are inside the repository folder `$ cd teach-me`
-4. Install the required dependencies `$ npm install`
-5. Set the database URI `$ export DB_URI="mongodb+srv://throwaway-user-1:gLDkfoFApIyyz3Fg@teach-me-zlqgf.mongodb.net/test?retryWrites=true"`
-6. Start the local server `$ node app.js`
-7. View the application in your browser at [this page](http://localhost:9000/)
+3. Make sure you are inside the repository folder (`$ cd teach-me`)
+4. Install the required dependencies: `$ npm install`
+5. Build the app: `$ npm run build`
+6. Set the required environment variables:
+`$ export CLOUDINARY_URL=cloudinary://386634463162269:1Qx9LZsY2bnVye4FopbuU5F3kaM@dezvvcopx/; DB_URI="mongodb+srv://throwaway-user-1:gLDkfoFApIyyz3Fg@teach-me-zlqgf.mongodb.net/test?retryWrites=true"`
+7. Start the local server `$ node app.js`
+8. View the application in your browser at http://localhost:9000/.
 
 ### Test instructions
 1. Follow steps 1-4 of the build instructions above
