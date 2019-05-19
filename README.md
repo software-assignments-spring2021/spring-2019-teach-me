@@ -23,7 +23,7 @@ Thank you for your interest in contributing! Please check out our [contributing 
 4. Install the required dependencies: `$ npm install`
 5. Build the app: `$ npm run build`
 6. Set the required environment variables:
-`$ export CLOUDINARY_URL=cloudinary://386634463162269:1Qx9LZsY2bnVye4FopbuU5F3kaM@dezvvcopx/; DB_URI="mongodb+srv://throwaway-user-1:gLDkfoFApIyyz3Fg@teach-me-zlqgf.mongodb.net/test?retryWrites=true"`
+`$ export CLOUDINARY_URL=cloudinary://386634463162269:1Qx9LZsY2bnVye4FopbuU5F3kaM@dezvvcopx/; export DB_URI="mongodb+srv://throwaway-user-1:gLDkfoFApIyyz3Fg@teach-me-zlqgf.mongodb.net/test?retryWrites=true"`
 7. Start the local server `$ node app.js`
 8. View the application in your browser at http://localhost:9000/.
 
